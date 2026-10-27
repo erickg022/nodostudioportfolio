@@ -2,9 +2,9 @@
 import { Fragment } from "react";
 import { isTodo, site, type Project, type ProjectMedia } from "@/content/site";
 import { fixedImage, responsiveImage, textureUrl } from "@/lib/media";
+import { LogoAssembly } from "./LogoAssembly";
+import { SiteFooter } from "./SiteFooter";
 import type { RuntimeData } from "./runtime/types";
-
-const DIGITS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
 
 const FIG_SIZES: Record<ProjectMedia["layout"], string> = {
   full: "100vw",
@@ -110,6 +110,7 @@ async function ProjectArticle({ project, next }: { project: Project; next: Proje
         <span className="mr-label">{overlay.nextLabel}</span>
         <span className="mr-proj__next-title">{next.title}</span>
       </a>
+      <SiteFooter />
     </article>
   );
 }
@@ -128,28 +129,25 @@ export async function Meridian() {
         id="mr-data"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, "\\u003c") }}
       />
-      <div data-mr="preloader" className="mr-pre" aria-hidden="true">
-        <div className="mr-pre__half mr-pre__half--top" />
-        <div className="mr-pre__half mr-pre__half--bottom" />
-        <p className="mr-pre__name">
-          <span data-pre-line="true">{studio.name}</span>
-        </p>
-        <p className="mr-pre__role">
-          <span data-pre-line="true">{studio.role}</span>
-        </p>
-        <div className="mr-pre__countmask">
-          <div className="mr-pre__count" data-pre-count="true">
-            {[0, 1, 2].map((col) => (
-              <span key={col} className="mr-pre__col" data-col={col}>
-                <span className="mr-pre__strip">
-                  {DIGITS.map((d, i) => (
-                    <span key={i}>{d}</span>
-                  ))}
-                </span>
-              </span>
-            ))}
-          </div>
-        </div>
+      {/* NODO preloader from the previous site: a film on landscape screens, a frame sequence on portrait. */}
+      <div
+        data-mr="preloader"
+        className="site-preloader"
+        data-visible="true"
+        data-video={site.preloader.desktopVideo}
+        data-frames={JSON.stringify(site.preloader.mobileFrames)}
+        aria-hidden="true"
+      >
+        <video
+          className="site-preloader__video"
+          muted
+          playsInline
+          preload="none"
+          disablePictureInPicture
+          controlsList="nodownload nofullscreen noremoteplayback"
+          hidden
+        />
+        <canvas className="site-preloader__video" hidden />
       </div>
 
       <header className="mr-header">
@@ -177,7 +175,13 @@ export async function Meridian() {
           <div className="mr-hero__sticky">
             <h1 className="mr-hero__name" aria-label={studio.name}>
               <span className="mr-hero__first">
-                <span data-rise="true">{studio.nameLines[0]}</span>
+                <span data-rise="true">
+                  {hero.logo ? (
+                    <img src={hero.logo.src} alt={hero.logo.alt} className="mr-hero__logo" decoding="async" />
+                  ) : (
+                    studio.nameLines[0]
+                  )}
+                </span>
               </span>
               <span className="mr-hero__last">
                 <span data-rise="true">{studio.nameLines[1]}</span>
@@ -210,6 +214,7 @@ export async function Meridian() {
         <section
           id="work"
           data-mr="gallery"
+          data-fallback="#index"
           className="mr-gallery"
           // Reference: 540vh for 8 projects (60vh per project + one screen).
           style={{ height: `${projects.length * 60 + 60}vh` }}
@@ -235,7 +240,7 @@ export async function Meridian() {
           </div>
         </section>
 
-        <section className="mr-index" aria-labelledby="index-title">
+        <section id="index" data-mr="index" className="mr-index" aria-labelledby="index-title">
           <header className="mr-index__head">
             <h2 id="index-title">{index.title}</h2>
             {index.columns.map((col) => (
@@ -262,13 +267,16 @@ export async function Meridian() {
           <h2 id="about-title" className="mr-label">
             {about.title}
           </h2>
-          <p className="mr-about__statement">
-            {about.statement.split(/\s+/).map((word, i) => (
-              <span key={i} data-word="true">
-                {word}{" "}
-              </span>
-            ))}
-          </p>
+          <div className="mr-about__lead">
+            <p className="mr-about__statement">
+              {about.statement.split(/\s+/).map((word, i) => (
+                <span key={i} data-word="true">
+                  {word}{" "}
+                </span>
+              ))}
+            </p>
+            <LogoAssembly {...about.logoAssembly} placement="side" />
+          </div>
           <div className="mr-about__grid">
             {about.lists.map((list) => (
               <div key={list.title}>
@@ -280,17 +288,6 @@ export async function Meridian() {
                 </ul>
               </div>
             ))}
-            <div className="mr-about__rec">
-              <h3 className="mr-label">{about.records.title}</h3>
-              <ul>
-                {about.records.items.map((rec) => (
-                  <li key={rec.label}>
-                    <span>{rec.label}</span>
-                    <span>{rec.value}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
           </div>
         </section>
 
@@ -343,14 +340,10 @@ export async function Meridian() {
               </ul>
             </div>
           </div>
-          <footer className="mr-footer">
-            <span>
-              © {studio.copyrightYear} {studio.name}
-            </span>
-            <span>{studio.location}</span>
-            <a href="#top">{contact.backToTop}</a>
-          </footer>
         </section>
+        {/* On vertical screens the assembly moves out of About to sit just above the footer. */}
+        <LogoAssembly {...about.logoAssembly} placement="stacked" />
+        <SiteFooter />
       </main>
 
       <div

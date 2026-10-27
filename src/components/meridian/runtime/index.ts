@@ -3,6 +3,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { createGallery, type Gallery } from "./gallery";
 import { createSphere, type Sphere, type SphereTile } from "./sphere";
+import { VERTICAL_QUERY } from "./media";
 import { loadTextures } from "./textures";
 import type { OpenOrigin, RuntimeData } from "./types";
 
@@ -40,11 +41,19 @@ function initSmoothScroll(): Cleanup {
   const onClick = (e: MouseEvent) => {
     const link = (e.target as Element).closest<HTMLAnchorElement>("a[href^='#']");
     if (!link || link.matches("[data-open], a[href^='#project-']")) return;
-    const target = $(link.getAttribute("href")!);
+    let target = $(link.getAttribute("href")!);
     if (!target) return;
+    // Sections hidden on this layout (the gallery on vertical screens) point to a fallback.
+    if (!target.getClientRects().length && target.dataset.fallback) target = $(target.dataset.fallback);
+    if (!target) return;
+    const dest = target;
     e.preventDefault();
-    if (lenis) lenis.scrollTo(target, { duration: 1.4 });
-    else target.scrollIntoView();
+    const go = () => (lenis ? lenis.scrollTo(dest, { duration: 1.4 }) : dest.scrollIntoView());
+    // Footer links inside a project overlay close it first, then scroll the page.
+    if (link.closest("[data-mr='overlay']")) {
+      window.dispatchEvent(new CustomEvent("mr:close"));
+      setTimeout(go, 950);
+    } else go();
   };
   document.addEventListener("click", onClick);
   return () => {
@@ -76,20 +85,148 @@ function initClock(): Cleanup {
   return () => clearInterval(id);
 }
 
+type FrameSequence = {
+  path: string;
+  prefix: string;
+  count: number;
+  fps: number;
+  startBuffer: number;
+  lookahead: number;
+  version: string;
+};
+
+function prepareVideoForAutoplay(video: HTMLVideoElement) {
+  video.muted = true;
+  video.defaultMuted = true;
+  video.volume = 0;
+  video.playsInline = true;
+  video.controls = false;
+  video.setAttribute("muted", "");
+  video.setAttribute("playsinline", "");
+  video.setAttribute("webkit-playsinline", "");
+  video.setAttribute("x-webkit-airplay", "deny");
+  video.removeAttribute("controls");
+}
+
+/** Desktop: the preloader film; resolves when it has played through. */
+function playPreloaderVideo(video: HTMLVideoElement, src: string, isCancelled: () => boolean) {
+  return new Promise<void>((resolve) => {
+    let retry: ReturnType<typeof setTimeout> | undefined;
+    const done = () => {
+      clearTimeout(retry);
+      resolve();
+    };
+    video.hidden = false;
+    video.src = src;
+    video.preload = "auto";
+    prepareVideoForAutoplay(video);
+    const play = () => {
+      if (isCancelled()) return done();
+      prepareVideoForAutoplay(video);
+      video.play().catch(() => {
+        retry = setTimeout(play, 250);
+      });
+    };
+    video.addEventListener("ended", done, { once: true });
+    video.addEventListener("error", done, { once: true });
+    video.addEventListener("timeupdate", () => {
+      if (Number.isFinite(video.duration) && video.duration > 0 && video.currentTime >= video.duration - 0.08) done();
+    });
+    video.addEventListener("canplay", play, { once: true });
+    video.addEventListener("loadeddata", play, { once: true });
+    play();
+  });
+}
+
+/** Portrait: the same animation as a JPG frame sequence drawn to a canvas. */
+function playPreloaderFrames(canvas: HTMLCanvasElement, seq: FrameSequence, isCancelled: () => boolean) {
+  return new Promise<void>((resolve) => {
+    const context = canvas.getContext("2d");
+    if (!context) return resolve();
+    canvas.hidden = false;
+    let raf = 0;
+    let started = false;
+    let startTime = 0;
+    let current = 0;
+    const frames = new Map<number, HTMLImageElement>();
+    const loading = new Set<number>();
+
+    const draw = (image: HTMLImageElement) => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      canvas.width = Math.ceil(width * dpr);
+      canvas.height = Math.ceil(height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+      context.clearRect(0, 0, width, height);
+      const imageRatio = image.naturalWidth / image.naturalHeight;
+      const canvasRatio = width / height;
+      const drawHeight = imageRatio > canvasRatio ? width / imageRatio : height;
+      const drawWidth = imageRatio > canvasRatio ? width : height * imageRatio;
+      context.drawImage(image, (width - drawWidth) / 2, (height - drawHeight) / 2, drawWidth, drawHeight);
+    };
+    const finish = () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", onResize);
+      resolve();
+    };
+    const load = (n: number) => {
+      if (n < 1 || n > seq.count || frames.has(n) || loading.has(n)) return;
+      loading.add(n);
+      const image = new Image();
+      image.decoding = "async";
+      image.onload = () => {
+        loading.delete(n);
+        frames.set(n, image);
+        if (isCancelled()) return finish();
+        if (n === 1) draw(image);
+        if (!started && frames.size >= seq.startBuffer) {
+          started = true;
+          startTime = performance.now();
+          raf = requestAnimationFrame(play);
+        }
+      };
+      image.onerror = () => loading.delete(n);
+      image.src = `${seq.path}/${seq.prefix}${String(n).padStart(4, "0")}.jpg?v=${seq.version}`;
+    };
+    const loadAround = (n: number) => {
+      const end = Math.min(seq.count, n + seq.lookahead);
+      for (let i = n; i <= end; i++) load(i);
+    };
+    const play = (time: number) => {
+      if (isCancelled()) return finish();
+      const n = Math.min(seq.count, Math.max(1, Math.floor(((time - startTime) / 1000) * seq.fps) + 1));
+      if (n !== current) {
+        current = n;
+        const image = frames.get(n);
+        if (image) draw(image);
+        loadAround(n);
+      }
+      if (n >= seq.count) return finish();
+      raf = requestAnimationFrame(play);
+    };
+    const onResize = () => {
+      const image = frames.get(current) ?? frames.get(1);
+      if (image) draw(image);
+    };
+    window.addEventListener("resize", onResize);
+    loadAround(1);
+  });
+}
+
 /**
- * Paper preloader: rolling 3-digit counter tied to texture loading, then the halves split.
- * Shown once per session; skipped with reduced motion.
+ * NODO preloader from the previous site: the film on landscape screens, the frame sequence
+ * on portrait ones (≤767px), on white. It stays up until both the animation has played and
+ * the WebGL textures are ready, then fades out over 600ms while the hero rises.
  */
 function initPreloader(
   load: (progress: (p: number) => void) => Promise<void>,
   reveal: () => void,
 ): Cleanup {
   const root = $("[data-mr='preloader']");
-  let seen = false;
-  try {
-    seen = sessionStorage.getItem("mr:seen") === "1";
-  } catch {}
-  if (!root || seen || reducedMotion()) {
+  if (!root || reducedMotion()) {
     root?.remove();
     load(() => {}).then(reveal);
     return () => {};
@@ -97,64 +234,23 @@ function initPreloader(
   lenis?.stop();
   document.documentElement.style.overflow = "hidden";
 
-  const strips = $$("[data-col]", root).map((col) => col.firstElementChild as HTMLElement);
-  const show = (n: number) => {
-    const digits = [Math.floor(n / 100), Math.floor(n / 10) % 10, n % 10];
-    strips.forEach((strip, i) => {
-      strip.style.transform = `translateY(${-digits[i]}em)`;
-      if (i === 0) strip.parentElement!.style.opacity = digits[0] ? "1" : "0";
-      if (i === 1) strip.parentElement!.style.opacity = n >= 10 ? "1" : "0";
-    });
-  };
-  let shown = 0;
-  let target = 0;
-  const count = () => {
-    shown += Math.max(0.25, (target - shown) * 0.12);
-    shown = Math.min(shown, target);
-    show(Math.floor(shown));
-  };
-  gsap.ticker.add(count);
-  gsap.from($$("[data-pre-line]", root), {
-    yPercent: 110,
-    duration: 1,
-    ease: "expo.out",
-    stagger: 0.08,
-  });
-
   let cancelled = false;
-  const minTime = new Promise((r) => setTimeout(r, 1400));
-  Promise.all([load((p) => (target = Math.round(p * 100))), minTime]).then(async () => {
-    target = 100;
-    await new Promise<void>((resolve) => {
-      const wait = () => (shown >= 100 ? resolve() : requestAnimationFrame(wait));
-      wait();
-    });
+  const isCancelled = () => cancelled;
+  const mobile = matchMedia("(max-width: 767px)").matches;
+  const animation = mobile
+    ? playPreloaderFrames($<HTMLCanvasElement>("canvas", root)!, JSON.parse(root.dataset.frames!), isCancelled)
+    : playPreloaderVideo($<HTMLVideoElement>("video", root)!, root.dataset.video!, isCancelled);
+
+  Promise.all([load(() => {}), animation]).then(() => {
     if (cancelled) return;
-    gsap.ticker.remove(count);
-    gsap
-      .timeline({
-        onComplete: () => {
-          try {
-            sessionStorage.setItem("mr:seen", "1");
-          } catch {}
-          document.documentElement.style.overflow = "";
-          lenis?.start();
-          root.remove();
-        },
-      })
-      .to($$("[data-pre-line], [data-pre-count]", root), {
-        yPercent: -110,
-        duration: 0.7,
-        ease: "expo.in",
-        stagger: 0.04,
-      })
-      .add(reveal, "-=0.05")
-      .to($(".mr-pre__half--top", root), { yPercent: -100, duration: 1.2, ease: "expo.inOut" }, "<")
-      .to($(".mr-pre__half--bottom", root), { yPercent: 100, duration: 1.2, ease: "expo.inOut" }, "<");
+    root.dataset.visible = "false";
+    document.documentElement.style.overflow = "";
+    lenis?.start();
+    reveal();
+    setTimeout(() => root.remove(), 620);
   });
   return () => {
     cancelled = true;
-    gsap.ticker.remove(count);
   };
 }
 
@@ -313,7 +409,9 @@ function initOverlay() {
     }
   };
 
+  const onCloseRequest = () => current && dismiss();
   close.addEventListener("click", dismiss);
+  window.addEventListener("mr:close", onCloseRequest);
   window.addEventListener("popstate", onPop);
   window.addEventListener("keydown", onKey);
   document.addEventListener("click", onClick);
@@ -321,6 +419,7 @@ function initOverlay() {
     open,
     destroy() {
       close.removeEventListener("click", dismiss);
+      window.removeEventListener("mr:close", onCloseRequest);
       window.removeEventListener("popstate", onPop);
       window.removeEventListener("keydown", onKey);
       document.removeEventListener("click", onClick);
@@ -435,6 +534,8 @@ export function initMeridian(): Cleanup {
   const { projects }: RuntimeData = JSON.parse($("#mr-data")?.textContent ?? '{"projects":[]}');
   const bySlug = new Map(projects.map((p) => [p.slug, p]));
   const tier = matchMedia("(max-width: 760px)").matches ? "sm" : "lg";
+  // The scroll-driven gallery is hidden on vertical screens (see VERTICAL_QUERY); skip its WebGL.
+  const showGallery = !matchMedia(VERTICAL_QUERY).matches;
 
   let destroyed = false;
   let sphere: Sphere | null = null;
@@ -498,7 +599,7 @@ export function initMeridian(): Cleanup {
         });
       }
       const galleryCanvas = $<HTMLCanvasElement>("[data-gallery]");
-      if (galleryCanvas) {
+      if (galleryCanvas && showGallery) {
         gallery = createGallery(
           galleryCanvas,
           projects.map((p) => ({ src: p.cover[tier], slug: p.slug })),

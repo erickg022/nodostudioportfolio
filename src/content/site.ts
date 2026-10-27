@@ -44,6 +44,8 @@ export type Site = {
   person: { name: string; role: string };
   nav: { label: string; href: string }[];
   hero: {
+    /** Replaces the first name line in the hero; the second line stays as text. */
+    logo?: { src: string; alt: string };
     intro: string;
     countLabels: { projects: string; images: string };
     hint: string[];
@@ -54,7 +56,37 @@ export type Site = {
     title: string;
     statement: string;
     lists: { title: string; items: string[] }[];
-    records: { title: string; items: { label: string; value: string }[] };
+    logoAssembly: {
+      logo: string;
+      label: string;
+      mode: "sequence" | "sway" | "stretch" | "still";
+      stage: "ink" | "paper";
+    };
+  };
+  preloader: {
+    desktopVideo: string;
+    mobileFrames: {
+      path: string;
+      prefix: string;
+      count: number;
+      fps: number;
+      startBuffer: number;
+      lookahead: number;
+      version: string;
+    };
+  };
+  footer: {
+    topLeft: string;
+    topCenter: string;
+    topRight: string;
+    statementLines: string[];
+    columns: {
+      label: string;
+      lines?: string[];
+      links?: { label: string; href: string }[];
+      /** Render contact.socials in this column. */
+      socials?: boolean;
+    }[];
   };
   contact: {
     headingLines: string[];

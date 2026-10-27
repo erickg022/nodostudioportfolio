@@ -1,0 +1,240 @@
+/*
+ * NODO additions on top of the verbatim Meridian styles (meridian.css):
+ * old-site preloader and footer, hero logo, body typeface, About logo assembly,
+ * and the vertical-screen layout. Loaded after meridian.css.
+ */
+
+/* Body text in Geist (previous site); display type stays Archivo.
+   `html:root` so it wins over meridian.css whatever the stylesheet order. */
+html:root {
+  --font-body: var(--font-geist), system-ui, sans-serif;
+}
+
+/* ---------- Preloader (previous site) ---------- */
+.site-preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #ffffff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 600ms ease;
+}
+.site-preloader[data-visible="true"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+.site-preloader__video {
+  display: block;
+  width: 100vw;
+  height: 100svh;
+  object-fit: contain;
+  object-position: center;
+  background: #ffffff;
+}
+
+/* ---------- Hero: logo in place of the first name line ---------- */
+/* In nodo-logo-cropped.png the N spans 45.8% of the image height and the drawn D hangs
+   29.5% below it. Scale so the N matches Archivo's cap height (~0.69em) and sit the N on
+   the baseline; the negative margin keeps the line box, the padding keeps the D unclipped. */
+.mr-hero__logo {
+  display: inline-block;
+  height: 1.506em;
+  width: auto;
+  max-width: none;
+  vertical-align: baseline;
+  margin-bottom: -0.444em;
+}
+.mr-hero__first:has(.mr-hero__logo) {
+  padding-bottom: 0.46em;
+  margin-bottom: -0.46em;
+}
+/* Stacked name (≤760px): give the D its own room so it doesn't run into STUDIO. */
+@media (max-width: 760px) {
+  .mr-hero__logo {
+    margin-bottom: 0;
+  }
+  .mr-hero__first:has(.mr-hero__logo) {
+    padding-bottom: 0.08em;
+    margin-bottom: 0;
+  }
+}
+
+/* ---------- About: statement with the logo assembly beside it ---------- */
+.mr-about__lead {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  align-items: stretch;
+}
+.mr-about__lead .mr-about__statement {
+  grid-column: 1 / span 8;
+}
+.nd-assembly {
+  position: relative;
+  min-width: 0;
+}
+.nd-assembly canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: pan-y;
+}
+.nd-assembly--side {
+  grid-column: 9 / span 4;
+  min-height: 280px;
+}
+.nd-assembly--stacked {
+  display: none;
+  height: 62svh;
+  margin: 0 var(--gutter);
+}
+.nd-assembly__fallback {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 78%;
+  height: auto;
+  max-height: 60%;
+  object-fit: contain;
+}
+.nd-assembly[data-stage="ink"] {
+  background: #0b0b0a;
+}
+.nd-assembly[data-stage="ink"] .nd-assembly__fallback {
+  filter: invert(1);
+}
+
+/* ---------- Footer (previous site), also at the end of every project ---------- */
+.nd-footer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100svh;
+  padding: 24px 16px;
+  background: #ffffff;
+  color: #0a0a0a;
+  font-family: var(--font-body);
+}
+.nd-footer__top {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #a1a1a1;
+}
+.nd-footer__top p:nth-child(2) {
+  text-align: center;
+}
+.nd-footer__top p:nth-child(3) {
+  text-align: right;
+}
+.nd-footer__center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 96px 0;
+}
+.nd-footer__frame {
+  position: relative;
+  padding: 28px 40px;
+  text-align: center;
+}
+.nd-footer__frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(#10100e, #10100e) left top / 12px 1.5px no-repeat,
+    linear-gradient(#10100e, #10100e) left top / 1.5px 12px no-repeat,
+    linear-gradient(#10100e, #10100e) right top / 12px 1.5px no-repeat,
+    linear-gradient(#10100e, #10100e) right top / 1.5px 12px no-repeat,
+    linear-gradient(#10100e, #10100e) left bottom / 12px 1.5px no-repeat,
+    linear-gradient(#10100e, #10100e) left bottom / 1.5px 12px no-repeat,
+    linear-gradient(#10100e, #10100e) right bottom / 12px 1.5px no-repeat,
+    linear-gradient(#10100e, #10100e) right bottom / 1.5px 12px no-repeat;
+}
+.nd-footer__statement {
+  font-size: clamp(24.8px, 2.05vw, 39.2px);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+}
+.nd-footer__cols {
+  display: grid;
+  gap: 40px;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 12px;
+  line-height: 1.25;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.nd-footer__label {
+  margin-bottom: 28px !important;
+  color: #a1a1a1;
+}
+.nd-footer__nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 32px;
+  row-gap: 4px;
+}
+.nd-footer__link {
+  display: block;
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.15s;
+}
+.nd-footer__link:hover {
+  text-decoration: underline;
+}
+.nd-footer p + .nd-footer__link {
+  margin-top: 8px;
+}
+@media (min-width: 640px) {
+  .nd-footer {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+@media (min-width: 768px) {
+  .nd-footer__top {
+    font-size: 12px;
+  }
+  .nd-footer__cols {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    font-size: 14px;
+  }
+  .nd-footer__nav {
+    max-width: 176px;
+  }
+}
+
+/* ---------- Vertical screens: same query as VERTICAL_QUERY in runtime/media.ts ---------- */
+@media (max-width: 760px), (hover: none) and (orientation: portrait) {
+  /* The scroll-turned gallery needs a wheel; the Index below lists the same projects. */
+  .mr-gallery {
+    display: none;
+  }
+  .mr-about__lead {
+    display: block;
+  }
+  .nd-assembly--side {
+    display: none;
+  }
+  .nd-assembly--stacked {
+    display: block;
+  }
+}

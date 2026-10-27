@@ -5,13 +5,16 @@
     "lang": "en"
   },
   "theme": {
-    "bg": "#F3F2EE",
+    "bg": "#FFFFFF",
     "fg": "#000000",
     "accent": "#FF4D00"
   },
   "studio": {
     "name": "NODO STUDIO",
-    "nameLines": ["NODO", "STUDIO"],
+    "nameLines": [
+      "NODO",
+      "STUDIO"
+    ],
     "role": "Creative Technology",
     "location": "LA · MX · ES",
     "clockLabel": "LA",
@@ -24,14 +27,33 @@
     "role": "Founder / Creative Director / Creative Technologist"
   },
   "nav": [
-    { "label": "Work", "href": "#work" },
-    { "label": "About", "href": "#about" },
-    { "label": "Contact", "href": "#contact" }
+    {
+      "label": "Work",
+      "href": "#work"
+    },
+    {
+      "label": "About",
+      "href": "#about"
+    },
+    {
+      "label": "Contact",
+      "href": "#contact"
+    }
   ],
   "hero": {
+    "logo": {
+      "src": "/brand/nodo-logo-cropped.png",
+      "alt": "NODO"
+    },
     "intro": "Creative technology practice shaping visual worlds through AI, CGI and immersive media. We combine creative direction, real-time 3D, generative workflows and spatial experiences to create campaigns, digital identities and new forms of interaction.",
-    "countLabels": { "projects": "projects", "images": "images" },
-    "hint": ["Drag to turn the sphere.", "Click an image to open its project."]
+    "countLabels": {
+      "projects": "projects",
+      "images": "images"
+    },
+    "hint": [
+      "Drag to turn the sphere.",
+      "Click an image to open its project."
+    ]
   },
   "work": {
     "title": "Work",
@@ -39,38 +61,58 @@
   },
   "index": {
     "title": "Index",
-    "columns": ["Client", "Discipline", "Year"]
+    "columns": [
+      "Client",
+      "Discipline",
+      "Year"
+    ]
   },
   "about": {
     "title": "About",
     "statement": "NODO STUDIO is a creative technology and visual direction practice building campaign worlds, spatial experiences, and digital culture for brands that want to move differently.",
     "lists": [
       {
-        "title": "Services",
+        "title": "(EXPERTISE)",
         "items": [
-          "Creative Direction",
-          "AI Visual Development",
-          "CGI + Motion",
-          "Spatial Design",
-          "Interactive Experiences"
+          "CREATIVE TECHNOLOGY",
+          "INTERACTIVE DEVELOPMENT",
+          "IMMERSIVE EXPERIENCES",
+          "CGI + GENERATIVE AI",
+          "CREATIVE DIRECTION"
         ]
       },
       {
-        "title": "Focus",
-        "items": ["Fashion", "Sport", "Hospitality", "Music", "Culture"]
+        "title": "(ROLE)",
+        "items": [
+          "ERICK GARCIA",
+          "FOUNDER / CREATIVE DIRECTOR",
+          "CREATIVE TECHNOLOGIST",
+          "DEVELOPER"
+        ]
+      },
+      {
+        "title": "(FOCUS)",
+        "items": [
+          "ART + CULTURE",
+          "FASHION + RETAIL",
+          "MUSIC + ENTERTAINMENT",
+          "SPATIAL EXPERIENCES",
+          "EVERYDAY INNOVATION"
+        ]
       }
     ],
-    "records": {
-      "title": "Studio",
-      "items": [
-        { "label": "Founder", "value": "Erick Garcia" },
-        { "label": "Role", "value": "Founder / Creative Director / Creative Technologist" },
-        { "label": "Based", "value": "LA · MX · ES, working globally" }
-      ]
+    "logoAssembly": {
+      "logo": "/brand/nodo-logo-mask.png",
+      "label": "The NODO logo, built from small glyphs that drift in as the About section scrolls into view.",
+      "mode": "sequence",
+      "stage": "paper"
     }
   },
   "contact": {
-    "headingLines": ["Let’s work", "together"],
+    "headingLines": [
+      "Let’s work",
+      "together"
+    ],
     "emailLabel": "Email",
     "email": "TODO: studio email",
     "copyLabel": "Copy email",
@@ -80,8 +122,14 @@
     "availability": "Based LA · MX · ES, working globally",
     "elsewhereLabel": "Elsewhere",
     "socials": [
-      { "label": "Instagram", "href": "https://www.instagram.com/nodostudio__/" },
-      { "label": "LinkedIn", "href": "TODO: LinkedIn URL" }
+      {
+        "label": "Instagram",
+        "href": "https://www.instagram.com/nodostudio__/"
+      },
+      {
+        "label": "LinkedIn",
+        "href": "TODO: LinkedIn URL"
+      }
     ],
     "backToTop": "Back to top"
   },
@@ -89,7 +137,11 @@
     "dialogLabel": "Project",
     "closeLabel": "Close",
     "nextLabel": "Next project",
-    "metaLabels": { "client": "Client", "year": "Year", "discipline": "Discipline" }
+    "metaLabels": {
+      "client": "Client",
+      "year": "Year",
+      "discipline": "Discipline"
+    }
   },
   "projects": [
     {
@@ -97,7 +149,9 @@
       "title": "Dilo como Madrid",
       "year": "2026",
       "client": "Mahou",
-      "disciplines": ["Interactive AR Experience"],
+      "disciplines": [
+        "Interactive AR Experience"
+      ],
       "cover": "/projects/mahou/cover.webp",
       "images": [
         "/projects/mahou/cover.webp",
@@ -108,7 +162,10 @@
         "/projects/mahou/still-05.webp"
       ],
       "credits": [
-        { "label": "Scope", "value": "Creative Direction / Art Direction / Creative Technology / AR / Voice Recognition / Development / Motion" }
+        {
+          "label": "Scope",
+          "value": "Creative Direction / Art Direction / Creative Technology / AR / Voice Recognition / Development / Motion"
+        }
       ],
       "summary": "A voice-activated AR experience turning Mahou’s pronunciation into a playful introduction to Madrid.",
       "text": [
@@ -117,12 +174,44 @@
         "I developed the project end-to-end, from concept and creative direction to visual design, animation, voice recognition, AR and development."
       ],
       "media": [
-        { "type": "video", "src": "/projects/mahou/film-720p.mp4", "poster": "/projects/mahou/cover.webp", "alt": "Dilo como Madrid interactive AR experience film", "layout": "full", "controls": true },
-        { "type": "image", "src": "/projects/mahou/still-01.webp", "alt": "Mahou voice interaction in Madrid", "layout": "full" },
-        { "type": "image", "src": "/projects/mahou/still-02.webp", "alt": "Mahou pronunciation prompt viewed on a Madrid street", "layout": "half" },
-        { "type": "image", "src": "/projects/mahou/still-03.webp", "alt": "Mahou mural at Plaza del Carmen", "layout": "half" },
-        { "type": "image", "src": "/projects/mahou/still-04.webp", "alt": "Mahou bottle in front of a Madrid mural", "layout": "half" },
-        { "type": "image", "src": "/projects/mahou/still-05.webp", "alt": "Mahou mural animated with a figure holding a beer", "layout": "half" }
+        {
+          "type": "video",
+          "src": "/projects/mahou/film-720p.mp4",
+          "poster": "/projects/mahou/cover.webp",
+          "alt": "Dilo como Madrid interactive AR experience film",
+          "layout": "full",
+          "controls": true
+        },
+        {
+          "type": "image",
+          "src": "/projects/mahou/still-01.webp",
+          "alt": "Mahou voice interaction in Madrid",
+          "layout": "full"
+        },
+        {
+          "type": "image",
+          "src": "/projects/mahou/still-02.webp",
+          "alt": "Mahou pronunciation prompt viewed on a Madrid street",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/mahou/still-03.webp",
+          "alt": "Mahou mural at Plaza del Carmen",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/mahou/still-04.webp",
+          "alt": "Mahou bottle in front of a Madrid mural",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/mahou/still-05.webp",
+          "alt": "Mahou mural animated with a figure holding a beer",
+          "layout": "half"
+        }
       ]
     },
     {
@@ -130,7 +219,9 @@
       "title": "Beefeater Light",
       "year": "2026",
       "client": "Beefeater Light",
-      "disciplines": ["Campaign Concept + Film"],
+      "disciplines": [
+        "Campaign Concept + Film"
+      ],
       "cover": "/projects/beefeater-light/cover.webp",
       "images": [
         "/projects/beefeater-light/cover.webp",
@@ -139,8 +230,14 @@
         "/projects/beefeater-light/still-03.webp"
       ],
       "credits": [
-        { "label": "Scope", "value": "Creative Direction / Campaign Concept / Art Direction / Film / Motion Design / AI-Assisted Production / Visual Identity" },
-        { "label": "Status", "value": "Spec campaign / concept" }
+        {
+          "label": "Scope",
+          "value": "Creative Direction / Campaign Concept / Art Direction / Film / Motion Design / AI-Assisted Production / Visual Identity"
+        },
+        {
+          "label": "Status",
+          "value": "Spec campaign / concept"
+        }
       ],
       "summary": "A campaign concept for Beefeater Light turning its 50% lower alcohol proposition into a visual language rooted in London.",
       "text": [
@@ -149,10 +246,32 @@
         "The idea became a cinematic and graphic campaign system built around a simple message: Half the alcohol. Full London spirit."
       ],
       "media": [
-        { "type": "video", "src": "/projects/beefeater-light/film-1080p.mp4", "poster": "/projects/beefeater-light/film-poster.webp", "alt": "Beefeater Light campaign film — Half the alcohol. Full London spirit.", "layout": "full", "controls": true },
-        { "type": "image", "src": "/projects/beefeater-light/still-01.webp", "alt": "Close-up of a Beefeater Light bottle in a dark cinematic setting", "layout": "full" },
-        { "type": "image", "src": "/projects/beefeater-light/still-02.webp", "alt": "Red London bus crossing a city intersection at dusk", "layout": "half" },
-        { "type": "image", "src": "/projects/beefeater-light/still-03.webp", "alt": "Beefeater Light bottle beside a London Underground entrance at night", "layout": "half" }
+        {
+          "type": "video",
+          "src": "/projects/beefeater-light/film-1080p.mp4",
+          "poster": "/projects/beefeater-light/film-poster.webp",
+          "alt": "Beefeater Light campaign film — Half the alcohol. Full London spirit.",
+          "layout": "full",
+          "controls": true
+        },
+        {
+          "type": "image",
+          "src": "/projects/beefeater-light/still-01.webp",
+          "alt": "Close-up of a Beefeater Light bottle in a dark cinematic setting",
+          "layout": "full"
+        },
+        {
+          "type": "image",
+          "src": "/projects/beefeater-light/still-02.webp",
+          "alt": "Red London bus crossing a city intersection at dusk",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/beefeater-light/still-03.webp",
+          "alt": "Beefeater Light bottle beside a London Underground entrance at night",
+          "layout": "half"
+        }
       ]
     },
     {
@@ -160,7 +279,9 @@
       "title": "Lacoste × Roland-Garros",
       "year": "2026",
       "client": "Lacoste × Roland-Garros",
-      "disciplines": ["Retail Creative Direction"],
+      "disciplines": [
+        "Retail Creative Direction"
+      ],
       "cover": "/projects/lacoste-cover.jpg",
       "images": [
         "/projects/lacoste-cover.jpg",
@@ -171,20 +292,56 @@
         "/projects/lacoste-soundroom.jpg"
       ],
       "credits": [
-        { "label": "Scope", "value": "Creative Direction / Spatial Design / AI Visual Development / Retail" },
-        { "label": "Status", "value": "Independent speculative concept" }
+        {
+          "label": "Scope",
+          "value": "Creative Direction / Spatial Design / AI Visual Development / Retail"
+        },
+        {
+          "label": "Status",
+          "value": "Independent speculative concept"
+        }
       ],
       "summary": "A pop-up exploring French tennis heritage through contemporary fashion, immersive retail, and spatial storytelling.",
       "text": [
         "Built through creative direction, spatial design, and AI visual development, it imagines a complete brand world across every touchpoint."
       ],
       "media": [
-        { "type": "image", "src": "/projects/lacoste-work.jpg", "alt": "Lacoste Roland-Garros speculative retail experience interior", "layout": "full" },
-        { "type": "image", "src": "/projects/lacoste-conversation-pit.jpg", "alt": "Lacoste Roland-Garros conversation pit retail interior", "layout": "half" },
-        { "type": "image", "src": "/projects/lacoste-coffee-stop.jpg", "alt": "Lacoste Roland-Garros coffee stop detail", "layout": "half" },
-        { "type": "image", "src": "/projects/lacoste-merch-shop.jpg", "alt": "Lacoste Roland-Garros merch shop retail area", "layout": "full" },
-        { "type": "image", "src": "/projects/lacoste-storefront-gallery.jpg", "alt": "Lacoste Roland-Garros storefront", "layout": "half" },
-        { "type": "image", "src": "/projects/lacoste-soundroom.jpg", "alt": "Lacoste Roland-Garros soundroom", "layout": "half" }
+        {
+          "type": "image",
+          "src": "/projects/lacoste-work.jpg",
+          "alt": "Lacoste Roland-Garros speculative retail experience interior",
+          "layout": "full"
+        },
+        {
+          "type": "image",
+          "src": "/projects/lacoste-conversation-pit.jpg",
+          "alt": "Lacoste Roland-Garros conversation pit retail interior",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/lacoste-coffee-stop.jpg",
+          "alt": "Lacoste Roland-Garros coffee stop detail",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/lacoste-merch-shop.jpg",
+          "alt": "Lacoste Roland-Garros merch shop retail area",
+          "layout": "full"
+        },
+        {
+          "type": "image",
+          "src": "/projects/lacoste-storefront-gallery.jpg",
+          "alt": "Lacoste Roland-Garros storefront",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/lacoste-soundroom.jpg",
+          "alt": "Lacoste Roland-Garros soundroom",
+          "layout": "half"
+        }
       ]
     },
     {
@@ -192,7 +349,9 @@
       "title": "Ginebra Joyería",
       "year": "2026",
       "client": "Ginebra Joyería",
-      "disciplines": ["CGI + AI"],
+      "disciplines": [
+        "CGI + AI"
+      ],
       "cover": "/projects/ginebra-carousel-cover.png",
       "images": [
         "/projects/ginebra-carousel-cover.png",
@@ -202,17 +361,41 @@
         "/projects/videos/ginebra-gl-poster.jpg"
       ],
       "credits": [
-        { "label": "Scope", "value": "Creative Direction / CGI / AI Visuals / Motion + 3D" },
-        { "label": "Status", "value": "Client project" }
+        {
+          "label": "Scope",
+          "value": "Creative Direction / CGI / AI Visuals / Motion + 3D"
+        },
+        {
+          "label": "Status",
+          "value": "Client project"
+        }
       ],
       "summary": "Premium launch visuals combining CGI craft, AI image direction, and product-world storytelling.",
       "text": [
         "Premium launch visuals for Ginebra, a jewelry brand featured in British Vogue, combining CGI craft, AI image direction, and product-world storytelling."
       ],
       "media": [
-        { "type": "video", "src": "/projects/videos/ginebra-vending.mp4", "poster": "/projects/videos/ginebra-vending-poster.jpg", "alt": "Ginebra jewelry dispenser launch film", "layout": "half" },
-        { "type": "video", "src": "/projects/videos/ginebra-transport.mp4", "poster": "/projects/videos/ginebra-transport-poster.jpg", "alt": "Ginebra transport campaign film", "layout": "half" },
-        { "type": "video", "src": "/projects/videos/ginebra-gl.mp4", "poster": "/projects/videos/ginebra-gl-poster.jpg", "alt": "Ginebra jewelry glass motion film", "layout": "left" }
+        {
+          "type": "video",
+          "src": "/projects/videos/ginebra-vending.mp4",
+          "poster": "/projects/videos/ginebra-vending-poster.jpg",
+          "alt": "Ginebra jewelry dispenser launch film",
+          "layout": "half"
+        },
+        {
+          "type": "video",
+          "src": "/projects/videos/ginebra-transport.mp4",
+          "poster": "/projects/videos/ginebra-transport-poster.jpg",
+          "alt": "Ginebra transport campaign film",
+          "layout": "half"
+        },
+        {
+          "type": "video",
+          "src": "/projects/videos/ginebra-gl.mp4",
+          "poster": "/projects/videos/ginebra-gl-poster.jpg",
+          "alt": "Ginebra jewelry glass motion film",
+          "layout": "left"
+        }
       ]
     },
     {
@@ -220,7 +403,9 @@
       "title": "Stussy × Moncler",
       "year": "2026",
       "client": "Stussy × Moncler",
-      "disciplines": ["AI Visual Campaign"],
+      "disciplines": [
+        "AI Visual Campaign"
+      ],
       "cover": "/projects/stussy-moncler-carousel.webp",
       "images": [
         "/projects/stussy-moncler-carousel.webp",
@@ -231,8 +416,14 @@
         "/projects/stussy-moncler-work.webp"
       ],
       "credits": [
-        { "label": "Scope", "value": "Creative Direction / CGI / AI Visuals / Motion + 3D" },
-        { "label": "Status", "value": "Independent speculative concept" }
+        {
+          "label": "Scope",
+          "value": "Creative Direction / CGI / AI Visuals / Motion + 3D"
+        },
+        {
+          "label": "Status",
+          "value": "Independent speculative concept"
+        }
       ],
       "summary": "A speculative Stussy × Moncler campaign world built through AI image direction, CGI, motion, and 3D visual development.",
       "text": [
@@ -240,13 +431,51 @@
         "The project explores how AI image direction, CGI, motion, and 3D visual development can extend a fashion collaboration into a complete visual system across stills, moving-image assets, and launch-world storytelling."
       ],
       "media": [
-        { "type": "image", "src": "/projects/stussy-moncler-wave-01.webp", "alt": "Stussy Moncler Inside the Wave campaign image", "layout": "full" },
-        { "type": "video", "src": "/projects/videos/stussy-moncler-wave-film.mp4", "poster": "/projects/videos/stussy-moncler-wave-film-poster.jpg", "alt": "Stussy Moncler Inside the Wave campaign film", "layout": "right" },
-        { "type": "image", "src": "/projects/stussy-moncler-wave-02.webp", "alt": "Stussy Moncler campaign still", "layout": "full" },
-        { "type": "image", "src": "/projects/stussy-moncler-surfboard.webp", "alt": "Stussy Moncler surfboard object study", "layout": "half" },
-        { "type": "image", "src": "/projects/stussy-moncler-wave-03.webp", "alt": "Stussy Moncler campaign environment still", "layout": "half" },
-        { "type": "video", "src": "/projects/videos/stussy-moncler-vertical-01.mp4", "poster": "/projects/videos/stussy-moncler-vertical-01-poster.jpg", "alt": "Stussy Moncler moving image study", "layout": "half" },
-        { "type": "video", "src": "/projects/videos/stussy-moncler-vertical-02.mp4", "poster": "/projects/videos/stussy-moncler-vertical-02-poster.jpg", "alt": "Stussy Moncler second moving image study", "layout": "half" }
+        {
+          "type": "image",
+          "src": "/projects/stussy-moncler-wave-01.webp",
+          "alt": "Stussy Moncler Inside the Wave campaign image",
+          "layout": "full"
+        },
+        {
+          "type": "video",
+          "src": "/projects/videos/stussy-moncler-wave-film.mp4",
+          "poster": "/projects/videos/stussy-moncler-wave-film-poster.jpg",
+          "alt": "Stussy Moncler Inside the Wave campaign film",
+          "layout": "right"
+        },
+        {
+          "type": "image",
+          "src": "/projects/stussy-moncler-wave-02.webp",
+          "alt": "Stussy Moncler campaign still",
+          "layout": "full"
+        },
+        {
+          "type": "image",
+          "src": "/projects/stussy-moncler-surfboard.webp",
+          "alt": "Stussy Moncler surfboard object study",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/stussy-moncler-wave-03.webp",
+          "alt": "Stussy Moncler campaign environment still",
+          "layout": "half"
+        },
+        {
+          "type": "video",
+          "src": "/projects/videos/stussy-moncler-vertical-01.mp4",
+          "poster": "/projects/videos/stussy-moncler-vertical-01-poster.jpg",
+          "alt": "Stussy Moncler moving image study",
+          "layout": "half"
+        },
+        {
+          "type": "video",
+          "src": "/projects/videos/stussy-moncler-vertical-02.mp4",
+          "poster": "/projects/videos/stussy-moncler-vertical-02-poster.jpg",
+          "alt": "Stussy Moncler second moving image study",
+          "layout": "half"
+        }
       ]
     },
     {
@@ -254,7 +483,9 @@
       "title": "Airbnb",
       "year": "2026",
       "client": "Airbnb",
-      "disciplines": ["AI Film + Storytelling"],
+      "disciplines": [
+        "AI Film + Storytelling"
+      ],
       "cover": "/projects/airbnb/film-final-poster.webp",
       "images": [
         "/projects/airbnb/film-final-poster.webp",
@@ -264,8 +495,14 @@
         "/projects/airbnb/still-04.webp"
       ],
       "credits": [
-        { "label": "Scope", "value": "Creative Direction / Campaign Concept / Art Direction / AI Film / Storytelling" },
-        { "label": "Status", "value": "Spec campaign / concept" }
+        {
+          "label": "Scope",
+          "value": "Creative Direction / Campaign Concept / Art Direction / AI Film / Storytelling"
+        },
+        {
+          "label": "Status",
+          "value": "Spec campaign / concept"
+        }
       ],
       "summary": "A campaign concept for Airbnb built around the gap between what homeowners imagine and what actually happens when they open their door.",
       "text": [
@@ -274,11 +511,38 @@
         "The campaign is built around the gap between what homeowners imagine could happen and what actually happens when they open their door."
       ],
       "media": [
-        { "type": "video", "src": "/projects/airbnb/film-final-1080p.mp4", "poster": "/projects/airbnb/film-final-poster.webp", "alt": "Airbnb campaign film about the fears of opening a home to guests", "layout": "full", "controls": true },
-        { "type": "image", "src": "/projects/airbnb/still-01.webp", "alt": "An elderly couple sees a family arriving at their door", "layout": "full" },
-        { "type": "image", "src": "/projects/airbnb/still-02.webp", "alt": "Three children run through an ornate hallway in the imagined scenario", "layout": "half" },
-        { "type": "image", "src": "/projects/airbnb/still-03.webp", "alt": "Cleaning supplies prepared in the couple's home", "layout": "half" },
-        { "type": "image", "src": "/projects/airbnb/still-04.webp", "alt": "Three children sit on a sofa in the Airbnb campaign film", "layout": "full" }
+        {
+          "type": "video",
+          "src": "/projects/airbnb/film-final-1080p.mp4",
+          "poster": "/projects/airbnb/film-final-poster.webp",
+          "alt": "Airbnb campaign film about the fears of opening a home to guests",
+          "layout": "full",
+          "controls": true
+        },
+        {
+          "type": "image",
+          "src": "/projects/airbnb/still-01.webp",
+          "alt": "An elderly couple sees a family arriving at their door",
+          "layout": "full"
+        },
+        {
+          "type": "image",
+          "src": "/projects/airbnb/still-02.webp",
+          "alt": "Three children run through an ornate hallway in the imagined scenario",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/airbnb/still-03.webp",
+          "alt": "Cleaning supplies prepared in the couple's home",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/airbnb/still-04.webp",
+          "alt": "Three children sit on a sofa in the Airbnb campaign film",
+          "layout": "full"
+        }
       ]
     },
     {
@@ -286,7 +550,9 @@
       "title": "Twojeys",
       "year": "2026",
       "client": "Twojeys",
-      "disciplines": ["AI Creative Direction"],
+      "disciplines": [
+        "AI Creative Direction"
+      ],
       "cover": "/projects/twojeys-work.jpg",
       "images": [
         "/projects/twojeys-work.jpg",
@@ -297,20 +563,57 @@
         "/projects/twojeys-campaign-06.jpg"
       ],
       "credits": [
-        { "label": "Scope", "value": "AI Visuals / Creative Direction / Campaign Imagery / Post-Production" },
-        { "label": "Status", "value": "Client project" }
+        {
+          "label": "Scope",
+          "value": "AI Visuals / Creative Direction / Campaign Imagery / Post-Production"
+        },
+        {
+          "label": "Status",
+          "value": "Client project"
+        }
       ],
       "summary": "An AI-led visual campaign system exploring new product forms through synthetic image direction.",
       "text": [
         "An AI-led visual campaign system for TWOJEYS, exploring new product forms through synthetic image direction, campaign mood, and polished visual storytelling."
       ],
       "media": [
-        { "type": "video", "src": "/projects/videos/twojeys-dawgs.mp4", "poster": "/projects/videos/twojeys-dawgs-poster.jpg", "alt": "TWOJEYS AI visual campaign hero film", "layout": "full" },
-        { "type": "image", "src": "/projects/twojeys-campaign-01-replacement.png", "alt": "TWOJEYS AI visual campaign portrait still", "layout": "left" },
-        { "type": "image", "src": "/projects/twojeys-campaign-03.jpg", "alt": "TWOJEYS campaign behind-the-scenes image", "layout": "full" },
-        { "type": "image", "src": "/projects/twojeys-campaign-04.jpg", "alt": "TWOJEYS AI campaign image study", "layout": "half" },
-        { "type": "image", "src": "/projects/twojeys-campaign-05.jpg", "alt": "TWOJEYS AI visual campaign material study", "layout": "half" },
-        { "type": "image", "src": "/projects/twojeys-campaign-06.jpg", "alt": "TWOJEYS AI visual campaign wide still", "layout": "full" }
+        {
+          "type": "video",
+          "src": "/projects/videos/twojeys-dawgs.mp4",
+          "poster": "/projects/videos/twojeys-dawgs-poster.jpg",
+          "alt": "TWOJEYS AI visual campaign hero film",
+          "layout": "full"
+        },
+        {
+          "type": "image",
+          "src": "/projects/twojeys-campaign-01-replacement.png",
+          "alt": "TWOJEYS AI visual campaign portrait still",
+          "layout": "left"
+        },
+        {
+          "type": "image",
+          "src": "/projects/twojeys-campaign-03.jpg",
+          "alt": "TWOJEYS campaign behind-the-scenes image",
+          "layout": "full"
+        },
+        {
+          "type": "image",
+          "src": "/projects/twojeys-campaign-04.jpg",
+          "alt": "TWOJEYS AI campaign image study",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/twojeys-campaign-05.jpg",
+          "alt": "TWOJEYS AI visual campaign material study",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/twojeys-campaign-06.jpg",
+          "alt": "TWOJEYS AI visual campaign wide still",
+          "layout": "full"
+        }
       ]
     },
     {
@@ -318,7 +621,9 @@
       "title": "Eat Nudes",
       "year": "2026",
       "client": "Eat Nudes",
-      "disciplines": ["Creative Technology + Production"],
+      "disciplines": [
+        "Creative Technology + Production"
+      ],
       "cover": "/projects/eat-nudes-cover.jpg",
       "images": [
         "/projects/eat-nudes-cover.jpg",
@@ -329,22 +634,72 @@
         "/projects/eat-nudes-campaign-02.jpg"
       ],
       "credits": [
-        { "label": "Scope", "value": "Web Design / Motion / Digital Menus / AI + CGI Content" },
-        { "label": "Status", "value": "Client project" }
+        {
+          "label": "Scope",
+          "value": "Web Design / Motion / Digital Menus / AI + CGI Content"
+        },
+        {
+          "label": "Status",
+          "value": "Client project"
+        }
       ],
       "summary": "A multi-platform digital rollout spanning AI imagery, CGI content, web design, menus, and social direction.",
       "text": [
         "A multi-platform digital rollout for EAT NUDES, including AI-led campaign imagery, CGI product content, web design, animated digital menus, and social-first creative direction."
       ],
       "media": [
-        { "type": "image", "src": "/projects/eat-nudes-hero.jpg", "alt": "Eat Nudes hero campaign image", "layout": "right" },
-        { "type": "video", "src": "/projects/videos/eat-nudes-cognitive-cacao.mp4", "poster": "/projects/videos/eat-nudes-cognitive-cacao-poster.jpg", "alt": "Eat Nudes Cognitive Cacao vertical motion piece", "layout": "half" },
-        { "type": "image", "src": "/projects/eat-nudes-green-soft-serve.png", "alt": "Eat Nudes green soft serve campaign still", "layout": "half" },
-        { "type": "image", "src": "/projects/eat-nudes-smoothie-replacement.png", "alt": "Eat Nudes smoothie campaign still", "layout": "half" },
-        { "type": "video", "src": "/projects/videos/eat-nudes-clawmachine.mp4", "poster": "/projects/videos/eat-nudes-clawmachine-poster.jpg", "alt": "Eat Nudes claw machine vertical motion piece", "layout": "half" },
-        { "type": "video", "src": "/projects/videos/eat-nudes-colab.mp4", "poster": "/projects/videos/eat-nudes-colab-poster.jpg", "alt": "Eat Nudes collaboration vertical motion piece", "layout": "half" },
-        { "type": "image", "src": "/projects/eat-nudes-macro-02.jpg", "alt": "Eat Nudes macro campaign image", "layout": "half" },
-        { "type": "video", "src": "/projects/videos/eat-nudes-screen-horizontal.mp4", "poster": "/projects/videos/eat-nudes-screen-horizontal-poster.jpg", "alt": "Eat Nudes horizontal digital interface recording", "layout": "full" }
+        {
+          "type": "image",
+          "src": "/projects/eat-nudes-hero.jpg",
+          "alt": "Eat Nudes hero campaign image",
+          "layout": "right"
+        },
+        {
+          "type": "video",
+          "src": "/projects/videos/eat-nudes-cognitive-cacao.mp4",
+          "poster": "/projects/videos/eat-nudes-cognitive-cacao-poster.jpg",
+          "alt": "Eat Nudes Cognitive Cacao vertical motion piece",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/eat-nudes-green-soft-serve.png",
+          "alt": "Eat Nudes green soft serve campaign still",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/eat-nudes-smoothie-replacement.png",
+          "alt": "Eat Nudes smoothie campaign still",
+          "layout": "half"
+        },
+        {
+          "type": "video",
+          "src": "/projects/videos/eat-nudes-clawmachine.mp4",
+          "poster": "/projects/videos/eat-nudes-clawmachine-poster.jpg",
+          "alt": "Eat Nudes claw machine vertical motion piece",
+          "layout": "half"
+        },
+        {
+          "type": "video",
+          "src": "/projects/videos/eat-nudes-colab.mp4",
+          "poster": "/projects/videos/eat-nudes-colab-poster.jpg",
+          "alt": "Eat Nudes collaboration vertical motion piece",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/eat-nudes-macro-02.jpg",
+          "alt": "Eat Nudes macro campaign image",
+          "layout": "half"
+        },
+        {
+          "type": "video",
+          "src": "/projects/videos/eat-nudes-screen-horizontal.mp4",
+          "poster": "/projects/videos/eat-nudes-screen-horizontal-poster.jpg",
+          "alt": "Eat Nudes horizontal digital interface recording",
+          "layout": "full"
+        }
       ]
     },
     {
@@ -352,7 +707,9 @@
       "title": "Nike Football",
       "year": "2025",
       "client": "Nike Football",
-      "disciplines": ["Retail Creative Direction"],
+      "disciplines": [
+        "Retail Creative Direction"
+      ],
       "cover": "/projects/nike-cover.jpg",
       "images": [
         "/projects/nike-cover.jpg",
@@ -363,21 +720,132 @@
         "/projects/nike-work.jpg"
       ],
       "credits": [
-        { "label": "Scope", "value": "Creative Direction / Experiential Design / Spatial Visual Development / AI Visuals / Retail Concept" },
-        { "label": "Status", "value": "Independent speculative concept" }
+        {
+          "label": "Scope",
+          "value": "Creative Direction / Experiential Design / Spatial Visual Development / AI Visuals / Retail Concept"
+        },
+        {
+          "label": "Status",
+          "value": "Independent speculative concept"
+        }
       ],
       "summary": "A speculative Nike Football pop-up store developed for the World Cup.",
       "text": [
         "A speculative Nike Football pop-up store developed for the World Cup, translating football culture into an immersive retail experience. The project combines spatial storytelling, product moments, campaign visuals, and interactive brand zones to imagine how Nike Football could activate the city around the tournament."
       ],
       "media": [
-        { "type": "video", "src": "/projects/videos/nike-world-cup-hero.mp4", "poster": "/projects/videos/nike-world-cup-hero-poster.jpg", "alt": "Nike World Cup shoe installation hero film", "layout": "full" },
-        { "type": "image", "src": "/projects/nike-dj-room.jpg", "alt": "Nike World Cup DJ room activation", "layout": "full" },
-        { "type": "video", "src": "/projects/videos/nike-installation-carousel.mp4", "poster": "/projects/videos/nike-installation-poster.jpg", "alt": "Nike World Cup live installation loop", "layout": "full" },
-        { "type": "image", "src": "/projects/nike-circular-lounge.jpg", "alt": "Nike World Cup circular lounge installation", "layout": "half" },
-        { "type": "image", "src": "/projects/nike-store-interior.jpg", "alt": "Nike World Cup modern retail interior", "layout": "half" },
-        { "type": "image", "src": "/projects/nike-activation-room.jpg", "alt": "Nike World Cup activation room", "layout": "full" }
+        {
+          "type": "video",
+          "src": "/projects/videos/nike-world-cup-hero.mp4",
+          "poster": "/projects/videos/nike-world-cup-hero-poster.jpg",
+          "alt": "Nike World Cup shoe installation hero film",
+          "layout": "full"
+        },
+        {
+          "type": "image",
+          "src": "/projects/nike-dj-room.jpg",
+          "alt": "Nike World Cup DJ room activation",
+          "layout": "full"
+        },
+        {
+          "type": "video",
+          "src": "/projects/videos/nike-installation-carousel.mp4",
+          "poster": "/projects/videos/nike-installation-poster.jpg",
+          "alt": "Nike World Cup live installation loop",
+          "layout": "full"
+        },
+        {
+          "type": "image",
+          "src": "/projects/nike-circular-lounge.jpg",
+          "alt": "Nike World Cup circular lounge installation",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/nike-store-interior.jpg",
+          "alt": "Nike World Cup modern retail interior",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/nike-activation-room.jpg",
+          "alt": "Nike World Cup activation room",
+          "layout": "full"
+        }
       ]
     }
-  ]
+  ],
+  "preloader": {
+    "desktopVideo": "/video/nodo-preload-desktop.mp4?v=20260823-1",
+    "mobileFrames": {
+      "path": "/video/preload-jpg-v2",
+      "prefix": "preload-",
+      "count": 111,
+      "fps": 25,
+      "startBuffer": 18,
+      "lookahead": 36,
+      "version": "20260803-5"
+    }
+  },
+  "footer": {
+    "topLeft": "All Rights Reserved",
+    "topCenter": "NODO Studio",
+    "topRight": "©2026",
+    "statementLines": [
+      "Built Between",
+      "Code, Culture,",
+      "And Craft."
+    ],
+    "columns": [
+      {
+        "label": "Navigation",
+        "links": [
+          {
+            "label": "Home",
+            "href": "#top"
+          },
+          {
+            "label": "Work",
+            "href": "#work"
+          },
+          {
+            "label": "Index",
+            "href": "#index"
+          },
+          {
+            "label": "About",
+            "href": "#about"
+          },
+          {
+            "label": "Contact",
+            "href": "#contact"
+          }
+        ]
+      },
+      {
+        "label": "Contact",
+        "lines": [
+          "NODO Studio",
+          "LA - MX - ES / Working globally"
+        ],
+        "links": [
+          {
+            "label": "Start A Conversation",
+            "href": "#contact"
+          }
+        ]
+      },
+      {
+        "label": "Practice",
+        "lines": [
+          "Creative Technology",
+          "Image / Interaction / Systems"
+        ]
+      },
+      {
+        "label": "Social",
+        "socials": true
+      }
+    ]
+  }
 }
