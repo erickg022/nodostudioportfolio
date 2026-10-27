@@ -5,6 +5,11 @@ import site from "./content/site.json";
 const RETIRED_PROJECTS = ["axe-ceremonia-ar-portal", "gdl-movilidad", "play-in-motion"];
 
 const nextConfig: NextConfig = {
+  // src/lib/media.ts reads image sizes from /public at build time; the page is prerendered,
+  // so keep public assets (and the archived site) out of the server function bundle.
+  outputFileTracingExcludes: {
+    "/*": ["./public/**/*", "./_legacy/**/*", "./_reference/**/*", "./REFERENCE/**/*"],
+  },
   images: {
     remotePatterns: [
       {
