@@ -83,23 +83,22 @@ export type Site = {
     columns: {
       label: string;
       lines?: string[];
+      /** href "mailto" becomes a mail link to contact.email. */
       links?: { label: string; href: string }[];
       /** Render contact.socials in this column. */
       socials?: boolean;
     }[];
   };
+  header: {
+    brand: string;
+    /** Right-hand text of the desktop bar. */
+    right: string;
+    mobileLinks: { label: string; href: string }[];
+    mobileMeta: string[];
+  };
   contact: {
-    headingLines: string[];
-    emailLabel: string;
     email: string;
-    copyLabel: string;
-    copiedLabel: string;
-    copyFallbackLabel: string;
-    availabilityLabel: string;
-    availability: string;
-    elsewhereLabel: string;
     socials: { label: string; href: string }[];
-    backToTop: string;
   };
   overlay: {
     dialogLabel: string;

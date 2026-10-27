@@ -36,30 +36,214 @@ html:root {
   background: #ffffff;
 }
 
-/* ---------- Hero: logo in place of the first name line ---------- */
-/* In nodo-logo-cropped.png the N spans 45.8% of the image height and the drawn D hangs
-   29.5% below it. Scale so the N matches Archivo's cap height (~0.69em) and sit the N on
-   the baseline; the negative margin keeps the line box, the padding keeps the D unclipped. */
+/* ---------- Hero: the NODO logo alone, centred at the bottom ---------- */
+/* Centred, it would sit behind the sphere; bring it in front and invert against what is
+   underneath (Meridian's header trick), so it reads black on white and stays visible on photos. */
+.mr-hero__name--logo {
+  justify-content: center;
+  bottom: clamp(20px, 4svh, 40px);
+  line-height: 1;
+  z-index: 3;
+  mix-blend-mode: difference;
+}
+.mr-hero__name--logo .mr-hero__logo {
+  filter: invert(1);
+}
+/* The sticky wrapper is its own stacking context; give the blend the page colour to work on. */
+.mr-hero__sticky:has(.mr-hero__name--logo) {
+  background: var(--paper);
+}
+/* Full image is shown (nothing cropped); the span still masks the rise-in. */
+.mr-hero__name--logo .mr-hero__first {
+  padding-top: 0;
+}
 .mr-hero__logo {
-  display: inline-block;
-  height: 1.506em;
+  display: block;
+  height: min(18svh, 20vw);
   width: auto;
-  max-width: none;
-  vertical-align: baseline;
-  margin-bottom: -0.444em;
+  max-width: 100%;
 }
-.mr-hero__first:has(.mr-hero__logo) {
-  padding-bottom: 0.46em;
-  margin-bottom: -0.46em;
-}
-/* Stacked name (≤760px): give the D its own room so it doesn't run into STUDIO. */
 @media (max-width: 760px) {
-  .mr-hero__logo {
-    margin-bottom: 0;
+  .mr-hero__name--logo {
+    align-items: center;
   }
-  .mr-hero__first:has(.mr-hero__logo) {
-    padding-bottom: 0.08em;
-    margin-bottom: 0;
+  .mr-hero__logo {
+    height: auto;
+    width: min(72vw, 340px);
+  }
+}
+
+/* ---------- Navigation (previous site) ---------- */
+/* Desktop: white mono bar. Sits under the project overlay (z 60). */
+.nd-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 55;
+  border-bottom: 1px solid rgb(0 0 0 / 0.15);
+  background: rgb(255 255 255 / 0.95);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+}
+.nd-header__bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  max-width: 1800px;
+  height: 56px;
+  margin: 0 auto;
+  padding: 0 24px;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #171717;
+}
+.nd-header__links {
+  display: flex;
+  gap: 20px;
+}
+.nd-header__links a,
+.nd-header__right {
+  color: #404040;
+}
+.nd-header a {
+  text-underline-offset: 4px;
+  transition: color 0.15s;
+}
+.nd-header a:hover {
+  color: #0a0a0a;
+  text-decoration: underline;
+}
+.nd-header__right {
+  justify-self: end;
+}
+@media (min-width: 1024px) {
+  .nd-header__links {
+    gap: 32px;
+  }
+}
+
+/* Mobile: 80px header with a two-line toggle and a full-screen menu. */
+.mobile-site-header,
+.mobile-menu-panel {
+  display: none;
+}
+@media (max-width: 767px) {
+  .nd-header {
+    display: none;
+  }
+  .mobile-site-header {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 55;
+    display: flex;
+    height: 80px;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(16, 16, 14, 0.14);
+    background: #ffffff;
+    padding: calc(env(safe-area-inset-top, 0px) + 14px) 18px 14px;
+  }
+  .mobile-site-header__brand-text {
+    font-family: var(--font-geist-mono), monospace;
+    font-size: clamp(13px, 3.8vw, 16px);
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #10100e;
+  }
+  .mobile-site-header__toggle {
+    position: relative;
+    display: grid;
+    height: 48px;
+    width: 48px;
+    place-items: center;
+    border: 0;
+    background: transparent;
+    color: #10100e;
+  }
+  .mobile-site-header__toggle span {
+    grid-area: 1 / 1;
+    display: block;
+    height: 1.5px;
+    width: 24px;
+    background: currentColor;
+    transition: transform 220ms ease, opacity 220ms ease;
+  }
+  .mobile-site-header__toggle span:first-child {
+    transform: translateY(-4px);
+  }
+  .mobile-site-header__toggle span:last-child {
+    transform: translateY(4px);
+  }
+  .mobile-site-header__toggle[aria-expanded="true"] span:first-child {
+    transform: rotate(45deg);
+  }
+  .mobile-site-header__toggle[aria-expanded="true"] span:last-child {
+    transform: rotate(-45deg);
+  }
+  .mobile-site-header__toggle:focus-visible,
+  .mobile-site-header__brand-text:focus-visible,
+  .mobile-menu-panel a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+  .mobile-menu-panel {
+    position: fixed;
+    inset: 0;
+    z-index: 1001;
+    display: flex;
+    min-height: 100svh;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #ffffff;
+    padding: calc(env(safe-area-inset-top, 0px) + 108px) 18px calc(env(safe-area-inset-bottom, 0px) + 22px);
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 360ms cubic-bezier(0.76, 0, 0.24, 1), opacity 180ms ease;
+  }
+  .mobile-menu-panel[data-open="true"] {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .mobile-menu-panel__nav {
+    display: grid;
+    gap: 0.18em;
+  }
+  .mobile-menu-panel__nav a {
+    display: block;
+    width: fit-content;
+    font-family: var(--font-geist), system-ui, sans-serif;
+    font-size: clamp(60.8px, 18vw, 115.2px);
+    font-weight: 800;
+    letter-spacing: -0.065em;
+    line-height: 0.86;
+    text-transform: uppercase;
+    color: #10100e;
+  }
+  .mobile-menu-panel__meta {
+    display: grid;
+    gap: 7.2px;
+    border-top: 1px solid rgba(16, 16, 14, 0.16);
+    padding-top: 17.6px;
+    font-family: var(--font-geist-mono), monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    line-height: 1.45;
+    text-transform: uppercase;
+    color: rgba(16, 16, 14, 0.72);
+  }
+}
+
+/* Keep the top-anchored Meridian copy clear of the opaque bars (56px desktop, 80px mobile). */
+@media (max-width: 767px) {
+  .mr-hero__notes {
+    top: 100px;
   }
 }
 

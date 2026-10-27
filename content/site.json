@@ -109,18 +109,7 @@
     }
   },
   "contact": {
-    "headingLines": [
-      "Let’s work",
-      "together"
-    ],
-    "emailLabel": "Email",
     "email": "TODO: studio email",
-    "copyLabel": "Copy email",
-    "copiedLabel": "Email copied",
-    "copyFallbackLabel": "Selected, press Copy",
-    "availabilityLabel": "Availability",
-    "availability": "Based LA · MX · ES, working globally",
-    "elsewhereLabel": "Elsewhere",
     "socials": [
       {
         "label": "Instagram",
@@ -130,8 +119,7 @@
         "label": "LinkedIn",
         "href": "TODO: LinkedIn URL"
       }
-    ],
-    "backToTop": "Back to top"
+    ]
   },
   "overlay": {
     "dialogLabel": "Project",
@@ -831,7 +819,7 @@
         "links": [
           {
             "label": "Start A Conversation",
-            "href": "#contact"
+            "href": "mailto"
           }
         ]
       },
@@ -846,6 +834,29 @@
         "label": "Social",
         "socials": true
       }
+    ]
+  },
+  "header": {
+    "brand": "NODO STUDIO",
+    "right": "Index / 001",
+    "mobileLinks": [
+      {
+        "label": "Home",
+        "href": "#top"
+      },
+      {
+        "label": "Work",
+        "href": "#work"
+      },
+      {
+        "label": "About",
+        "href": "#about"
+      }
+    ],
+    "mobileMeta": [
+      "LA - MX - ES",
+      "Working globally",
+      "(C) 2026 NODO STUDIO"
     ]
   }
 }

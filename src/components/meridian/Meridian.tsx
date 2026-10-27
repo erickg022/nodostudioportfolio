@@ -1,8 +1,9 @@
 /* eslint-disable @next/next/no-img-element -- Meridian's runtime animates raw <img> nodes (clip-path reveals, ghost transition); sources still go through the Next image optimizer via getImageProps. */
 import { Fragment } from "react";
-import { isTodo, site, type Project, type ProjectMedia } from "@/content/site";
+import { site, type Project, type ProjectMedia } from "@/content/site";
 import { fixedImage, responsiveImage, textureUrl } from "@/lib/media";
 import { LogoAssembly } from "./LogoAssembly";
+import { NodoHeader } from "./NodoHeader";
 import { SiteFooter } from "./SiteFooter";
 import type { RuntimeData } from "./runtime/types";
 
@@ -116,7 +117,7 @@ async function ProjectArticle({ project, next }: { project: Project; next: Proje
 }
 
 export async function Meridian() {
-  const { studio, hero, work, index, about, contact, overlay, projects } = site;
+  const { studio, hero, work, index, about, overlay, projects } = site;
   const data = await runtimeData(projects);
   const imageCount = projects.reduce((sum, p) => sum + p.images.length, 0);
   const first = projects[0];
@@ -150,43 +151,30 @@ export async function Meridian() {
         <canvas className="site-preloader__video" hidden />
       </div>
 
-      <header className="mr-header">
-        <a href="#top" className="mr-header__name">
-          {studio.name}
-        </a>
-        <span className="mr-header__role">{studio.role}</span>
-        <nav className="mr-header__nav" aria-label="Main">
-          {site.nav.map((item) => (
-            <a key={item.href} href={item.href}>
-              {item.label}
-            </a>
-          ))}
-        </nav>
-        <span className="mr-header__status">
-          <span>
-            {studio.clockLabel} <span data-clock="true" data-tz={studio.timezone} />
-          </span>
-          <span className="mr-header__avail">{studio.availability}</span>
-        </span>
-      </header>
+      <NodoHeader />
 
       <main>
         <section id="top" data-mr="hero" className="mr-hero" aria-label="Introduction">
           <div className="mr-hero__sticky">
-            <h1 className="mr-hero__name" aria-label={studio.name}>
-              <span className="mr-hero__first">
-                <span data-rise="true">
-                  {hero.logo ? (
+            {hero.logo ? (
+              // Logo only, centred at the bottom of the hero.
+              <h1 className="mr-hero__name mr-hero__name--logo" aria-label={studio.name}>
+                <span className="mr-hero__first">
+                  <span data-rise="true">
                     <img src={hero.logo.src} alt={hero.logo.alt} className="mr-hero__logo" decoding="async" />
-                  ) : (
-                    studio.nameLines[0]
-                  )}
+                  </span>
                 </span>
-              </span>
-              <span className="mr-hero__last">
-                <span data-rise="true">{studio.nameLines[1]}</span>
-              </span>
-            </h1>
+              </h1>
+            ) : (
+              <h1 className="mr-hero__name" aria-label={studio.name}>
+                <span className="mr-hero__first">
+                  <span data-rise="true">{studio.nameLines[0]}</span>
+                </span>
+                <span className="mr-hero__last">
+                  <span data-rise="true">{studio.nameLines[1]}</span>
+                </span>
+              </h1>
+            )}
             <canvas data-sphere="true" className="mr-hero__canvas" aria-hidden="true" />
             <div className="mr-hero__notes">
               <p className="mr-hero__intro">{hero.intro}</p>
@@ -291,59 +279,9 @@ export async function Meridian() {
           </div>
         </section>
 
-        <section id="contact" data-mr="contact" className="mr-contact" aria-labelledby="contact-title">
-          <h2 id="contact-title" className="mr-contact__big" aria-label={contact.headingLines.join(" ")}>
-            {contact.headingLines.map((line, li) => (
-              <span key={li} className="mr-contact__line" aria-hidden="true">
-                {Array.from(line).map((ch, ci) => (
-                  <span key={ci} data-letter="true" className="mr-contact__letter">
-                    {/* The reference uses a non-breaking space so the inline-block keeps its width. */}
-                    {ch === " " ? " " : ch}
-                  </span>
-                ))}
-              </span>
-            ))}
-          </h2>
-          <div className="mr-contact__row">
-            <div className="mr-contact__email">
-              <span className="mr-label">{contact.emailLabel}</span>
-              <span className="mr-contact__address">{contact.email}</span>
-              <button
-                type="button"
-                data-copy={contact.email}
-                data-copy-label={contact.copyLabel}
-                data-copied-label={contact.copiedLabel}
-                data-fallback-label={contact.copyFallbackLabel}
-                className="mr-contact__copy"
-              >
-                {contact.copyLabel}
-              </button>
-            </div>
-            <div>
-              <span className="mr-label">{contact.availabilityLabel}</span>
-              <span>{contact.availability}</span>
-            </div>
-            <div>
-              <span className="mr-label">{contact.elsewhereLabel}</span>
-              <ul className="mr-contact__socials">
-                {contact.socials.map((social) => (
-                  <li key={social.label}>
-                    {isTodo(social.href) ? (
-                      <span title={social.href}>{social.label} (TODO)</span>
-                    ) : (
-                      <a href={social.href} target="_blank" rel="noreferrer">
-                        {social.label}
-                      </a>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </section>
         {/* On vertical screens the assembly moves out of About to sit just above the footer. */}
         <LogoAssembly {...about.logoAssembly} placement="stacked" />
-        <SiteFooter />
+        <SiteFooter id="contact" />
       </main>
 
       <div
