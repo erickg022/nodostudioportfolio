@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Archived pre-Meridian site and extracted reference material.
+    "_legacy/**",
+    "_reference/**",
+    "REFERENCE/**",
+    ".codex-tmp-ffmpeg/**",
   ]),
 ]);
 

@@ -32,6 +32,8 @@ export function SitePreloader() {
   }, []);
 
   useEffect(() => {
+    // Pre-existing legacy pattern (only /recursos uses this); reads the viewport after hydration.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMode(window.matchMedia("(max-width: 767px)").matches ? "mobile" : "desktop");
   }, []);
 
