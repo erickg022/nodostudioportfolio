@@ -1,0 +1,7 @@
+<svg width="1200" height="960" viewBox="0 0 1200 960" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="960" fill="#e9e2d4"/>
+  <path d="M220 710C345 535 470 360 602 184C720 340 838 496 980 710H220Z" stroke="#11110f" stroke-width="30"/>
+  <circle cx="602" cy="478" r="86" fill="#b93015"/>
+  <path d="M160 210H1040M160 750H1040M240 120V840M960 120V840" stroke="#11110f" stroke-opacity=".16" stroke-width="3"/>
+  <text x="50" y="70" fill="#11110f" font-family="monospace" font-size="28" letter-spacing="8">AR WAYFINDING</text>
+</svg>

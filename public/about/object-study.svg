@@ -1,0 +1,7 @@
+<svg width="1200" height="1500" viewBox="0 0 1200 1500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="1500" fill="#ded7c8"/>
+  <path d="M280 1030L474 310H730L920 1030H760L724 856H474L438 1030H280Z" fill="#11110f"/>
+  <path d="M512 700L598 420L686 700H512Z" fill="#f4f1e8"/>
+  <path d="M0 520H1200M600 0V1500" stroke="#11110f" stroke-opacity=".18" stroke-width="3"/>
+  <text x="50" y="70" fill="#11110f" font-family="monospace" font-size="28" letter-spacing="8">OBJECT STUDY / 01</text>
+</svg>

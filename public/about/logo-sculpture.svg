@@ -1,0 +1,7 @@
+<svg width="1200" height="1200" viewBox="0 0 1200 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="1200" fill="#ebe6d9"/>
+  <path d="M600 190L725 465H1028L782 640L884 1010L600 790L316 1010L418 640L172 465H475L600 190Z" fill="#11110f"/>
+  <path d="M600 312L683 498H888L720 618L790 858L600 710L410 858L480 618L312 498H517L600 312Z" fill="#f4f1e8"/>
+  <path d="M120 120H1080V1080H120V120Z" stroke="#11110f" stroke-opacity=".18" stroke-width="4"/>
+  <text x="55" y="75" fill="#11110f" font-family="monospace" font-size="28" letter-spacing="8">MATERIAL TEST / CHROME</text>
+</svg>
