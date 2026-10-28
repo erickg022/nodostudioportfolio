@@ -60,8 +60,7 @@
     ]
   },
   "work": {
-    "title": "Work",
-    "hint": "Scroll to move through the projects"
+    "title": "Work"
   },
   "index": {
     "title": "Index",
@@ -132,10 +131,65 @@
     "metaLabels": {
       "client": "Client",
       "year": "Year",
-      "discipline": "Discipline"
+      "discipline": "Discipline",
+      "technology": "Technology"
     }
   },
   "projects": [
+    {
+      "slug": "oura-chrome-hearts",
+      "title": "Oura × Chrome Hearts",
+      "year": "2026",
+      "client": "Oura × Chrome Hearts",
+      "disciplines": [
+        "CGI / 3D Animation"
+      ],
+      "cover": "/projects/oura/cover.webp",
+      "images": [
+        "/projects/oura/cover.webp",
+        "/projects/oura/still-ring.webp",
+        "/projects/oura/still-cross.webp",
+        "/projects/oura/still-orbit.webp"
+      ],
+      "credits": [
+        {
+          "label": "Scope",
+          "value": "CGI / 3D Animation / Creative Direction"
+        }
+      ],
+      "summary": "CGI product film and stills for the Chrome Hearts × Oura ring.",
+      "text": [],
+      "media": [
+        {
+          "type": "video",
+          "src": "/projects/oura/oura-film.mp4",
+          "poster": "/projects/oura/oura-film-poster.jpg",
+          "alt": "Oura × Chrome Hearts CGI product film",
+          "layout": "left"
+        },
+        {
+          "type": "image",
+          "src": "/projects/oura/still-ring.webp",
+          "alt": "Oura × Chrome Hearts ring render",
+          "layout": "right"
+        },
+        {
+          "type": "image",
+          "src": "/projects/oura/still-cross.webp",
+          "alt": "Chrome Hearts cross detail on the Oura ring",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/oura/still-orbit.webp",
+          "alt": "Oura ring with orbiting Chrome Hearts charms",
+          "layout": "half"
+        }
+      ],
+      "categories": [
+        "visual"
+      ]
+    },
     {
       "slug": "mahou-dilo-como-madrid",
       "title": "Dilo como Madrid",
@@ -204,66 +258,136 @@
           "alt": "Mahou mural animated with a figure holding a beer",
           "layout": "half"
         }
+      ],
+      "categories": [
+        "tech"
+      ],
+      "technologies": [
+        "WebAR",
+        "Three.js",
+        "Speech recognition"
       ]
     },
     {
-      "slug": "beefeater-light",
-      "title": "Beefeater Light",
+      "slug": "ginebra",
+      "title": "Ginebra Joyería",
       "year": "2026",
-      "client": "Beefeater Light",
+      "client": "Ginebra Joyería",
       "disciplines": [
-        "Campaign Concept + Film"
+        "CGI + AI"
       ],
-      "cover": "/projects/beefeater-light/cover.webp",
+      "cover": "/projects/ginebra-carousel-cover.png",
       "images": [
-        "/projects/beefeater-light/cover.webp",
-        "/projects/beefeater-light/still-01.webp",
-        "/projects/beefeater-light/still-02.webp",
-        "/projects/beefeater-light/still-03.webp"
+        "/projects/ginebra-carousel-cover.png",
+        "/projects/ginebra-work.jpg",
+        "/projects/videos/ginebra-vending-poster.jpg",
+        "/projects/videos/ginebra-transport-poster.jpg",
+        "/projects/videos/ginebra-gl-poster.jpg"
       ],
       "credits": [
         {
           "label": "Scope",
-          "value": "Creative Direction / Campaign Concept / Art Direction / Film / Motion Design / AI-Assisted Production / Visual Identity"
+          "value": "Creative Direction / CGI / AI Visuals / Motion + 3D"
         },
         {
           "label": "Status",
-          "value": "Spec campaign / concept"
+          "value": "Client project"
         }
       ],
-      "summary": "A campaign concept for Beefeater Light turning its 50% lower alcohol proposition into a visual language rooted in London.",
+      "summary": "Premium launch visuals combining CGI craft, AI image direction, and product-world storytelling.",
       "text": [
-        "Beefeater has always been deeply connected to London — its streets, architecture, culture and attitude. With Beefeater Light offering 50% less alcohol, the challenge was to communicate reduction without making the product feel like a reduced version of the brand.",
-        "The campaign turns “half” into the central creative device. London’s most recognizable icons are divided, cropped and reconstructed in halves while remaining instantly identifiable, creating a visual parallel with the product itself.",
-        "The idea became a cinematic and graphic campaign system built around a simple message: Half the alcohol. Full London spirit."
+        "Premium launch visuals for Ginebra, a jewelry brand featured in British Vogue, combining CGI craft, AI image direction, and product-world storytelling."
       ],
       "media": [
         {
           "type": "video",
-          "src": "/projects/beefeater-light/film-1080p.mp4",
-          "poster": "/projects/beefeater-light/film-poster.webp",
-          "alt": "Beefeater Light campaign film — Half the alcohol. Full London spirit.",
-          "layout": "full",
-          "controls": true
-        },
-        {
-          "type": "image",
-          "src": "/projects/beefeater-light/still-01.webp",
-          "alt": "Close-up of a Beefeater Light bottle in a dark cinematic setting",
-          "layout": "full"
-        },
-        {
-          "type": "image",
-          "src": "/projects/beefeater-light/still-02.webp",
-          "alt": "Red London bus crossing a city intersection at dusk",
+          "src": "/projects/videos/ginebra-vending.mp4",
+          "poster": "/projects/videos/ginebra-vending-poster.jpg",
+          "alt": "Ginebra jewelry dispenser launch film",
           "layout": "half"
         },
         {
+          "type": "video",
+          "src": "/projects/videos/ginebra-transport.mp4",
+          "poster": "/projects/videos/ginebra-transport-poster.jpg",
+          "alt": "Ginebra transport campaign film",
+          "layout": "half"
+        },
+        {
+          "type": "video",
+          "src": "/projects/videos/ginebra-gl.mp4",
+          "poster": "/projects/videos/ginebra-gl-poster.jpg",
+          "alt": "Ginebra jewelry glass motion film",
+          "layout": "left"
+        }
+      ],
+      "categories": [
+        "visual"
+      ]
+    },
+    {
+      "slug": "avocados",
+      "title": "Avocados From Mexico",
+      "year": "2025",
+      "client": "Avocados From Mexico",
+      "disciplines": [
+        "Hand-Tracked Brand Activation"
+      ],
+      "cover": "/projects/avocados-work.jpg",
+      "images": [
+        "/projects/avocados-work.jpg",
+        "/projects/avocados-installation-01.jpg",
+        "/projects/avocados-installation-02.jpg"
+      ],
+      "credits": [
+        {
+          "label": "Scope",
+          "value": "Creative Technology / Game Design / Hand Tracking / Real-Time Interaction / Installation Design"
+        },
+        {
+          "label": "Status",
+          "value": "Client project"
+        }
+      ],
+      "summary": "Two camera-based interactive games developed for a live Avocados From Mexico expo activation.",
+      "text": [
+        "Two camera-based interactive games developed for a live Avocados From Mexico expo activation. Visitors controlled each experience with their hands in front of a screen: real-time tracking translated physical gestures into in-game actions, reactions, and score-based play. The games turned the booth into a participatory brand moment, encouraging movement, competition, and repeat engagement rather than passive viewing."
+      ],
+      "media": [
+        {
+          "type": "video",
+          "src": "/projects/videos/avocados-node-ar-ifba-web.mp4",
+          "poster": "/projects/videos/avocados-node-ar-ifba-poster.jpg",
+          "alt": "Avocados From Mexico AR game capture",
+          "layout": "left"
+        },
+        {
           "type": "image",
-          "src": "/projects/beefeater-light/still-03.webp",
-          "alt": "Beefeater Light bottle beside a London Underground entrance at night",
+          "src": "/projects/avocados-installation-02.jpg",
+          "alt": "Avocados From Mexico interactive game still",
+          "layout": "right"
+        },
+        {
+          "type": "image",
+          "src": "/projects/avocados-installation-01.jpg",
+          "alt": "Avocados From Mexico interactive activation still",
+          "layout": "half"
+        },
+        {
+          "type": "video",
+          "src": "/projects/videos/avocados-live-demo.mp4",
+          "poster": "/projects/videos/avocados-live-demo-poster.jpg",
+          "alt": "Avocados From Mexico live demo video",
           "layout": "half"
         }
+      ],
+      "categories": [
+        "tech"
+      ],
+      "technologies": [
+        "Hand tracking",
+        "Real-time interaction",
+        "Game design"
       ]
     },
     {
@@ -334,60 +458,80 @@
           "alt": "Lacoste Roland-Garros soundroom",
           "layout": "half"
         }
+      ],
+      "categories": [
+        "visual"
       ]
     },
     {
-      "slug": "ginebra",
-      "title": "Ginebra Joyería",
-      "year": "2026",
-      "client": "Ginebra Joyería",
+      "slug": "axe-ceremonia",
+      "title": "Axe Ceremonia",
+      "year": "2025",
+      "client": "AXE Ceremonia",
       "disciplines": [
-        "CGI + AI"
+        "AR Brand Activation"
       ],
-      "cover": "/projects/ginebra-carousel-cover.png",
+      "cover": "/projects/axe-ceremonia-hero.jpg",
       "images": [
-        "/projects/ginebra-carousel-cover.png",
-        "/projects/ginebra-work.jpg",
-        "/projects/videos/ginebra-vending-poster.jpg",
-        "/projects/videos/ginebra-transport-poster.jpg",
-        "/projects/videos/ginebra-gl-poster.jpg"
+        "/projects/axe-ceremonia-hero.jpg",
+        "/projects/axe-ceremonia-portal.png",
+        "/projects/axe-ceremonia-still-01.jpg",
+        "/projects/axe-ceremonia-still-02.jpg"
       ],
       "credits": [
         {
           "label": "Scope",
-          "value": "Creative Direction / CGI / AI Visuals / Motion + 3D"
+          "value": "Creative Technology / AR Experience Design / Spatial Computing / Real-Time 3D / Interaction Design / Mobile Interface"
         },
         {
           "label": "Status",
           "value": "Client project"
         }
       ],
-      "summary": "Premium launch visuals combining CGI craft, AI image direction, and product-world storytelling.",
+      "summary": "An augmented-reality brand activation developed for AXE Ceremonia.",
       "text": [
-        "Premium launch visuals for Ginebra, a jewelry brand featured in British Vogue, combining CGI craft, AI image direction, and product-world storytelling."
+        "An augmented-reality brand activation developed for AXE Ceremonia, using mobile-based spatial tracking and real-time 3D content to transform a physical festival moment into an interactive digital layer. The experience guided users through a portal-like AR sequence, placing branded visual environments and responsive digital elements directly within their surroundings to create a more immersive, shareable on-site interaction."
       ],
       "media": [
         {
           "type": "video",
-          "src": "/projects/videos/ginebra-vending.mp4",
-          "poster": "/projects/videos/ginebra-vending-poster.jpg",
-          "alt": "Ginebra jewelry dispenser launch film",
-          "layout": "half"
-        },
-        {
-          "type": "video",
-          "src": "/projects/videos/ginebra-transport.mp4",
-          "poster": "/projects/videos/ginebra-transport-poster.jpg",
-          "alt": "Ginebra transport campaign film",
-          "layout": "half"
-        },
-        {
-          "type": "video",
-          "src": "/projects/videos/ginebra-gl.mp4",
-          "poster": "/projects/videos/ginebra-gl-poster.jpg",
-          "alt": "Ginebra jewelry glass motion film",
+          "src": "/projects/videos/axe-ceremonia-ar-portal-web.mp4",
+          "poster": "/projects/videos/axe-ceremonia-ar-portal-poster.jpg",
+          "alt": "Axe Ceremonia AR portal mobile capture",
           "layout": "left"
+        },
+        {
+          "type": "image",
+          "src": "/projects/axe-ceremonia-portal.png",
+          "alt": "Axe Ceremonia AR portal still",
+          "layout": "right"
+        },
+        {
+          "type": "image",
+          "src": "/projects/axe-ceremonia-still-02.jpg",
+          "alt": "Axe Ceremonia AR portal visual still",
+          "layout": "full"
+        },
+        {
+          "type": "image",
+          "src": "/projects/axe-ceremonia-still-03.jpg",
+          "alt": "Axe Ceremonia AR portal environment still",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/axe-ceremonia-still-01.jpg",
+          "alt": "Axe Ceremonia AR portal still",
+          "layout": "half"
         }
+      ],
+      "categories": [
+        "tech"
+      ],
+      "technologies": [
+        "Mobile AR",
+        "Spatial tracking",
+        "Real-time 3D"
       ]
     },
     {
@@ -468,144 +612,157 @@
           "alt": "Stussy Moncler second moving image study",
           "layout": "half"
         }
+      ],
+      "categories": [
+        "visual"
       ]
     },
     {
-      "slug": "airbnb",
-      "title": "Airbnb",
-      "year": "2026",
-      "client": "Airbnb",
+      "slug": "gdl-movilidad",
+      "title": "GDL Movilidad",
+      "year": "2025",
+      "client": "GDL Government",
       "disciplines": [
-        "AI Film + Storytelling"
+        "AR + App Development"
       ],
-      "cover": "/projects/airbnb/film-final-poster.webp",
+      "cover": "/projects/gdl-cover.jpg",
       "images": [
-        "/projects/airbnb/film-final-poster.webp",
-        "/projects/airbnb/still-01.webp",
-        "/projects/airbnb/still-02.webp",
-        "/projects/airbnb/still-03.webp",
-        "/projects/airbnb/still-04.webp"
+        "/projects/gdl-cover.jpg",
+        "/projects/gdl-work.jpg",
+        "/projects/gdl-movilidad-ar-01.jpg",
+        "/projects/gdl-movilidad-ar-02.jpg"
       ],
       "credits": [
         {
           "label": "Scope",
-          "value": "Creative Direction / Campaign Concept / Art Direction / AI Film / Storytelling"
+          "value": "AR Experience Design / Image Recognition / Interaction Design / Interface Design / Systems Design / App Development"
         },
         {
           "label": "Status",
-          "value": "Spec campaign / concept"
+          "value": "Concept + prototype"
         }
       ],
-      "summary": "A campaign concept for Airbnb built around the gap between what homeowners imagine and what actually happens when they open their door.",
+      "summary": "An augmented-reality transit navigation prototype developed for Guadalajara’s public transport system.",
       "text": [
-        "Opening your home to strangers can make it easy to imagine the worst.",
-        "For Airbnb, we turned that fear into the starting point of the campaign. An elderly couple receives a booking from a family with three children and immediately imagines chaos: mess, destruction and everything that could go wrong inside their home.",
-        "The campaign is built around the gap between what homeowners imagine could happen and what actually happens when they open their door."
+        "An augmented-reality transit navigation prototype developed for Guadalajara’s public transport system. Users scan a physical transport card to access route information, choose their destination, and activate an AR guidance layer that maps the journey through directional overlays, stops, transfers, and real-time navigation cues."
       ],
       "media": [
         {
           "type": "video",
-          "src": "/projects/airbnb/film-final-1080p.mp4",
-          "poster": "/projects/airbnb/film-final-poster.webp",
-          "alt": "Airbnb campaign film about the fears of opening a home to guests",
+          "src": "/projects/videos/gdl-movilidad-ar-master.mp4",
+          "poster": "/projects/videos/gdl-movilidad-ar-master-poster.jpg",
+          "alt": "Mi Movilidad AR transit navigation film",
           "layout": "full",
           "controls": true
         },
         {
-          "type": "image",
-          "src": "/projects/airbnb/still-01.webp",
-          "alt": "An elderly couple sees a family arriving at their door",
-          "layout": "full"
-        },
-        {
-          "type": "image",
-          "src": "/projects/airbnb/still-02.webp",
-          "alt": "Three children run through an ornate hallway in the imagined scenario",
-          "layout": "half"
-        },
-        {
-          "type": "image",
-          "src": "/projects/airbnb/still-03.webp",
-          "alt": "Cleaning supplies prepared in the couple's home",
-          "layout": "half"
-        },
-        {
-          "type": "image",
-          "src": "/projects/airbnb/still-04.webp",
-          "alt": "Three children sit on a sofa in the Airbnb campaign film",
-          "layout": "full"
-        }
-      ]
-    },
-    {
-      "slug": "twojeys",
-      "title": "Twojeys",
-      "year": "2026",
-      "client": "Twojeys",
-      "disciplines": [
-        "AI Creative Direction"
-      ],
-      "cover": "/projects/twojeys-work.jpg",
-      "images": [
-        "/projects/twojeys-work.jpg",
-        "/projects/twojeys-campaign-01-replacement.png",
-        "/projects/twojeys-campaign-03.jpg",
-        "/projects/twojeys-campaign-04.jpg",
-        "/projects/twojeys-campaign-05.jpg",
-        "/projects/twojeys-campaign-06.jpg"
-      ],
-      "credits": [
-        {
-          "label": "Scope",
-          "value": "AI Visuals / Creative Direction / Campaign Imagery / Post-Production"
-        },
-        {
-          "label": "Status",
-          "value": "Client project"
-        }
-      ],
-      "summary": "An AI-led visual campaign system exploring new product forms through synthetic image direction.",
-      "text": [
-        "An AI-led visual campaign system for TWOJEYS, exploring new product forms through synthetic image direction, campaign mood, and polished visual storytelling."
-      ],
-      "media": [
-        {
           "type": "video",
-          "src": "/projects/videos/twojeys-dawgs.mp4",
-          "poster": "/projects/videos/twojeys-dawgs-poster.jpg",
-          "alt": "TWOJEYS AI visual campaign hero film",
-          "layout": "full"
-        },
-        {
-          "type": "image",
-          "src": "/projects/twojeys-campaign-01-replacement.png",
-          "alt": "TWOJEYS AI visual campaign portrait still",
+          "src": "/projects/videos/gdl-macro-instrucciones-web.mp4",
+          "poster": "/projects/videos/gdl-macro-instrucciones-web-poster.jpg",
+          "alt": "GDL Movilidad macro instructions video",
           "layout": "left"
         },
         {
           "type": "image",
-          "src": "/projects/twojeys-campaign-03.jpg",
-          "alt": "TWOJEYS campaign behind-the-scenes image",
+          "src": "/projects/gdl-work.jpg",
+          "alt": "GDL Movilidad AR transit navigation in the station",
+          "layout": "right"
+        },
+        {
+          "type": "image",
+          "src": "/projects/gdl-movilidad-ar-01.jpg",
+          "alt": "GDL Movilidad AR route selection interface",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/gdl-movilidad-ar-02.jpg",
+          "alt": "GDL Movilidad AR navigation prototype screen",
+          "layout": "half"
+        }
+      ],
+      "categories": [
+        "tech"
+      ],
+      "technologies": [
+        "AR",
+        "Image recognition",
+        "App development"
+      ]
+    },
+    {
+      "slug": "nike-world-cup",
+      "title": "Nike Football",
+      "year": "2025",
+      "client": "Nike Football",
+      "disciplines": [
+        "Retail Creative Direction"
+      ],
+      "cover": "/projects/nike-cover.jpg",
+      "images": [
+        "/projects/nike-cover.jpg",
+        "/projects/nike-dj-room.jpg",
+        "/projects/nike-circular-lounge.jpg",
+        "/projects/nike-store-interior.jpg",
+        "/projects/nike-activation-room.jpg",
+        "/projects/nike-work.jpg"
+      ],
+      "credits": [
+        {
+          "label": "Scope",
+          "value": "Creative Direction / Experiential Design / Spatial Visual Development / AI Visuals / Retail Concept"
+        },
+        {
+          "label": "Status",
+          "value": "Independent speculative concept"
+        }
+      ],
+      "summary": "A speculative Nike Football pop-up store developed for the World Cup.",
+      "text": [
+        "A speculative Nike Football pop-up store developed for the World Cup, translating football culture into an immersive retail experience. The project combines spatial storytelling, product moments, campaign visuals, and interactive brand zones to imagine how Nike Football could activate the city around the tournament."
+      ],
+      "media": [
+        {
+          "type": "video",
+          "src": "/projects/videos/nike-world-cup-hero.mp4",
+          "poster": "/projects/videos/nike-world-cup-hero-poster.jpg",
+          "alt": "Nike World Cup shoe installation hero film",
           "layout": "full"
         },
         {
           "type": "image",
-          "src": "/projects/twojeys-campaign-04.jpg",
-          "alt": "TWOJEYS AI campaign image study",
+          "src": "/projects/nike-dj-room.jpg",
+          "alt": "Nike World Cup DJ room activation",
+          "layout": "full"
+        },
+        {
+          "type": "video",
+          "src": "/projects/videos/nike-installation-carousel.mp4",
+          "poster": "/projects/videos/nike-installation-poster.jpg",
+          "alt": "Nike World Cup live installation loop",
+          "layout": "full"
+        },
+        {
+          "type": "image",
+          "src": "/projects/nike-circular-lounge.jpg",
+          "alt": "Nike World Cup circular lounge installation",
           "layout": "half"
         },
         {
           "type": "image",
-          "src": "/projects/twojeys-campaign-05.jpg",
-          "alt": "TWOJEYS AI visual campaign material study",
+          "src": "/projects/nike-store-interior.jpg",
+          "alt": "Nike World Cup modern retail interior",
           "layout": "half"
         },
         {
           "type": "image",
-          "src": "/projects/twojeys-campaign-06.jpg",
-          "alt": "TWOJEYS AI visual campaign wide still",
+          "src": "/projects/nike-activation-room.jpg",
+          "alt": "Nike World Cup activation room",
           "layout": "full"
         }
+      ],
+      "categories": [
+        "visual"
       ]
     },
     {
@@ -692,78 +849,217 @@
           "alt": "Eat Nudes horizontal digital interface recording",
           "layout": "full"
         }
+      ],
+      "categories": [
+        "visual",
+        "tech"
       ]
     },
     {
-      "slug": "nike-world-cup",
-      "title": "Nike Football",
-      "year": "2025",
-      "client": "Nike Football",
+      "slug": "twojeys",
+      "title": "Twojeys",
+      "year": "2026",
+      "client": "Twojeys",
       "disciplines": [
-        "Retail Creative Direction"
+        "AI Creative Direction"
       ],
-      "cover": "/projects/nike-cover.jpg",
+      "cover": "/projects/twojeys-work.jpg",
       "images": [
-        "/projects/nike-cover.jpg",
-        "/projects/nike-dj-room.jpg",
-        "/projects/nike-circular-lounge.jpg",
-        "/projects/nike-store-interior.jpg",
-        "/projects/nike-activation-room.jpg",
-        "/projects/nike-work.jpg"
+        "/projects/twojeys-work.jpg",
+        "/projects/twojeys-campaign-01-replacement.png",
+        "/projects/twojeys-campaign-03.jpg",
+        "/projects/twojeys-campaign-04.jpg",
+        "/projects/twojeys-campaign-05.jpg",
+        "/projects/twojeys-campaign-06.jpg"
       ],
       "credits": [
         {
           "label": "Scope",
-          "value": "Creative Direction / Experiential Design / Spatial Visual Development / AI Visuals / Retail Concept"
+          "value": "AI Visuals / Creative Direction / Campaign Imagery / Post-Production"
         },
         {
           "label": "Status",
-          "value": "Independent speculative concept"
+          "value": "Client project"
         }
       ],
-      "summary": "A speculative Nike Football pop-up store developed for the World Cup.",
+      "summary": "An AI-led visual campaign system exploring new product forms through synthetic image direction.",
       "text": [
-        "A speculative Nike Football pop-up store developed for the World Cup, translating football culture into an immersive retail experience. The project combines spatial storytelling, product moments, campaign visuals, and interactive brand zones to imagine how Nike Football could activate the city around the tournament."
+        "An AI-led visual campaign system for TWOJEYS, exploring new product forms through synthetic image direction, campaign mood, and polished visual storytelling."
       ],
       "media": [
         {
           "type": "video",
-          "src": "/projects/videos/nike-world-cup-hero.mp4",
-          "poster": "/projects/videos/nike-world-cup-hero-poster.jpg",
-          "alt": "Nike World Cup shoe installation hero film",
+          "src": "/projects/videos/twojeys-dawgs.mp4",
+          "poster": "/projects/videos/twojeys-dawgs-poster.jpg",
+          "alt": "TWOJEYS AI visual campaign hero film",
           "layout": "full"
         },
         {
           "type": "image",
-          "src": "/projects/nike-dj-room.jpg",
-          "alt": "Nike World Cup DJ room activation",
-          "layout": "full"
+          "src": "/projects/twojeys-campaign-01-replacement.png",
+          "alt": "TWOJEYS AI visual campaign portrait still",
+          "layout": "left"
         },
         {
-          "type": "video",
-          "src": "/projects/videos/nike-installation-carousel.mp4",
-          "poster": "/projects/videos/nike-installation-poster.jpg",
-          "alt": "Nike World Cup live installation loop",
+          "type": "image",
+          "src": "/projects/twojeys-campaign-03.jpg",
+          "alt": "TWOJEYS campaign behind-the-scenes image",
           "layout": "full"
         },
         {
           "type": "image",
-          "src": "/projects/nike-circular-lounge.jpg",
-          "alt": "Nike World Cup circular lounge installation",
+          "src": "/projects/twojeys-campaign-04.jpg",
+          "alt": "TWOJEYS AI campaign image study",
           "layout": "half"
         },
         {
           "type": "image",
-          "src": "/projects/nike-store-interior.jpg",
-          "alt": "Nike World Cup modern retail interior",
+          "src": "/projects/twojeys-campaign-05.jpg",
+          "alt": "TWOJEYS AI visual campaign material study",
           "layout": "half"
         },
         {
           "type": "image",
-          "src": "/projects/nike-activation-room.jpg",
-          "alt": "Nike World Cup activation room",
+          "src": "/projects/twojeys-campaign-06.jpg",
+          "alt": "TWOJEYS AI visual campaign wide still",
           "layout": "full"
         }
+      ],
+      "categories": [
+        "visual"
+      ]
+    },
+    {
+      "slug": "beefeater-light",
+      "title": "Beefeater Light",
+      "year": "2026",
+      "client": "Beefeater Light",
+      "disciplines": [
+        "Campaign Concept + Film"
+      ],
+      "cover": "/projects/beefeater-light/cover.webp",
+      "images": [
+        "/projects/beefeater-light/cover.webp",
+        "/projects/beefeater-light/still-01.webp",
+        "/projects/beefeater-light/still-02.webp",
+        "/projects/beefeater-light/still-03.webp"
+      ],
+      "credits": [
+        {
+          "label": "Scope",
+          "value": "Creative Direction / Campaign Concept / Art Direction / Film / Motion Design / AI-Assisted Production / Visual Identity"
+        },
+        {
+          "label": "Status",
+          "value": "Spec campaign / concept"
+        }
+      ],
+      "summary": "A campaign concept for Beefeater Light turning its 50% lower alcohol proposition into a visual language rooted in London.",
+      "text": [
+        "Beefeater has always been deeply connected to London — its streets, architecture, culture and attitude. With Beefeater Light offering 50% less alcohol, the challenge was to communicate reduction without making the product feel like a reduced version of the brand.",
+        "The campaign turns “half” into the central creative device. London’s most recognizable icons are divided, cropped and reconstructed in halves while remaining instantly identifiable, creating a visual parallel with the product itself.",
+        "The idea became a cinematic and graphic campaign system built around a simple message: Half the alcohol. Full London spirit."
+      ],
+      "media": [
+        {
+          "type": "video",
+          "src": "/projects/beefeater-light/film-1080p.mp4",
+          "poster": "/projects/beefeater-light/film-poster.webp",
+          "alt": "Beefeater Light campaign film — Half the alcohol. Full London spirit.",
+          "layout": "full",
+          "controls": true
+        },
+        {
+          "type": "image",
+          "src": "/projects/beefeater-light/still-01.webp",
+          "alt": "Close-up of a Beefeater Light bottle in a dark cinematic setting",
+          "layout": "full"
+        },
+        {
+          "type": "image",
+          "src": "/projects/beefeater-light/still-02.webp",
+          "alt": "Red London bus crossing a city intersection at dusk",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/beefeater-light/still-03.webp",
+          "alt": "Beefeater Light bottle beside a London Underground entrance at night",
+          "layout": "half"
+        }
+      ],
+      "categories": [
+        "visual"
+      ]
+    },
+    {
+      "slug": "airbnb",
+      "title": "Airbnb",
+      "year": "2026",
+      "client": "Airbnb",
+      "disciplines": [
+        "AI Film + Storytelling"
+      ],
+      "cover": "/projects/airbnb/film-final-poster.webp",
+      "images": [
+        "/projects/airbnb/film-final-poster.webp",
+        "/projects/airbnb/still-01.webp",
+        "/projects/airbnb/still-02.webp",
+        "/projects/airbnb/still-03.webp",
+        "/projects/airbnb/still-04.webp"
+      ],
+      "credits": [
+        {
+          "label": "Scope",
+          "value": "Creative Direction / Campaign Concept / Art Direction / AI Film / Storytelling"
+        },
+        {
+          "label": "Status",
+          "value": "Spec campaign / concept"
+        }
+      ],
+      "summary": "A campaign concept for Airbnb built around the gap between what homeowners imagine and what actually happens when they open their door.",
+      "text": [
+        "Opening your home to strangers can make it easy to imagine the worst.",
+        "For Airbnb, we turned that fear into the starting point of the campaign. An elderly couple receives a booking from a family with three children and immediately imagines chaos: mess, destruction and everything that could go wrong inside their home.",
+        "The campaign is built around the gap between what homeowners imagine could happen and what actually happens when they open their door."
+      ],
+      "media": [
+        {
+          "type": "video",
+          "src": "/projects/airbnb/film-final-1080p.mp4",
+          "poster": "/projects/airbnb/film-final-poster.webp",
+          "alt": "Airbnb campaign film about the fears of opening a home to guests",
+          "layout": "full",
+          "controls": true
+        },
+        {
+          "type": "image",
+          "src": "/projects/airbnb/still-01.webp",
+          "alt": "An elderly couple sees a family arriving at their door",
+          "layout": "full"
+        },
+        {
+          "type": "image",
+          "src": "/projects/airbnb/still-02.webp",
+          "alt": "Three children run through an ornate hallway in the imagined scenario",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/airbnb/still-03.webp",
+          "alt": "Cleaning supplies prepared in the couple's home",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/airbnb/still-04.webp",
+          "alt": "Three children sit on a sofa in the Airbnb campaign film",
+          "layout": "full"
+        }
+      ],
+      "categories": [
+        "visual"
       ]
     }
   ],
@@ -1010,38 +1306,31 @@
     },
     {
       "src": "/sphere/21",
-      "project": "axe-ceremonia",
-      "title": "Axe Ceremonia"
+      "project": "axe-ceremonia"
     },
     {
       "src": "/sphere/33",
-      "project": "axe-ceremonia",
-      "title": "Axe Ceremonia"
+      "project": "axe-ceremonia"
     },
     {
       "src": "/sphere/37",
-      "project": "axe-ceremonia",
-      "title": "Axe Ceremonia"
+      "project": "axe-ceremonia"
     },
     {
       "src": "/sphere/24",
-      "project": "gdl-movilidad",
-      "title": "GDL Movilidad"
+      "project": "gdl-movilidad"
     },
     {
       "src": "/sphere/25",
-      "project": "gdl-movilidad",
-      "title": "GDL Movilidad"
+      "project": "gdl-movilidad"
     },
     {
       "src": "/sphere/35",
-      "project": "avocados",
-      "title": "Avocados from Mexico"
+      "project": "avocados"
     },
     {
       "src": "/sphere/36",
-      "project": "avocados",
-      "title": "Avocados from Mexico"
+      "project": "avocados"
     },
     {
       "src": "/sphere/02",
@@ -1127,5 +1416,51 @@
       "src": "/sphere/58",
       "project": "nodo"
     }
-  ]
+  ],
+  "portfolio": {
+    "label": "(Selected work)",
+    "defaultView": "all",
+    "views": [
+      {
+        "id": "all",
+        "label": "All work",
+        "param": "",
+        "projects": [
+          "oura-chrome-hearts",
+          "mahou-dilo-como-madrid",
+          "ginebra",
+          "avocados",
+          "lacoste-roland-garros",
+          "axe-ceremonia",
+          "stussy-moncler"
+        ]
+      },
+      {
+        "id": "visual",
+        "label": "Visual",
+        "param": "visual",
+        "projects": [
+          "oura-chrome-hearts",
+          "ginebra",
+          "lacoste-roland-garros",
+          "stussy-moncler",
+          "nike-world-cup",
+          "twojeys"
+        ]
+      },
+      {
+        "id": "tech",
+        "label": "Technology",
+        "param": "tech",
+        "projects": [
+          "mahou-dilo-como-madrid",
+          "avocados",
+          "axe-ceremonia",
+          "gdl-movilidad",
+          "eat-nudes"
+        ]
+      }
+    ],
+    "covers": {}
+  }
 }

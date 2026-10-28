@@ -440,11 +440,205 @@ html:root {
   }
 }
 
+/* ---------- Work: adaptive portfolio carousel (ALL WORK / VISUAL / TECHNOLOGY) ---------- */
+/* White like the rest of the page; the project images carry the colour. */
+.mr-gallery {
+  background: var(--paper);
+  color: var(--ink);
+}
+.mr-gallery__canvas {
+  transition: opacity 0.28s ease;
+}
+.mr-gallery__canvas.is-switching {
+  opacity: 0;
+}
+.nd-work__head {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  top: 112px;
+  z-index: 2;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 1.35;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.nd-work__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+.nd-work__label {
+  margin: 0;
+  font: inherit;
+}
+.nd-work__count {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.nd-work__tabs {
+  display: flex;
+  gap: clamp(20px, 3vw, 48px);
+  margin-top: 10px;
+}
+/* Tabs are type, not buttons: dimmed when idle, full ink with a hairline underline when active. */
+.nd-work__tab {
+  position: relative;
+  display: inline-block;
+  padding: 12px 0;
+  color: var(--ink);
+  opacity: 0.36;
+  white-space: nowrap;
+  transition: opacity 0.25s ease;
+}
+.nd-work__tab::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0.22em;
+  bottom: 8px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s var(--ease-out);
+}
+.nd-work__tab:hover {
+  opacity: 0.7;
+}
+.nd-work__tab[aria-selected="true"] {
+  opacity: 1;
+}
+.nd-work__tab[aria-selected="true"]::after {
+  transform: scaleX(1);
+}
+.nd-work__tab:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* Swipe reel: shown instead of the WebGL gallery on vertical screens and without WebGL. */
+.nd-reel {
+  display: none;
+}
+.nd-reel__list {
+  display: flex;
+  gap: 12px;
+  margin: 0;
+  padding: 0 var(--gutter);
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 var(--gutter);
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.nd-reel__list[hidden] {
+  display: none;
+}
+.nd-reel__list::-webkit-scrollbar {
+  display: none;
+}
+.nd-reel__item {
+  flex: 0 0 78%;
+  scroll-snap-align: start;
+}
+.nd-reel__link {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 12px;
+  row-gap: 6px;
+  align-items: baseline;
+  color: var(--ink);
+}
+.nd-reel__img {
+  grid-column: 1 / -1;
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  margin-bottom: 8px;
+  background: var(--rule);
+}
+.nd-reel__no {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.nd-reel__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(22px, 6.2vw, 34px);
+  line-height: 1;
+  letter-spacing: var(--tight);
+}
+.nd-reel__meta {
+  grid-column: 2;
+  font-size: 12px;
+  color: var(--muted);
+}
+@media (min-width: 600px) {
+  .nd-reel__item {
+    flex-basis: 46%;
+  }
+}
+
+/* No WebGL on a landscape screen: same reel, in normal flow. */
+.mr--nogl .mr-gallery {
+  display: block;
+  height: auto !important;
+  padding: 112px 0 64px;
+}
+.mr--nogl .mr-gallery__sticky {
+  position: static;
+  height: auto;
+  overflow: visible;
+}
+.mr--nogl .mr-gallery__canvas,
+.mr--nogl .mr-gallery__info {
+  display: none;
+}
+.mr--nogl .nd-work__head {
+  position: static;
+  margin: 0 var(--gutter) 20px;
+}
+.mr--nogl .nd-reel {
+  display: block;
+}
+
 /* ---------- Vertical screens: same query as VERTICAL_QUERY in runtime/media.ts ---------- */
 @media (max-width: 760px), (hover: none) and (orientation: portrait) {
-  /* The scroll-turned gallery needs a wheel; the Index below lists the same projects. */
+  /* The scroll-turned gallery needs a wheel; here the same views become a native swipe reel. */
   .mr-gallery {
+    height: auto !important;
+    padding: 104px 0 56px;
+  }
+  .mr-gallery__sticky {
+    position: static;
+    height: auto;
+    overflow: visible;
+  }
+  .mr-gallery__canvas,
+  .mr-gallery__info {
     display: none;
+  }
+  .nd-work__head {
+    position: static;
+    margin: 0 var(--gutter) 16px;
+  }
+  .nd-work__tabs {
+    gap: 22px;
+    margin-top: 4px;
+  }
+  .nd-reel {
+    display: block;
   }
   .mr-about__lead {
     display: block;

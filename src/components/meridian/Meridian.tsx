@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element -- Meridian's runtime animates raw <img> nodes (clip-path reveals, ghost transition); sources still go through the Next image optimizer via getImageProps. */
+import { resolveView, viewHref } from "@/content/portfolio";
 import { site, type Project, type ProjectMedia } from "@/content/site";
 import { fixedImage, responsiveImage, textureUrl } from "@/lib/media";
 import { LogoAssembly } from "./LogoAssembly";
@@ -16,24 +17,34 @@ const FIG_SIZES: Record<ProjectMedia["layout"], string> = {
 const pad = (n: number) => String(n).padStart(2, "0");
 
 async function runtimeData(projects: Project[]): Promise<RuntimeData> {
+  const { portfolio } = site;
   return {
     sphere: site.sphere.map((s) => ({ slug: s.project, title: s.title, textures: { lg: `${s.src}-lg.webp`, sm: `${s.src}-sm.webp` } })),
     projects: await Promise.all(
-      projects.map(async (p) => ({
-        slug: p.slug,
-        title: p.title,
-        year: p.year,
-        client: p.client,
-        cover: { lg: await textureUrl(p.cover, 1920), sm: await textureUrl(p.cover, 1080) },
-        images: await Promise.all(
-          p.images.map(async (src) => ({
-            lg: await textureUrl(src, 640),
-            sm: await textureUrl(src, 384),
-          })),
-        ),
-      })),
+      projects.map(async (p) => {
+        const carousel = portfolio.covers[p.slug] ?? p.cover;
+        return {
+          slug: p.slug,
+          title: p.title,
+          year: p.year,
+          client: p.client,
+          cover: { lg: await textureUrl(p.cover, 1920), sm: await textureUrl(p.cover, 1080) },
+          carouselCover: { lg: await textureUrl(carousel, 1920), sm: await textureUrl(carousel, 1080) },
+        };
+      }),
     ),
+    views: portfolio.views.map((v) => ({ id: v.id, param: v.param, slugs: v.projects })),
+    defaultView: portfolio.defaultView,
   };
+}
+
+/** Projects of every portfolio view, in curated order; unknown slugs in site.json are skipped. */
+function portfolioViews(projects: Project[]) {
+  const bySlug = new Map(projects.map((p) => [p.slug, p]));
+  return site.portfolio.views.map((view) => ({
+    ...view,
+    items: view.projects.flatMap((slug) => bySlug.get(slug) ?? []),
+  }));
 }
 
 async function Figure({ media, alt }: { media: ProjectMedia; alt: string }) {
@@ -88,6 +99,12 @@ async function ProjectArticle({ project, next }: { project: Project; next: Proje
             <dt>{overlay.metaLabels.discipline}</dt>
             <dd>{project.disciplines.join(", ")}</dd>
           </div>
+          {project.technologies?.length ? (
+            <div>
+              <dt>{overlay.metaLabels.technology}</dt>
+              <dd>{project.technologies.join(", ")}</dd>
+            </div>
+          ) : null}
           {project.credits.map((credit) => (
             <div key={credit.label}>
               <dt>{credit.label}</dt>
@@ -117,13 +134,25 @@ async function ProjectArticle({ project, next }: { project: Project; next: Proje
 }
 
 export async function Meridian() {
-  const { studio, hero, work, index, about, overlay, projects } = site;
+  const { studio, hero, work, index, about, overlay, projects, portfolio } = site;
   const data = await runtimeData(projects);
-  const first = projects[0];
+  const views = portfolioViews(projects);
+  // The page is prerendered with the default view; the runtime applies ?view= before the preloader lifts.
+  const active = resolveView(views, null, portfolio.defaultView);
+  const first = active.items[0];
+  // The section keeps one height for every view, so switching never shifts the page below.
+  const longest = Math.max(...views.map((v) => v.items.length));
+  const reels = await Promise.all(
+    views.map((v) =>
+      Promise.all(
+        v.items.map((p) => responsiveImage(portfolio.covers[p.slug] ?? p.cover, "(max-width: 760px) 78vw, 46vw")),
+      ),
+    ),
+  );
   const peeks = await Promise.all(projects.map((p) => fixedImage(p.cover, 170)));
 
   return (
-    <div className="mr">
+    <div className="mr" data-view={active.id}>
       <script
         type="application/json"
         id="mr-data"
@@ -193,26 +222,65 @@ export async function Meridian() {
           data-mr="gallery"
           data-fallback="#index"
           className="mr-gallery"
-          // Reference: 540vh for 8 projects (60vh per project + one screen).
-          style={{ height: `${projects.length * 60 + 60}vh` }}
+          // Reference: 60vh per project + one screen, sized for the longest view.
+          style={{ height: `${longest * 60 + 60}vh` }}
           aria-labelledby="work-title"
         >
           <div className="mr-gallery__sticky">
             <canvas data-gallery="true" className="mr-gallery__canvas" aria-hidden="true" />
-            <div className="mr-gallery__head">
-              <h2 id="work-title">{work.title}</h2>
-              <span>{work.hint}</span>
+            <div className="nd-work__head">
+              <div className="nd-work__row">
+                <h2 id="work-title" className="nd-work__label">
+                  {portfolio.label}
+                </h2>
+                <span className="nd-work__count">
+                  (<span data-g-index="true">01</span> — <span data-g-total="true">{pad(active.items.length)}</span>)
+                </span>
+              </div>
+              <div role="tablist" aria-label={`${work.title} view`} className="nd-work__tabs">
+                {views.map((v) => (
+                  <a
+                    key={v.id}
+                    href={viewHref(v.param)}
+                    role="tab"
+                    id={`work-tab-${v.id}`}
+                    aria-selected={v.id === active.id}
+                    aria-controls="work-panel"
+                    tabIndex={v.id === active.id ? 0 : -1}
+                    data-view-tab={v.id}
+                    className="nd-work__tab"
+                  >
+                    {v.label}
+                  </a>
+                ))}
+              </div>
             </div>
-            <div className="mr-gallery__info">
-              <span className="mr-gallery__num">
-                <span data-g-index="true">01</span> / {pad(projects.length)}
-              </span>
-              <a data-g-link="true" href={`#project-${first.slug}`} className="mr-gallery__title">
-                <span data-g-title="true">{first.title}</span>
-              </a>
-              <span data-g-meta="true" className="mr-gallery__meta">
-                {[first.client, first.year].filter(Boolean).join(", ")}
-              </span>
+            <div id="work-panel" role="tabpanel" aria-labelledby={`work-tab-${active.id}`} className="nd-work__panel">
+              <div className="mr-gallery__info">
+                <a data-g-link="true" href={`#project-${first.slug}`} className="mr-gallery__title">
+                  <span data-g-title="true">{first.title}</span>
+                </a>
+                <span data-g-meta="true" className="mr-gallery__meta">
+                  {[first.client, first.year].filter(Boolean).join(", ")}
+                </span>
+              </div>
+              {/* Vertical screens: a native swipe reel instead of the scroll-turned WebGL gallery. */}
+              <div className="nd-reel">
+                {views.map((v, vi) => (
+                  <ol key={v.id} data-reel={v.id} className="nd-reel__list" hidden={v.id !== active.id}>
+                    {v.items.map((p, i) => (
+                      <li key={p.slug} className="nd-reel__item">
+                        <a href={`#project-${p.slug}`} data-open={p.slug} className="nd-reel__link">
+                          <img {...reels[vi][i]} alt="" loading="lazy" decoding="async" className="nd-reel__img" />
+                          <span className="nd-reel__no">{pad(i + 1)}</span>
+                          <span className="nd-reel__title">{p.title}</span>
+                          <span className="nd-reel__meta">{[p.client, p.year].filter(Boolean).join(", ")}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ol>
+                ))}
+              </div>
             </div>
           </div>
         </section>

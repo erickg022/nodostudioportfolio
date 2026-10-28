@@ -4,8 +4,9 @@ import Lenis from "lenis";
 import { createGallery, type Gallery } from "./gallery";
 import { createSphere, type Sphere, type SphereTile } from "./sphere";
 import { VERTICAL_QUERY } from "./media";
-import { loadTextures } from "./textures";
-import type { OpenOrigin, RuntimeData } from "./types";
+import { resolveView, viewHref } from "@/content/portfolio";
+import { loadTextures, type TextureMap } from "./textures";
+import type { OpenOrigin, RuntimeData, RuntimeProject, RuntimeView } from "./types";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -531,17 +532,28 @@ function initContact(): Cleanup {
 export function initMeridian(): Cleanup {
   const root = $(".mr");
   if (!root) return () => {};
-  const { projects, sphere: sphereData }: RuntimeData = JSON.parse(
-    $("#mr-data")?.textContent ?? '{"projects":[],"sphere":[]}',
+  const { projects, sphere: sphereData, views, defaultView }: RuntimeData = JSON.parse(
+    $("#mr-data")?.textContent ?? '{"projects":[],"sphere":[],"views":[],"defaultView":"all"}',
   );
   const bySlug = new Map(projects.map((p) => [p.slug, p]));
   const tier = matchMedia("(max-width: 760px)").matches ? "sm" : "lg";
   // The scroll-driven gallery is hidden on vertical screens (see VERTICAL_QUERY); skip its WebGL.
   const showGallery = !matchMedia(VERTICAL_QUERY).matches;
 
+  // Active portfolio view (data-view on .mr), kept in sync with ?view= in the URL.
+  let view: RuntimeView =
+    views.find((v) => v.id === root.getAttribute("data-view")) ?? resolveView(views, null, defaultView);
+  const viewProjects = (v: RuntimeView) =>
+    v.slugs.flatMap((slug) => bySlug.get(slug) ?? ([] as RuntimeProject[]));
+  const slidesFor = (v: RuntimeView) =>
+    viewProjects(v).map((p) => ({ src: p.carouselCover[tier], slug: p.slug }));
+
   let destroyed = false;
   let sphere: Sphere | null = null;
   let gallery: Gallery | null = null;
+  let galleryTrigger: ScrollTrigger | null = null;
+  let galleryIndex = 0;
+  let textureCache: TextureMap = new Map();
   const triggers: ScrollTrigger[] = [];
   const cleanups: Cleanup[] = [];
   // Synchronous tweens/sets live in a context so a teardown (e.g. React Strict Mode) restores the DOM.
@@ -573,12 +585,14 @@ export function initMeridian(): Cleanup {
       progress(1);
       return Promise.resolve();
     }
-    const urls = [...projects.map((p) => p.cover[tier]), ...tiles.map((t) => t.src)];
+    // Only the active view's covers load up front; other views load when first opened.
+    const urls = [...slidesFor(view).map((s) => s.src), ...tiles.map((t) => t.src)];
     return loadTextures(urls, progress).then((textures) => {
       if (destroyed) {
         textures.forEach((t) => t.dispose());
         return;
       }
+      textureCache = textures;
       const sphereCanvas = $<HTMLCanvasElement>("[data-sphere]");
       if (sphereCanvas) {
         sphere = createSphere(sphereCanvas, tiles, textures, {
@@ -602,7 +616,7 @@ export function initMeridian(): Cleanup {
       if (galleryCanvas && showGallery) {
         gallery = createGallery(
           galleryCanvas,
-          projects.map((p) => ({ src: p.cover[tier], slug: p.slug })),
+          slidesFor(view),
           textures,
           {
             onOpen(slide, rect) {
@@ -642,6 +656,169 @@ export function initMeridian(): Cleanup {
     if (initial && bySlug.has(initial)) setTimeout(() => overlay.open(initial), 400);
   };
 
+  const info = {
+    index: $("[data-g-index]"),
+    total: $("[data-g-total]"),
+    title: $("[data-g-title]"),
+    meta: $("[data-g-meta]"),
+    link: $<HTMLAnchorElement>("[data-g-link]"),
+  };
+  /** Number, title, client and link for slide `i` of the active view. */
+  function showSlide(i: number, animate = true) {
+    const p = viewProjects(view)[i];
+    if (!p) return;
+    galleryIndex = i;
+    if (info.index) info.index.textContent = String(i + 1).padStart(2, "0");
+    if (info.link) info.link.href = `#project-${p.slug}`;
+    if (info.meta) info.meta.textContent = [p.client, p.year].filter(Boolean).join(", ");
+    const title = info.title;
+    if (!title) return;
+    if (!animate || reducedMotion()) {
+      title.textContent = p.title;
+      return;
+    }
+    gsap.fromTo(
+      title,
+      { yPercent: 100 },
+      { yPercent: 0, duration: 0.7, ease: "expo.out", onStart: () => void (title.textContent = p.title) },
+    );
+  }
+
+  /** Scrolls the gallery section so slide `i` of the active view is in front. */
+  function goToSlide(i: number, duration = 0.9) {
+    const st = galleryTrigger;
+    const count = gallery?.count ?? 0;
+    if (!st || count < 1) return;
+    const clamped = Math.max(0, Math.min(count - 1, i));
+    const y = st.start + (st.end - st.start) * (count > 1 ? clamped / (count - 1) : 0);
+    if (lenis) lenis.scrollTo(y, { duration: reducedMotion() ? 0 : duration, immediate: reducedMotion() });
+    else window.scrollTo({ top: y, behavior: reducedMotion() ? "auto" : "smooth" });
+  }
+
+  const tabs = $$<HTMLAnchorElement>("[data-view-tab]");
+  const panel = $("#work-panel");
+  const galleryCanvasEl = $<HTMLCanvasElement>("[data-gallery]");
+  let swapToken = 0;
+
+  /** Activates a portfolio view: tabs, counter, swipe reel, URL and the WebGL slides. */
+  function setView(id: string, push: boolean) {
+    const next = views.find((v) => v.id === id);
+    if (!next || next.id === view.id) return;
+    view = next;
+    root!.setAttribute("data-view", next.id);
+    tabs.forEach((t) => {
+      const on = t.dataset.viewTab === next.id;
+      t.setAttribute("aria-selected", String(on));
+      t.tabIndex = on ? 0 : -1;
+    });
+    panel?.setAttribute("aria-labelledby", `work-tab-${next.id}`);
+    if (info.total) info.total.textContent = String(viewProjects(next).length).padStart(2, "0");
+    $$<HTMLOListElement>("[data-reel]").forEach((list) => {
+      list.hidden = list.dataset.reel !== next.id;
+      if (!list.hidden) list.scrollLeft = 0;
+    });
+    showSlide(0, false);
+    if (push) {
+      const url = viewHref(next.param, location.pathname);
+      history.pushState({ mrView: next.id }, "", url);
+    }
+    swapGallery(next);
+  }
+
+  /** Fades the canvas, loads any covers this view has not used yet, swaps the slides, returns to slide 1. */
+  function swapGallery(next: RuntimeView) {
+    const g = gallery;
+    const canvas = galleryCanvasEl;
+    if (!g || !canvas) return;
+    const token = ++swapToken;
+    const slides = slidesFor(next);
+    const missing = slides.map((s) => s.src).filter((src) => !textureCache.has(src));
+    const fade = reducedMotion() ? 0 : 280;
+    canvas.classList.add("is-switching");
+    // Back to the first project: the gallery is scroll-driven, so return to the top of its section.
+    const st = galleryTrigger;
+    if (st && st.progress > 0 && st.isActive) goToSlide(0, 0.8);
+    Promise.all([
+      missing.length ? loadTextures(missing, () => {}) : Promise.resolve(new Map() as TextureMap),
+      new Promise((r) => setTimeout(r, fade)),
+    ]).then(([loaded]) => {
+      if (destroyed || token !== swapToken) {
+        if (destroyed) loaded.forEach((t) => t.dispose());
+        else loaded.forEach((t, src) => textureCache.set(src, t));
+        return;
+      }
+      loaded.forEach((t, src) => textureCache.set(src, t));
+      g.setSlides(slides, textureCache);
+      if (galleryTrigger) g.setProgress(galleryTrigger.isActive ? galleryTrigger.progress : 0);
+      showSlide(0, false);
+      canvas.classList.remove("is-switching");
+    });
+  }
+
+  function initViews(): Cleanup {
+    const onTabClick = (e: MouseEvent) => {
+      const tab = (e.target as Element).closest<HTMLAnchorElement>("[data-view-tab]");
+      if (!tab || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+      e.preventDefault();
+      setView(tab.dataset.viewTab!, true);
+    };
+    // Arrow keys move between tabs (and activate them), as in a standard tablist.
+    const onTabKey = (e: KeyboardEvent) => {
+      const i = tabs.indexOf(e.target as HTMLAnchorElement);
+      if (i < 0) return;
+      const to =
+        e.key === "ArrowRight" ? (i + 1) % tabs.length
+        : e.key === "ArrowLeft" ? (i - 1 + tabs.length) % tabs.length
+        : e.key === "Home" ? 0
+        : e.key === "End" ? tabs.length - 1
+        : -1;
+      if (to < 0) return;
+      e.preventDefault();
+      e.stopPropagation();
+      tabs[to].focus();
+      setView(tabs[to].dataset.viewTab!, true);
+    };
+    // While the gallery is on screen, left/right step through its projects.
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+      if (!galleryTrigger?.isActive || e.defaultPrevented || e.altKey || e.metaKey || e.ctrlKey) return;
+      const el = e.target as HTMLElement;
+      if (el.closest("input, textarea, select, [contenteditable], [data-mr='overlay']")) return;
+      if (!$("[data-mr='overlay']")?.hidden) return;
+      e.preventDefault();
+      goToSlide(galleryIndex + (e.key === "ArrowRight" ? 1 : -1));
+    };
+    const onPop = () => {
+      const next = resolveView(views, new URL(location.href).searchParams.get("view"), defaultView);
+      if (next.id !== view.id) setView(next.id, false);
+    };
+    // Swipe reel (vertical screens): keep the counter on the card nearest the left edge.
+    const reels = $$<HTMLOListElement>("[data-reel]");
+    const onReelScroll = (e: Event) => {
+      const list = e.currentTarget as HTMLOListElement;
+      const item = list.firstElementChild as HTMLElement | null;
+      if (!item || list.hidden) return;
+      const step = item.offsetWidth + parseFloat(getComputedStyle(list).columnGap || "0");
+      const i = Math.round(list.scrollLeft / Math.max(1, step));
+      if (info.index) info.index.textContent = String(i + 1).padStart(2, "0");
+    };
+    document.addEventListener("click", onTabClick);
+    tabs.forEach((t) => t.addEventListener("keydown", onTabKey));
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("popstate", onPop);
+    reels.forEach((r) => r.addEventListener("scroll", onReelScroll, { passive: true }));
+    return () => {
+      document.removeEventListener("click", onTabClick);
+      tabs.forEach((t) => t.removeEventListener("keydown", onTabKey));
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("popstate", onPop);
+      reels.forEach((r) => r.removeEventListener("scroll", onReelScroll));
+    };
+  }
+  cleanups.push(initViews());
+  // Shared links (/?view=visual, /?view=tech): switch before WebGL loads, while the preloader still covers the page.
+  setView(resolveView(views, new URL(location.href).searchParams.get("view"), defaultView).id, false);
+
   function bindScroll() {
     const s = sphere;
     const g = gallery;
@@ -665,38 +842,15 @@ export function initMeridian(): Cleanup {
     }
     if (g) {
       const section = $("[data-mr='gallery']")!;
-      const index = $("[data-g-index]")!;
-      const title = $("[data-g-title]")!;
-      const meta = $("[data-g-meta]")!;
-      const link = $<HTMLAnchorElement>("[data-g-link]")!;
-      g.onIndex((i) => {
-        const p = projects[i];
-        if (!p) return;
-        index.textContent = String(i + 1).padStart(2, "0");
-        link.href = `#project-${p.slug}`;
-        gsap.fromTo(
-          title,
-          { yPercent: 100 },
-          {
-            yPercent: 0,
-            duration: 0.7,
-            ease: "expo.out",
-            onStart: () => {
-              title.textContent = p.title;
-            },
-          },
-        );
-        meta.textContent = [p.client, p.year].filter(Boolean).join(", ");
+      g.onIndex(showSlide);
+      galleryTrigger = ScrollTrigger.create({
+        trigger: section,
+        start: "top top",
+        end: "bottom bottom",
+        onUpdate: (st) => gallery?.setProgress(st.progress),
+        onToggle: (st) => (st.isActive ? gallery?.start() : gallery?.stop()),
       });
-      triggers.push(
-        ScrollTrigger.create({
-          trigger: section,
-          start: "top top",
-          end: "bottom bottom",
-          onUpdate: (st) => g.setProgress(st.progress),
-          onToggle: (st) => (st.isActive ? g.start() : g.stop()),
-        }),
-      );
+      triggers.push(galleryTrigger);
       g.start();
       requestAnimationFrame(() => {
         const r = section.getBoundingClientRect();

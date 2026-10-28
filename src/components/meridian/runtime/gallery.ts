@@ -17,7 +17,10 @@ type SlideMesh = THREE.Mesh<THREE.CylinderGeometry, THREE.MeshBasicMaterial> & {
   userData: { slide: GallerySlide; index: number };
 };
 
-/** Work gallery: covers on the inside of a cylinder, turned by scroll; speed adds tilt and stretch. */
+/**
+ * Work gallery: covers on the inside of a cylinder, turned by scroll; speed adds tilt and stretch.
+ * `setSlides` swaps the collection in place (portfolio views) and returns to the first slide.
+ */
 export function createGallery(
   canvas: HTMLCanvasElement,
   slides: GallerySlide[],
@@ -34,30 +37,44 @@ export function createGallery(
   const group = new THREE.Group();
   scene.add(group);
 
-  const meshes = slides.flatMap((slide, index) => {
-    const tex = textures.get(slide.src);
-    if (!tex) return [];
-    const geometry = new THREE.CylinderGeometry(
-      RADIUS,
-      RADIUS,
-      HEIGHT,
-      32,
-      1,
-      true,
-      Math.PI - ARC / 2,
-      ARC,
-    );
-    const aspect = (ARC * RADIUS) / HEIGHT;
-    const material = new THREE.MeshBasicMaterial({
-      map: coverTexture(tex, aspect, true),
-      side: THREE.BackSide,
-      transparent: true,
+  let meshes: SlideMesh[] = [];
+  const disposeMeshes = () => {
+    meshes.forEach((m) => {
+      group.remove(m);
+      m.geometry.dispose();
+      m.material.map?.dispose();
+      m.material.dispose();
     });
-    const mesh = new THREE.Mesh(geometry, material) as SlideMesh;
-    mesh.userData = { slide, index };
-    group.add(mesh);
-    return [mesh];
-  });
+    meshes = [];
+  };
+  const buildMeshes = (list: GallerySlide[]) => {
+    disposeMeshes();
+    meshes = list.flatMap((slide, index) => {
+      const tex = textures.get(slide.src);
+      if (!tex) return [];
+      const geometry = new THREE.CylinderGeometry(
+        RADIUS,
+        RADIUS,
+        HEIGHT,
+        32,
+        1,
+        true,
+        Math.PI - ARC / 2,
+        ARC,
+      );
+      const aspect = (ARC * RADIUS) / HEIGHT;
+      const material = new THREE.MeshBasicMaterial({
+        map: coverTexture(tex, aspect, true),
+        side: THREE.BackSide,
+        transparent: true,
+      });
+      const mesh = new THREE.Mesh(geometry, material) as SlideMesh;
+      mesh.userData = { slide, index };
+      group.add(mesh);
+      return [mesh];
+    });
+  };
+  buildMeshes(slides);
 
   const resize = () => {
     const rect = canvas.getBoundingClientRect();
@@ -114,6 +131,9 @@ export function createGallery(
   const white = new THREE.Color(1, 1, 1);
   const tick = () => {
     raf = requestAnimationFrame(tick);
+    frame();
+  };
+  const frame = () => {
     const prev = current;
     current += (target - current) * 0.08;
     velocity += ((current - prev) * 60 - velocity) * 0.15;
@@ -121,9 +141,10 @@ export function createGallery(
       const offset = mesh.userData.index - current;
       mesh.rotation.y = -offset * STEP;
       const dist = Math.abs(offset);
-      const tone = 0.42 + 0.58 * Math.max(0, 1 - dist * 0.55) * (mesh === hovered ? 1 : 0.94);
-      mesh.material.color.copy(white).multiplyScalar(tone);
-      mesh.material.opacity = Math.max(0, 1 - Math.max(0, dist - 2.2));
+      // On the white page, slides away from the centre fade out instead of darkening.
+      mesh.material.color.copy(white).multiplyScalar(mesh === hovered ? 1 : 0.97);
+      const focus = 0.3 + 0.7 * Math.max(0, 1 - dist * 0.5);
+      mesh.material.opacity = Math.max(0, 1 - Math.max(0, dist - 2.2)) * focus;
       mesh.scale.y = 1 + Math.min(0.12, Math.abs(velocity) * 0.04);
     });
     group.rotation.z = Math.max(-0.05, Math.min(0.05, velocity * 0.02));
@@ -138,6 +159,22 @@ export function createGallery(
   };
 
   return {
+    /** Replaces the slides (textures must already be in the map) and jumps to the first one. */
+    setSlides(next: GallerySlide[], map: TextureMap = textures) {
+      textures = map;
+      applyAnisotropy(textures, renderer);
+      buildMeshes(next);
+      hovered = null;
+      canvas.style.cursor = "";
+      events.onHover(false);
+      raw = target = current = velocity = 0;
+      lastIndex = -1;
+      // Paused (section off screen): draw once so the old slides never linger on the canvas.
+      if (!running) frame();
+    },
+    get count() {
+      return meshes.length;
+    },
     setProgress(p: number) {
       raw = p * (meshes.length - 1);
       target = raw;
@@ -163,11 +200,7 @@ export function createGallery(
       window.removeEventListener("resize", resize);
       canvas.removeEventListener("pointermove", onMove);
       canvas.removeEventListener("click", onClick);
-      meshes.forEach((m) => {
-        m.geometry.dispose();
-        m.material.map?.dispose();
-        m.material.dispose();
-      });
+      disposeMeshes();
       renderer.dispose();
     },
   };

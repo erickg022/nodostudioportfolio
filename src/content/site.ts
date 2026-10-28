@@ -1,4 +1,5 @@
 import data from "../../content/site.json";
+import type { PortfolioCategory, PortfolioViewId } from "./portfolio";
 
 export type MediaLayout = "full" | "half" | "left" | "right";
 
@@ -26,6 +27,19 @@ export type Project = {
   summary: string;
   text: string[];
   media: ProjectMedia[];
+  /** Portfolio categories this project belongs to; a project can be in both. */
+  categories: PortfolioCategory[];
+  /** Verifiable technologies used, listed in the project overlay. */
+  technologies?: string[];
+};
+
+export type PortfolioView = {
+  id: PortfolioViewId;
+  label: string;
+  /** `?view=` value for this view; empty for the default view (plain `/`). */
+  param: string;
+  /** Project slugs in carousel order. */
+  projects: string[];
 };
 
 export type SphereImage = {
@@ -62,7 +76,15 @@ export type Site = {
     countLabels: { projects: string; images: string };
     hint: string[];
   };
-  work: { title: string; hint: string };
+  work: { title: string };
+  /** The adaptive carousel after the hero: three curated views of the same projects. */
+  portfolio: {
+    label: string;
+    defaultView: PortfolioViewId;
+    views: PortfolioView[];
+    /** Optional carousel-only cover per project slug; falls back to the project cover. */
+    covers: Record<string, string>;
+  };
   index: { title: string; columns: string[] };
   about: {
     title: string;
@@ -120,7 +142,7 @@ export type Site = {
     dialogLabel: string;
     closeLabel: string;
     nextLabel: string;
-    metaLabels: { client: string; year: string; discipline: string };
+    metaLabels: { client: string; year: string; discipline: string; technology: string };
   };
   projects: Project[];
 };
