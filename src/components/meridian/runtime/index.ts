@@ -531,7 +531,9 @@ function initContact(): Cleanup {
 export function initMeridian(): Cleanup {
   const root = $(".mr");
   if (!root) return () => {};
-  const { projects }: RuntimeData = JSON.parse($("#mr-data")?.textContent ?? '{"projects":[]}');
+  const { projects, sphere: sphereData }: RuntimeData = JSON.parse(
+    $("#mr-data")?.textContent ?? '{"projects":[],"sphere":[]}',
+  );
   const bySlug = new Map(projects.map((p) => [p.slug, p]));
   const tier = matchMedia("(max-width: 760px)").matches ? "sm" : "lg";
   // The scroll-driven gallery is hidden on vertical screens (see VERTICAL_QUERY); skip its WebGL.
@@ -552,14 +554,11 @@ export function initMeridian(): Cleanup {
   const gl = hasWebGL();
   if (!gl) root.classList.add("mr--nogl");
 
-  // Sphere tiles: the first six photographs of every project, interleaved.
-  const tiles: SphereTile[] = [];
-  for (let i = 0; i < 6; i++) {
-    projects.forEach((p) => {
-      const img = p.images[i];
-      if (img) tiles.push({ src: img[tier], slug: p.slug, title: p.title, year: p.year });
-    });
-  }
+  // Sphere tiles: one curated photograph per tile, no repeats; "nodo" shots are brand pieces without a project page.
+  const tiles: SphereTile[] = sphereData.map((t) => {
+    const p = bySlug.get(t.slug);
+    return { src: t.textures[tier], slug: t.slug, title: p?.title ?? "NODO Studio", year: p?.year ?? "" };
+  });
 
   const rise = $$(".mr-hero [data-rise]");
   ctx.add(() => gsap.set(rise, { yPercent: 110 }));
@@ -593,6 +592,7 @@ export function initMeridian(): Cleanup {
             }
           },
           onOpen(tile, rect) {
+            if (!bySlug.has(tile.slug)) return;
             cursor.classList.remove("is-on");
             overlay.open(tile.slug, { rect, src: bySlug.get(tile.slug)?.cover[tier] ?? tile.src });
           },

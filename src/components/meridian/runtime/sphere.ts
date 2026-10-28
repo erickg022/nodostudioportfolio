@@ -10,13 +10,95 @@ type SphereEvents = {
 
 const RADIUS = 2;
 const RINGS = 8;
-const MAX_TILES = 15;
+const MAX_PER_RING = 15;
 const GAP = 0.014;
+/** Corner radius as a fraction of the tile's shorter side. */
+const CORNER = 0.07;
 
 type TileData = { tile: SphereTile; normal: THREE.Vector3; lift: number; tone: number };
 type TileMesh = THREE.Mesh<THREE.SphereGeometry, THREE.MeshBasicMaterial> & { userData: TileData };
 
-/** Hero photo sphere: one curved tile per photograph, drag to spin, hover lifts, click opens. */
+const thetaStart = Math.PI * 0.13;
+const band = (Math.PI * 0.87 - thetaStart) / RINGS;
+
+/** Tiles per ring for a given density (equator width), never fewer than five. */
+function ringCounts(density: number) {
+  return Array.from({ length: RINGS }, (_, ring) =>
+    Math.max(5, Math.round(density * Math.sin(thetaStart + ring * band + band / 2))),
+  );
+}
+
+/** Densest layout that still gives every slot its own photograph. */
+function fitRings(available: number) {
+  for (let density = MAX_PER_RING; density > 0; density -= 0.1) {
+    const counts = ringCounts(density);
+    if (counts.reduce((a, b) => a + b, 0) <= available) return counts;
+  }
+  return ringCounts(1);
+}
+
+/** Alpha mask with rounded corners for a tile of the given aspect (width / height). */
+function roundedMask(aspect: number) {
+  const h = 128;
+  const w = Math.max(16, Math.round(h * aspect));
+  const c = document.createElement("canvas");
+  c.width = w;
+  c.height = h;
+  const ctx = c.getContext("2d")!;
+  ctx.fillStyle = "#fff";
+  ctx.beginPath();
+  ctx.roundRect(0, 0, w, h, Math.min(w, h) * CORNER);
+  ctx.fill();
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.NoColorSpace;
+  return tex;
+}
+
+/**
+ * Assigns each slot a distinct tile, keeping neighbours (same ring, ring above, ring wrap) from sharing a project
+ * and spending the biggest groups first so no single project clumps at the end.
+ */
+function assignTiles(tiles: SphereTile[], counts: number[]) {
+  const total = counts.reduce((a, b) => a + b, 0);
+  const pool = [...tiles];
+  // Surplus photographs come out of the largest group first (the studio brand shots).
+  while (pool.length > total) {
+    const sizes = new Map<string, number>();
+    pool.forEach((t) => sizes.set(t.slug, (sizes.get(t.slug) ?? 0) + 1));
+    const biggest = [...sizes.entries()].sort((a, b) => b[1] - a[1])[0][0];
+    const of = pool.map((t, i) => (t.slug === biggest ? i : -1)).filter((i) => i >= 0);
+    pool.splice(of[Math.floor(of.length / 2)], 1);
+  }
+  let seed = 7;
+  const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  const rows: SphereTile[][] = [];
+  counts.forEach((n, ring) => {
+    const row: SphereTile[] = [];
+    for (let k = 0; k < n; k++) {
+      const left = row[k - 1]?.slug;
+      const above = rows[ring - 1]?.[Math.round((k / n) * rows[ring - 1].length) % rows[ring - 1].length]?.slug;
+      const above2 = rows[ring - 1]?.[Math.round(((k + 0.5) / n) * rows[ring - 1].length) % rows[ring - 1].length]?.slug;
+      const first = k === n - 1 ? row[0]?.slug : undefined;
+      const remaining = new Map<string, number>();
+      pool.forEach((t) => remaining.set(t.slug, (remaining.get(t.slug) ?? 0) + 1));
+      let best = 0;
+      let bestScore = -Infinity;
+      pool.forEach((t, i) => {
+        const clash = [left, above, above2, first].filter((s) => s === t.slug).length;
+        const score = -clash * 100 + (remaining.get(t.slug) ?? 0) * 2 + rand();
+        if (score > bestScore) {
+          bestScore = score;
+          best = i;
+        }
+      });
+      row.push(pool.splice(best, 1)[0]);
+    }
+    rows.push(row);
+  });
+  return rows;
+}
+
+/** Hero photo sphere: one curved, softly rounded tile per photograph, drag to spin, hover lifts, click opens. */
 export function createSphere(
   canvas: HTMLCanvasElement,
   tiles: SphereTile[],
@@ -39,33 +121,32 @@ export function createSphere(
   scene.add(group);
 
   const meshes: TileMesh[] = [];
-  const thetaStart = Math.PI * 0.13;
-  const band = (Math.PI * 0.87 - thetaStart) / RINGS;
-  let count = 0;
-  for (let ring = 0; ring < RINGS; ring++) {
+  const usable = tiles.filter((t) => textures.has(t.src));
+  const counts = fitRings(usable.length);
+  const rows = assignTiles(usable, counts);
+  rows.forEach((row, ring) => {
     const theta = thetaStart + ring * band;
     const mid = theta + band / 2;
-    const perRing = Math.max(5, Math.round(MAX_TILES * Math.sin(mid)));
+    const perRing = row.length;
     const step = (Math.PI * 2) / perRing;
     const shift = (ring % 2) * step * 0.5;
-    for (let k = 0; k < perRing; k++) {
-      const tile = tiles[(count * 5 + ring) % tiles.length];
-      count++;
-      const tex = textures.get(tile.src);
-      if (!tex) continue;
+    const aspect = ((step - GAP * 2) * Math.sin(mid)) / (band - GAP * 2);
+    const mask = roundedMask(aspect);
+    row.forEach((tile, k) => {
+      const tex = textures.get(tile.src)!;
       const phi = k * step + shift;
       const geometry = new THREE.SphereGeometry(
         RADIUS,
+        12,
         8,
-        6,
         phi + GAP,
         step - GAP * 2,
         theta + GAP,
         band - GAP * 2,
       );
-      const aspect = ((step - GAP * 2) * Math.sin(mid)) / (band - GAP * 2);
       const material = new THREE.MeshBasicMaterial({
         map: coverTexture(tex, aspect),
+        alphaMap: mask,
         side: THREE.DoubleSide,
         transparent: true,
       });
@@ -84,8 +165,8 @@ export function createSphere(
       geometry.computeBoundingBox();
       meshes.push(mesh);
       group.add(mesh);
-    }
-  }
+    });
+  });
 
   let width = 1;
   let height = 1;
@@ -250,6 +331,7 @@ export function createSphere(
       meshes.forEach((m) => {
         m.geometry.dispose();
         m.material.map?.dispose();
+        m.material.alphaMap?.dispose();
         m.material.dispose();
       });
       renderer.dispose();

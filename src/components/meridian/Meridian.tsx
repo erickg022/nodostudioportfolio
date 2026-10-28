@@ -18,6 +18,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
 async function runtimeData(projects: Project[]): Promise<RuntimeData> {
   return {
+    sphere: site.sphere.map((s) => ({ slug: s.project, textures: { lg: `${s.src}-lg.webp`, sm: `${s.src}-sm.webp` } })),
     projects: await Promise.all(
       projects.map(async (p) => ({
         slug: p.slug,
@@ -119,7 +120,7 @@ async function ProjectArticle({ project, next }: { project: Project; next: Proje
 export async function Meridian() {
   const { studio, hero, work, index, about, overlay, projects } = site;
   const data = await runtimeData(projects);
-  const imageCount = projects.reduce((sum, p) => sum + p.images.length, 0);
+  const imageCount = site.sphere.length;
   const first = projects[0];
   const peeks = await Promise.all(projects.map((p) => fixedImage(p.cover, 170)));
 

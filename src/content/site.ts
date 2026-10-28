@@ -28,7 +28,15 @@ export type Project = {
   media: ProjectMedia[];
 };
 
+export type SphereImage = {
+  /** Path without the size suffix: files live at `<src>-lg.webp` and `<src>-sm.webp`. */
+  src: string;
+  /** Project slug opened on click, or "nodo" for studio brand shots (not clickable). */
+  project: string;
+};
+
 export type Site = {
+  sphere: SphereImage[];
   meta: { title: string; description: string; lang: string };
   theme: { bg: string; fg: string; accent: string };
   studio: {

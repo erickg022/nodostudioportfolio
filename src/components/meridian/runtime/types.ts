@@ -11,7 +11,9 @@ export type RuntimeProject = {
 };
 
 /** Shape of the JSON in <script id="mr-data">. */
-export type RuntimeData = { projects: RuntimeProject[] };
+export type RuntimeSphereTile = { slug: string; textures: TextureSet };
+
+export type RuntimeData = { projects: RuntimeProject[]; sphere: RuntimeSphereTile[] };
 
 /** Where a project was opened from, for the ghost image transition. */
 export type OpenOrigin = { rect: DOMRect; src: string };
