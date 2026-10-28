@@ -69,7 +69,7 @@ export type Site = {
     logoAssembly: {
       logo: string;
       label: string;
-      mode: "sequence" | "sway" | "stretch" | "still";
+      mode: "sequence" | "sway" | "still";
       stage: "ink" | "paper";
     };
   };

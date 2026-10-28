@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import * as THREE from "three";
 import { VERTICAL_QUERY } from "./runtime/media";
 
-type Mode = "sequence" | "sway" | "stretch" | "still";
+type Mode = "sequence" | "sway" | "still";
 type Stage = "ink" | "paper";
 
 type Props = {
@@ -35,14 +35,15 @@ const CFG = {
   maxDelay: 0.45, // latest a glyph may start (0..1 of progress)
   scrollDamp: 4.2, // how quickly the drawn progress follows the scroll
   idleDamp: 1.6, // how slowly the idle motion fades in once built
-  seqLength: 13, // seconds in the Sequence loop
-  turnStart: 2.6,
+  seqLength: 11, // seconds in the Sequence loop: turn, orange sweep, nod, repeat
+  turnStart: 0.8,
   turnDur: 4.6,
-  stretchStart: 8.2,
-  stretchDur: 3.0,
-  stretchX: 0.38,
-  stretchY: 0.18,
+  sweepStart: 5.9,
   sweepDur: 2.4,
+  nodStart: 8.6,
+  nodDur: 2.4,
+  symbolsDesktop: 110, // floating code symbols orbiting the logo
+  symbolsMobile: 48,
   cursorRadius: 0.085, // fraction of logo width
   budgetDesktop: 12000,
   budgetMobile: 5200,
@@ -52,14 +53,71 @@ const CFG = {
 const GLYPHS = ["·", ":", "+", "N", "O", "D", "O"];
 const CELL = 48;
 
+/* code symbols that drift around the finished logo */
+const SYMBOLS = ["{", "}", "<", ">", "/", ";", "=", "(", ")", "[", "]", "0", "1", "#", "*", "&", "|", "$"];
+
+/* Each symbol rides its own slow 3D orbit around the logo, so there is always something moving. */
+const SYM_VERTEX = /* glsl */ `
+  uniform float uTg, uYaw, uPitch, uFw, uSize, uDpr, uSym, uMouseW, uR;
+  uniform vec2 uView, uMouse;
+  attribute vec4 aOrbit;   // radius scale, speed, phase, glyph index
+  attribute vec4 aShape;   // y scale, z scale, accent, tilt
+  varying float vA;
+  varying float vGlyph;
+  varying float vAccent;
+  void main() {
+    float a = aOrbit.z + uTg * aOrbit.y;
+    float rad = aOrbit.x * uFw;
+    float x = cos(a) * rad * 0.85;
+    float z = sin(a) * rad * 0.42 * aShape.y;
+    float y = (sin(a * 0.7 + aOrbit.z * 3.0) * 0.5 + sin(uTg * 0.3 + aOrbit.z) * 0.12) * rad * 0.5 * aShape.x;
+    float ca = cos(uYaw), sa = sin(uYaw), cb = cos(uPitch), sb = sin(uPitch);
+    float x1 = x * ca + z * sa, z1 = -x * sa + z * ca;
+    float y2 = y * cb - z1 * sb, z2 = y * sb + z1 * cb;
+    float Fd = uFw * 2.6;
+    float pr = Fd / (Fd - z2);
+    vec2 p = vec2(uView.x * 0.5 + x1 * pr, uView.y * 0.5 + y2 * pr);
+    if (uMouseW > 0.01) {
+      vec2 d = p - uMouse;
+      float dist = length(d);
+      if (dist < uR && dist > 0.1) {
+        float f = 1.0 - dist / uR;
+        p += d / dist * f * f * 70.0 * uMouseW;
+      }
+    }
+    float depth = clamp(0.5 + z2 / (uFw * 0.9), 0.0, 1.0);
+    float blink = 0.55 + 0.45 * sin(uTg * (0.6 + aShape.w) + aOrbit.z * 9.0);
+    vA = uSym * (0.4 + 0.6 * depth) * (0.6 + 0.4 * blink);
+    vGlyph = aOrbit.w;
+    vAccent = aShape.z;
+    gl_PointSize = uSize * pr * (0.7 + 0.5 * depth) * uDpr;
+    gl_Position = vec4(p.x / uView.x * 2.0 - 1.0, 1.0 - p.y / uView.y * 2.0, 0.0, 1.0);
+  }
+`;
+
+const SYM_FRAGMENT = /* glsl */ `
+  uniform sampler2D uAtlas;
+  uniform vec3 uFg, uAccent;
+  varying float vA;
+  varying float vGlyph;
+  varying float vAccent;
+  void main() {
+    vec2 uv = vec2((vGlyph + gl_PointCoord.x) / ${SYMBOLS.length.toFixed(1)}, 1.0 - gl_PointCoord.y);
+    float ink = texture2D(uAtlas, uv).a;
+    if (vA * ink < 0.01) discard;
+    vec3 col = vAccent > 0.5 ? uAccent : uFg;
+    gl_FragColor = vec4(col, vA * ink);
+  }
+`;
+
 /*
  * The per-glyph maths of the reference frame loop, moved to the GPU so the browser only
- * updates a few uniforms per frame. Same easing, arc, stretch, rotation, projection, depth,
+ * updates a few uniforms per frame. Same easing, arc, rotation, projection, depth,
  * light wave and sweep. The cursor uses the resting offset of the reference's spring
  * (force / 0.0396 ≈ 55px at full strength) instead of integrating it per glyph.
  */
 const VERTEX = /* glsl */ `
-  uniform float uP, uTg, uYaw, uPitch, uSt, uStK, uSweepX, uBand, uFw, uSize0, uDpr, uMouseW, uR;
+  uniform float uP, uTg, uYaw, uPitch, uSweepX, uBand, uFw, uSize0, uDpr, uMouseW, uR;
   uniform vec2 uView, uMouse;
   attribute vec3 aStart;
   attribute vec4 aMeta;   // delay, phase, brightness, arc
@@ -69,11 +127,6 @@ const VERTEX = /* glsl */ `
   varying float vGlyph;
   const float PI = 3.14159265;
   float smoother(float t) { return t * t * t * (t * (t * 6.0 - 15.0) + 10.0); }
-  float bell(float u) {
-    if (u <= 0.0 || u >= 1.0) return 0.0;
-    float s = sin(PI * u);
-    return s * s * (1.0 + 0.08 * sin(2.0 * PI * u));
-  }
   void main() {
     vec3 home = position;
     float e = smoother(clamp((uP - aMeta.x) / ${CFG.assemblySpan.toFixed(2)}, 0.0, 1.0));
@@ -83,12 +136,6 @@ const VERTEX = /* glsl */ `
     float x = cx + (home.x - cx) * e;
     float y = cy + (home.y - cy) * e + aMeta.w * sin(PI * e);
     float z = aStart.z + (home.z - aStart.z) * e;
-    if (uSt > -0.5) {
-      float k = bell(uSt - aMeta2.x * 0.22) * uStK;
-      x *= 1.0 + ${CFG.stretchX.toFixed(2)} * k;
-      y *= 1.0 - ${CFG.stretchY.toFixed(2)} * k;
-      z *= 1.0 - 0.3 * k;
-    }
     float ca = cos(uYaw), sa = sin(uYaw), cb = cos(uPitch), sb = sin(uPitch);
     float x1 = x * ca + z * sa, z1 = -x * sa + z * ca;
     float y2 = y * cb - z1 * sb, z2 = y * sb + z1 * cb;
@@ -139,7 +186,7 @@ const FRAGMENT = /* glsl */ `
 
 /**
  * NODO logo assembly: the logo builds from small glyphs as the box scrolls into view,
- * then idles (turn, stretch, orange sweep). WebGL points, one draw call per frame.
+ * then idles (turn, orange sweep, nod, orbiting code symbols). WebGL points, one draw call per frame.
  */
 export function LogoAssembly({ logo, label, mode = "sequence", stage = "paper", placement }: Props) {
   const boxRef = useRef<HTMLDivElement>(null);
@@ -191,8 +238,6 @@ export function LogoAssembly({ logo, label, mode = "sequence", stage = "paper", 
       uTg: { value: 0 },
       uYaw: { value: 0 },
       uPitch: { value: 0 },
-      uSt: { value: -1 },
-      uStK: { value: 0 },
       uSweepX: { value: 1e9 },
       uBand: { value: 1 },
       uFw: { value: 1 },
@@ -217,6 +262,38 @@ export function LogoAssembly({ logo, label, mode = "sequence", stage = "paper", 
       depthTest: false,
       depthWrite: false,
     });
+    const symAtlasCanvas = document.createElement("canvas");
+    const symAtlas = new THREE.CanvasTexture(symAtlasCanvas);
+    const symGeometry = new THREE.BufferGeometry();
+    const symUniforms = {
+      uTg: { value: 0 },
+      uYaw: { value: 0 },
+      uPitch: { value: 0 },
+      uFw: { value: 1 },
+      uSize: { value: 14 },
+      uDpr: { value: 1 },
+      uSym: { value: 0 },
+      uMouseW: { value: 0 },
+      uR: { value: 60 },
+      uView: { value: new THREE.Vector2(1, 1) },
+      uMouse: { value: new THREE.Vector2() },
+      uAtlas: { value: symAtlas },
+      uFg: { value: new THREE.Color(fg) },
+      uAccent: { value: new THREE.Color("#FF4D00") },
+    };
+    symUniforms.uFg.value.setStyle(fg, THREE.LinearSRGBColorSpace);
+    symUniforms.uAccent.value.setStyle("#FF4D00", THREE.LinearSRGBColorSpace);
+    const symMaterial = new THREE.ShaderMaterial({
+      uniforms: symUniforms,
+      vertexShader: SYM_VERTEX,
+      fragmentShader: SYM_FRAGMENT,
+      transparent: true,
+      depthTest: false,
+      depthWrite: false,
+    });
+    const symPoints = new THREE.Points(symGeometry, symMaterial);
+    symPoints.frustumCulled = false;
+    scene.add(symPoints);
     const points = new THREE.Points(geometry, material);
     points.frustumCulled = false;
     scene.add(points);
@@ -242,6 +319,16 @@ export function LogoAssembly({ logo, label, mode = "sequence", stage = "paper", 
       x.fillStyle = "#fff";
       GLYPHS.forEach((ch, i) => x.fillText(ch, CELL * i + CELL / 2, CELL / 2 + 2));
       atlas.needsUpdate = true;
+
+      symAtlasCanvas.width = CELL * SYMBOLS.length;
+      symAtlasCanvas.height = CELL;
+      const y = symAtlasCanvas.getContext("2d")!;
+      y.font = `500 34px ${fontFamily}, ui-monospace, monospace`;
+      y.textAlign = "center";
+      y.textBaseline = "middle";
+      y.fillStyle = "#fff";
+      SYMBOLS.forEach((ch, i) => y.fillText(ch, CELL * i + CELL / 2, CELL / 2 + 2));
+      symAtlas.needsUpdate = true;
     }
 
     /* sample the logo into a grid of points, two layers deep so the turn has volume */
@@ -342,6 +429,23 @@ export function LogoAssembly({ logo, label, mode = "sequence", stage = "paper", 
       uniforms.uSize0.value = cs * 1.68;
       uniforms.uBand.value = fw * 0.06;
       uniforms.uR.value = Math.max(60, fw * CFG.cursorRadius);
+      const SN = mobile ? CFG.symbolsMobile : CFG.symbolsDesktop;
+      const orbit = new Float32Array(SN * 4);
+      const shape = new Float32Array(SN * 4);
+      const srnd = rng(23);
+      const pos = new Float32Array(SN * 3);
+      for (let j = 0; j < SN; j++) {
+        // radius scale 0.5..0.72 of the logo width: a loose ring just around the letters
+        const speed = (0.12 + 0.3 * srnd()) * (srnd() < 0.5 ? -1 : 1);
+        orbit.set([0.5 + 0.22 * srnd(), speed, srnd() * TAU, Math.floor(srnd() * SYMBOLS.length)], j * 4);
+        shape.set([0.5 + 0.8 * srnd(), 0.6 + 0.8 * srnd(), srnd() < 0.16 ? 1 : 0, srnd() * 0.8], j * 4);
+      }
+      symGeometry.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+      symGeometry.setAttribute("aOrbit", new THREE.BufferAttribute(orbit, 4));
+      symGeometry.setAttribute("aShape", new THREE.BufferAttribute(shape, 4));
+      symUniforms.uFw.value = fw;
+      symUniforms.uSize.value = clamp(fw * 0.05, 14, 32);
+      symUniforms.uR.value = Math.max(60, fw * CFG.cursorRadius);
       built = true;
     }
 
@@ -354,6 +458,8 @@ export function LogoAssembly({ logo, label, mode = "sequence", stage = "paper", 
       renderer.setSize(W, H, false);
       uniforms.uDpr.value = dpr;
       uniforms.uView.value.set(W, H);
+      symUniforms.uDpr.value = dpr;
+      symUniforms.uView.value.set(W, H);
       build();
       if (!running) draw(); // keep a correct still frame when paused
     }
@@ -384,32 +490,29 @@ export function LogoAssembly({ logo, label, mode = "sequence", stage = "paper", 
 
       /* idle choreography, all as smooth functions of time */
       let yaw = 0;
-      let st = -1;
+      let nod = 0;
       let sweep = sweepT >= 0 && sweepT < CFG.sweepDur ? sweepT / CFG.sweepDur : -1;
       if (mode === "sequence") {
         const t = T % CFG.seqLength;
-        yaw = 0.09 * Math.sin(T * 0.7) + TAU * sineIO((t - CFG.turnStart) / CFG.turnDur);
-        st = (t - CFG.stretchStart) / CFG.stretchDur;
-        if (
-          t > CFG.stretchStart + CFG.stretchDur + 0.4 &&
-          t < CFG.stretchStart + CFG.stretchDur + 0.4 + CFG.sweepDur &&
-          T > CFG.seqLength * 0.5
-        )
-          sweep = (t - CFG.stretchStart - CFG.stretchDur - 0.4) / CFG.sweepDur;
+        yaw = 0.12 * Math.sin(T * 0.7) + TAU * sineIO((t - CFG.turnStart) / CFG.turnDur);
+        nod = Math.sin(Math.PI * clamp((t - CFG.nodStart) / CFG.nodDur, 0, 1)) * 0.32;
+        if (t > CFG.sweepStart && t < CFG.sweepStart + CFG.sweepDur && T > CFG.seqLength * 0.5)
+          sweep = (t - CFG.sweepStart) / CFG.sweepDur;
       } else if (mode === "sway") {
         yaw = 0.5 * Math.sin(T * 0.55);
-      } else if (mode === "stretch") {
-        yaw = 0.07 * Math.sin(T * 0.7);
-        st = ((T % 5) - 0.5) / CFG.stretchDur;
       }
-      const pitch = 0.07 * Math.sin(T * 0.45);
+      const pitch = 0.07 * Math.sin(T * 0.45) + nod;
 
       uniforms.uP.value = P;
       uniforms.uTg.value = tg;
       uniforms.uYaw.value = yaw * idleW;
       uniforms.uPitch.value = pitch * idleW;
-      uniforms.uSt.value = st;
-      uniforms.uStK.value = idleW;
+      symUniforms.uSym.value = idleW * clamp((P - 0.8) / 0.2, 0, 1);
+      symUniforms.uTg.value = tg;
+      symUniforms.uYaw.value = yaw * idleW * 0.5;
+      symUniforms.uPitch.value = pitch * idleW;
+      symUniforms.uMouseW.value = mouseW;
+      if (mouse) symUniforms.uMouse.value.set(mouse.x, mouse.y);
       uniforms.uSweepX.value = sweep >= 0 ? (-0.65 + 1.3 * sineIO(sweep)) * fw : 1e9;
       uniforms.uMouseW.value = mouseW;
       if (mouse) uniforms.uMouse.value.set(mouse.x, mouse.y);
@@ -495,6 +598,9 @@ export function LogoAssembly({ logo, label, mode = "sequence", stage = "paper", 
       geometry.dispose();
       material.dispose();
       atlas.dispose();
+      symGeometry.dispose();
+      symMaterial.dispose();
+      symAtlas.dispose();
       renderer.dispose();
     };
   }, [active, logo, mode, stage]);

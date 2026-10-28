@@ -622,7 +622,7 @@ export function initMeridian(): Cleanup {
     if (destroyed) return;
     gsap.to(rise, { yPercent: 0, duration: 1.3, ease: "expo.out", stagger: 0.08, delay: 0.1 });
     gsap.fromTo(
-      ".mr-hero__notes > *, .mr-header > *",
+      ".nd-hero__coords, .nd-hero__intro, .mr-header > *",
       { autoAlpha: 0, y: 12 },
       { autoAlpha: 1, y: 0, duration: 0.9, ease: "expo.out", stagger: 0.04, delay: 0.3 },
     );
@@ -646,7 +646,7 @@ export function initMeridian(): Cleanup {
     const s = sphere;
     const g = gallery;
     const hero = $("[data-mr='hero']")!;
-    const notes = $(".mr-hero__notes")!;
+    const notes = $$(".nd-hero__coords, .nd-hero__intro");
     if (s) {
       triggers.push(
         ScrollTrigger.create({
@@ -655,7 +655,8 @@ export function initMeridian(): Cleanup {
           end: "bottom bottom",
           onUpdate: (st) => {
             s.setProgress(st.progress);
-            notes.style.opacity = String(1 - Math.min(1, st.progress * 4));
+            const fade = String(1 - Math.min(1, st.progress * 4));
+            notes.forEach((n) => (n.style.opacity = fade));
           },
           onToggle: (st) => (st.isActive ? s.start() : s.stop()),
         }),
