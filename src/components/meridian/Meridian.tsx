@@ -17,7 +17,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
 async function runtimeData(projects: Project[]): Promise<RuntimeData> {
   return {
-    sphere: site.sphere.map((s) => ({ slug: s.project, textures: { lg: `${s.src}-lg.webp`, sm: `${s.src}-sm.webp` } })),
+    sphere: site.sphere.map((s) => ({ slug: s.project, title: s.title, textures: { lg: `${s.src}-lg.webp`, sm: `${s.src}-sm.webp` } })),
     projects: await Promise.all(
       projects.map(async (p) => ({
         slug: p.slug,

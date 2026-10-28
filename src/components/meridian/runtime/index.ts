@@ -557,7 +557,7 @@ export function initMeridian(): Cleanup {
   // Sphere tiles: one curated photograph per tile, no repeats; "nodo" shots are brand pieces without a project page.
   const tiles: SphereTile[] = sphereData.map((t) => {
     const p = bySlug.get(t.slug);
-    return { src: t.textures[tier], slug: t.slug, title: p?.title ?? "NODO Studio", year: p?.year ?? "" };
+    return { src: t.textures[tier], slug: t.slug, title: p?.title ?? t.title ?? "NODO Studio", year: p?.year ?? "" };
   });
 
   const rise = $$(".mr-hero [data-rise]");

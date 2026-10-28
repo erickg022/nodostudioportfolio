@@ -11,7 +11,7 @@ export type RuntimeProject = {
 };
 
 /** Shape of the JSON in <script id="mr-data">. */
-export type RuntimeSphereTile = { slug: string; textures: TextureSet };
+export type RuntimeSphereTile = { slug: string; title?: string; textures: TextureSet };
 
 export type RuntimeData = { projects: RuntimeProject[]; sphere: RuntimeSphereTile[] };
 

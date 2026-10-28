@@ -33,6 +33,8 @@ export type SphereImage = {
   src: string;
   /** Project slug opened on click, or "nodo" for studio brand shots (not clickable). */
   project: string;
+  /** Hover title for tiles without a project page. */
+  title?: string;
 };
 
 export type Site = {
