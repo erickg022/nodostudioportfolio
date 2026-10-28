@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element -- Meridian's runtime animates raw <img> nodes (clip-path reveals, ghost transition); sources still go through the Next image optimizer via getImageProps. */
-import { Fragment } from "react";
 import { site, type Project, type ProjectMedia } from "@/content/site";
 import { fixedImage, responsiveImage, textureUrl } from "@/lib/media";
 import { LogoAssembly } from "./LogoAssembly";
@@ -120,7 +119,6 @@ async function ProjectArticle({ project, next }: { project: Project; next: Proje
 export async function Meridian() {
   const { studio, hero, work, index, about, overlay, projects } = site;
   const data = await runtimeData(projects);
-  const imageCount = site.sphere.length;
   const first = projects[0];
   const peeks = await Promise.all(projects.map((p) => fixedImage(p.cover, 170)));
 
@@ -177,22 +175,12 @@ export async function Meridian() {
               </h1>
             )}
             <canvas data-sphere="true" className="mr-hero__canvas" aria-hidden="true" />
-            <div className="mr-hero__notes">
-              <p className="mr-hero__intro">{hero.intro}</p>
-              <p className="mr-hero__count">
-                {projects.length} {hero.countLabels.projects}
-                <br />
-                {imageCount} {hero.countLabels.images}
-              </p>
-              <p className="mr-hero__hint">
-                {hero.hint.map((line, i) => (
-                  <Fragment key={i}>
-                    {i > 0 && <br />}
-                    {line}
-                  </Fragment>
-                ))}
-              </p>
-            </div>
+            <p className="nd-hero__coords">
+              {hero.coordinates.map((line) => (
+                <span key={line}>{line}</span>
+              ))}
+            </p>
+            <p className="nd-hero__intro">{hero.intro}</p>
             <div data-cursor="true" className="mr-cursor" aria-hidden="true">
               <span data-cursor-title="true" />
               <span data-cursor-year="true" className="mr-cursor__year" />

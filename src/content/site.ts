@@ -55,6 +55,8 @@ export type Site = {
     /** Replaces the first name line in the hero; the second line stays as text. */
     logo?: { src: string; alt: string };
     intro: string;
+    /** Latitude / longitude shown bottom-left of the hero. */
+    coordinates: string[];
     countLabels: { projects: string; images: string };
     hint: string[];
   };
@@ -101,6 +103,10 @@ export type Site = {
     brand: string;
     /** Right-hand text of the desktop bar. */
     right: string;
+    /** Two-line location block on the left of the desktop bar. */
+    location: string[];
+    /** Live clock beside it: label above, HH:MM:SS below. */
+    clock: { label: string; timezone: string };
     mobileLinks: { label: string; href: string }[];
     mobileMeta: string[];
   };

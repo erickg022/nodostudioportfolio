@@ -3,6 +3,25 @@
 import { useEffect, useRef, useState } from "react";
 import { site } from "@/content/site";
 
+/** HH:MM:SS in the given time zone, ticking every second; blank until mounted so server and client markup match. */
+function useClock(timeZone: string) {
+  const [time, setTime] = useState("");
+  useEffect(() => {
+    const format = new Intl.DateTimeFormat("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+      timeZone,
+    });
+    const tick = () => setTime(format.format(new Date()));
+    tick();
+    const id = window.setInterval(tick, 1000);
+    return () => window.clearInterval(id);
+  }, [timeZone]);
+  return time;
+}
+
 /**
  * Navigation from the previous NODO site: a white mono bar on desktop, and on mobile an
  * 80px header whose two-line toggle opens a full-screen menu. Links are page anchors;
@@ -11,6 +30,7 @@ import { site } from "@/content/site";
 export function NodoHeader() {
   const { header, nav } = site;
   const [open, setOpen] = useState(false);
+  const time = useClock(header.clock.timezone);
   const panelRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -54,9 +74,16 @@ export function NodoHeader() {
     <>
       <header className="nd-header">
         <nav className="nd-header__bar" aria-label="Main">
-          <a href="#top" className="nd-header__brand">
-            {header.brand}
-          </a>
+          <p className="nd-header__loc">
+            {header.location[0]}
+            <br />
+            {header.location[1]}
+          </p>
+          <p className="nd-header__time">
+            {header.clock.label}
+            <br />
+            <span suppressHydrationWarning>{time || "00:00:00"}</span>
+          </p>
           <div className="nd-header__links">
             {nav.map((item) => (
               <a key={item.href} href={item.href}>
@@ -64,7 +91,6 @@ export function NodoHeader() {
               </a>
             ))}
           </div>
-          <div className="nd-header__right">{header.right}</div>
         </nav>
       </header>
 

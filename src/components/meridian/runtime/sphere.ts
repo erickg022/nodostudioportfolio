@@ -189,9 +189,11 @@ export function createSphere(
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
     const t = Math.tan((camera.fov * Math.PI) / 360);
-    const fitH = RADIUS / (t * 0.74);
+    const fitH = RADIUS / (t * 0.7);
     const fitW = RADIUS / (t * camera.aspect * 0.86);
     distance = Math.max(fitH, fitW);
+    // Sit a little above centre so the logo below overlaps as little as possible.
+    group.position.y = RADIUS * 0.1;
   };
   resize();
   window.addEventListener("resize", resize);

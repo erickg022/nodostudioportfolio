@@ -28,7 +28,7 @@
   },
   "nav": [
     {
-      "label": "Work",
+      "label": "Projects",
       "href": "#work"
     },
     {
@@ -36,7 +36,7 @@
       "href": "#about"
     },
     {
-      "label": "Contact",
+      "label": "- Info",
       "href": "#contact"
     }
   ],
@@ -53,6 +53,10 @@
     "hint": [
       "Drag to turn the sphere.",
       "Click an image to open its project."
+    ],
+    "coordinates": [
+      "30° 58' 57.504'' S",
+      "119° 6' 45.612'' E"
     ]
   },
   "work": {
@@ -857,7 +861,15 @@
       "LA - MX - ES",
       "Working globally",
       "(C) 2026 NODO STUDIO"
-    ]
+    ],
+    "location": [
+      "LA - MX - ES",
+      "Working globally"
+    ],
+    "clock": {
+      "label": "Time Check",
+      "timezone": "Europe/Madrid"
+    }
   },
   "sphere": [
     {

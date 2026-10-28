@@ -41,7 +41,7 @@ html:root {
    underneath (Meridian's header trick), so it reads black on white and stays visible on photos. */
 .mr-hero__name--logo {
   justify-content: center;
-  bottom: clamp(20px, 4svh, 40px);
+  bottom: clamp(14px, 3svh, 32px);
   line-height: 1;
   z-index: 3;
   mix-blend-mode: difference;
@@ -59,7 +59,7 @@ html:root {
 }
 .mr-hero__logo {
   display: block;
-  height: min(18svh, 20vw);
+  height: min(17svh, 18vw);
   width: auto;
   max-width: 100%;
 }
@@ -79,48 +79,82 @@ html:root {
   position: fixed;
   inset: 0 0 auto 0;
   z-index: 55;
-  border-bottom: 1px solid rgb(0 0 0 / 0.15);
-  background: rgb(255 255 255 / 0.95);
+  background: rgb(255 255 255 / 0.9);
   -webkit-backdrop-filter: blur(24px);
   backdrop-filter: blur(24px);
 }
+/* Location left, live clock a quarter in, links right (the previous site's hero bar). */
 .nd-header__bar {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 16px;
-  max-width: 1800px;
-  height: 56px;
-  margin: 0 auto;
-  padding: 0 24px;
+  grid-template-columns: 25.5% 1fr auto;
+  align-items: start;
+  height: 88px;
+  padding: 36px clamp(24px, 3.1vw, 56px) 0;
   font-family: var(--font-geist-mono), ui-monospace, monospace;
   font-size: 11px;
+  line-height: 1.35;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #171717;
+  color: #0a0a0a;
+}
+.nd-header__loc,
+.nd-header__time {
+  margin: 0;
+  white-space: nowrap;
+}
+.nd-header__time span {
+  font-variant-numeric: tabular-nums;
 }
 .nd-header__links {
   display: flex;
-  gap: 20px;
-}
-.nd-header__links a,
-.nd-header__right {
-  color: #404040;
+  gap: 48px;
 }
 .nd-header a {
   text-underline-offset: 4px;
-  transition: color 0.15s;
 }
 .nd-header a:hover {
-  color: #0a0a0a;
   text-decoration: underline;
 }
-.nd-header__right {
-  justify-self: end;
+
+/* ---------- Hero: coordinates bottom-left, statement bottom-right ---------- */
+.nd-hero__coords,
+.nd-hero__intro {
+  position: absolute;
+  z-index: 3;
+  margin: 0;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  text-transform: uppercase;
+  pointer-events: none;
 }
-@media (min-width: 1024px) {
-  .nd-header__links {
-    gap: 32px;
+.nd-hero__coords {
+  left: clamp(28px, 4.2vw, 76px);
+  bottom: 14svh;
+  display: flex;
+  gap: clamp(24px, 2.4vw, 48px);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+}
+.nd-hero__intro {
+  right: clamp(24px, 3.1vw, 56px);
+  bottom: 14svh;
+  max-width: min(24vw, 440px);
+  text-align: right;
+  font-size: 11px;
+  line-height: 1.6;
+  letter-spacing: 0.12em;
+}
+@media (max-width: 767px) {
+  .nd-hero__coords {
+    display: none;
+  }
+  .nd-hero__intro {
+    left: 18px;
+    right: 18px;
+    top: 96px;
+    bottom: auto;
+    max-width: none;
+    text-align: left;
+    font-size: 10px;
   }
 }
 
