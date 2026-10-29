@@ -991,9 +991,9 @@
       "media": [
         {
           "type": "video",
-          "src": "/projects/pato/red-flash.mp4",
-          "poster": "/projects/pato/red-flash-poster.jpg",
-          "alt": "Pato Shoucair red flash visual",
+          "src": "/projects/pato/song2.mp4",
+          "poster": "/projects/pato/song2-poster.jpg",
+          "alt": "Pato Shoucair Song 2 concert visual",
           "layout": "full"
         },
         {
