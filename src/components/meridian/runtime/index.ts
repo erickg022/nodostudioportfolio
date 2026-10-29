@@ -255,8 +255,11 @@ function initPreloader(
   };
 }
 
+/** Next project for the footer link of an open project (follows the active portfolio view). */
+type NextFor = (slug: string) => { slug: string; title: string } | null;
+
 /** Full-screen project overlay with hash routes (#project-<slug>), Esc, Close and back button. */
-function initOverlay() {
+function initOverlay(nextFor: NextFor) {
   const root = $("[data-mr='overlay']")!;
   const scroller = $("[data-scroll]", root)!;
   const close = $("[data-close]", root)!;
@@ -281,7 +284,19 @@ function initOverlay() {
     articles.forEach((a, s) => (a.hidden = s !== slug));
     scroller.scrollTop = 0;
     current = slug;
-    $$<HTMLVideoElement>("video", articles.get(slug)).forEach((v) => v.play().catch(() => {}));
+    const article = articles.get(slug);
+    const next = nextFor(slug);
+    const link = article && $<HTMLAnchorElement>("[data-next]", article);
+    if (next && link) {
+      link.href = `#project-${next.slug}`;
+      link.dataset.open = next.slug;
+      const title = $(".mr-proj__next-title", link);
+      if (title) title.textContent = next.title;
+    }
+    // Only films shown on this screen play; device-specific ones hidden by CSS never download.
+    $$<HTMLVideoElement>("video", article).forEach((v) => {
+      if (v.getClientRects().length) v.play().catch(() => {});
+    });
   };
 
   const open = (slug: string, origin?: OpenOrigin) => {
@@ -560,7 +575,14 @@ export function initMeridian(): Cleanup {
   const ctx = gsap.context(() => {});
 
   cleanups.push(initSmoothScroll(), initClock());
-  const overlay = initOverlay();
+  // Within a filtered view, "Next project" stays inside that view; ALL WORK follows the full list.
+  const overlay = initOverlay((slug) => {
+    const order = view.id === defaultView ? projects : viewProjects(view);
+    const i = order.findIndex((p) => p.slug === slug);
+    if (i < 0) return null;
+    const next = order[(i + 1) % order.length];
+    return { slug: next.slug, title: next.title };
+  });
   cleanups.push(overlay.destroy, initWords(), initContact());
 
   const gl = hasWebGL();

@@ -10,6 +10,19 @@ export type ProjectMedia = {
   alt: string;
   layout: MediaLayout;
   controls?: boolean;
+  /** Show only on vertical screens ("mobile") or only on landscape ones ("desktop"); both when omitted. */
+  device?: "mobile" | "desktop";
+};
+
+/** Results block under a project's media (metrics carried over from the previous site). */
+export type ProjectImpact = {
+  eyebrow: string;
+  intro: string;
+  /** "system" shows labelled pillars without big numbers. */
+  variant?: "metrics" | "system";
+  metrics: { value: string; label: string; description: string }[];
+  /** Recognition or annotation row under the metrics. */
+  strip?: { label: string; secondaryLabel?: string; text: string };
 };
 
 export type Project = {
@@ -31,6 +44,9 @@ export type Project = {
   categories: PortfolioCategory[];
   /** Verifiable technologies used, listed in the project overlay. */
   technologies?: string[];
+  /** Portrait cover used on vertical screens (overlay cover and work reel). */
+  coverMobile?: string;
+  impact?: ProjectImpact;
 };
 
 export type PortfolioView = {
@@ -110,9 +126,6 @@ export type Site = {
     };
   };
   footer: {
-    topLeft: string;
-    topCenter: string;
-    topRight: string;
     statementLines: string[];
     columns: {
       label: string;

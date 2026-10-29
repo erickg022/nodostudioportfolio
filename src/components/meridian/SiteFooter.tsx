@@ -8,12 +8,6 @@ export function SiteFooter({ id }: { id?: string }) {
     h === "mailto" ? (isTodo(contact.email) ? "#contact" : `mailto:${contact.email}`) : h;
   return (
     <footer id={id} className="nd-footer">
-      <div className="nd-footer__top">
-        <p>{footer.topLeft}</p>
-        <p>{footer.topCenter}</p>
-        <p>{footer.topRight}</p>
-      </div>
-
       <div className="nd-footer__center">
         <div className="nd-footer__frame">
           <p className="nd-footer__statement">

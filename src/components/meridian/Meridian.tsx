@@ -1,10 +1,11 @@
 /* eslint-disable @next/next/no-img-element -- Meridian's runtime animates raw <img> nodes (clip-path reveals, ghost transition); sources still go through the Next image optimizer via getImageProps. */
 import { resolveView, viewHref } from "@/content/portfolio";
-import { site, type Project, type ProjectMedia } from "@/content/site";
+import { site, type Project, type ProjectImpact, type ProjectMedia } from "@/content/site";
 import { fixedImage, responsiveImage, textureUrl } from "@/lib/media";
 import { LogoAssembly } from "./LogoAssembly";
 import { NodoHeader } from "./NodoHeader";
 import { SiteFooter } from "./SiteFooter";
+import { VERTICAL_QUERY } from "./runtime/media";
 import type { RuntimeData } from "./runtime/types";
 
 const FIG_SIZES: Record<ProjectMedia["layout"], string> = {
@@ -48,7 +49,7 @@ function portfolioViews(projects: Project[]) {
 }
 
 async function Figure({ media, alt }: { media: ProjectMedia; alt: string }) {
-  const className = `mr-proj__fig mr-proj__fig--${media.layout}`;
+  const className = `mr-proj__fig mr-proj__fig--${media.layout}${media.device ? ` mr-proj__fig--${media.device}` : ""}`;
   if (media.type === "video") {
     const poster = media.poster ? await responsiveImage(media.poster, FIG_SIZES[media.layout]) : null;
     return (
@@ -76,13 +77,50 @@ async function Figure({ media, alt }: { media: ProjectMedia; alt: string }) {
   );
 }
 
+/** Results under the project media: an intro, up to three metrics and an optional recognition row. */
+function ProjectImpactBlock({ impact }: { impact: ProjectImpact }) {
+  return (
+    <section className={`nd-impact nd-impact--${impact.variant ?? "metrics"}`} aria-label={impact.eyebrow}>
+      <div className="nd-impact__grid">
+        <div className="nd-impact__intro">
+          <p className="nd-impact__label">{impact.eyebrow}</p>
+          <p className="nd-impact__lead">{impact.intro}</p>
+        </div>
+        {impact.metrics.map((metric, i) => (
+          <div key={metric.label} className="nd-impact__cell">
+            <p className="nd-impact__label">{pad(i + 1)}</p>
+            {metric.value ? <p className="nd-impact__value">{metric.value}</p> : null}
+            <p className="nd-impact__name">{metric.label}</p>
+            <p className="nd-impact__desc">{metric.description}</p>
+          </div>
+        ))}
+      </div>
+      {impact.strip ? (
+        <div className="nd-impact__strip">
+          <p className="nd-impact__label">{impact.strip.label}</p>
+          <p className="nd-impact__label">{impact.strip.secondaryLabel ?? ""}</p>
+          <p className="nd-impact__strip-text">{impact.strip.text}</p>
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
 async function ProjectArticle({ project, next }: { project: Project; next: Project }) {
   const { overlay } = site;
   const cover = await responsiveImage(project.cover, "100vw");
+  const coverMobile = project.coverMobile ? await responsiveImage(project.coverMobile, "100vw") : null;
   return (
     <article data-project={project.slug} className="mr-proj" hidden>
       <div className="mr-proj__cover">
-        <img data-cover="true" {...cover} alt="" loading="lazy" decoding="async" />
+        {coverMobile ? (
+          <picture>
+            <source media={VERTICAL_QUERY} srcSet={coverMobile.srcSet} sizes={coverMobile.sizes} />
+            <img data-cover="true" {...cover} alt="" loading="lazy" decoding="async" />
+          </picture>
+        ) : (
+          <img data-cover="true" {...cover} alt="" loading="lazy" decoding="async" />
+        )}
         <h2 className="mr-proj__title">{project.title}</h2>
       </div>
       <div className="mr-proj__meta">
@@ -124,7 +162,9 @@ async function ProjectArticle({ project, next }: { project: Project; next: Proje
           <Figure key={media.src} media={media} alt={media.alt || `${project.title}, ${i + 1}`} />
         ))}
       </div>
-      <a href={`#project-${next.slug}`} data-open={next.slug} className="mr-proj__next">
+      {project.impact ? <ProjectImpactBlock impact={project.impact} /> : null}
+      {/* The runtime retargets this link to the next project of the active portfolio view. */}
+      <a href={`#project-${next.slug}`} data-open={next.slug} data-next="true" className="mr-proj__next">
         <span className="mr-label">{overlay.nextLabel}</span>
         <span className="mr-proj__next-title">{next.title}</span>
       </a>
@@ -145,7 +185,7 @@ export async function Meridian() {
   const reels = await Promise.all(
     views.map((v) =>
       Promise.all(
-        v.items.map((p) => responsiveImage(portfolio.covers[p.slug] ?? p.cover, "(max-width: 760px) 78vw, 46vw")),
+        v.items.map((p) => responsiveImage(p.coverMobile ?? portfolio.covers[p.slug] ?? p.cover, "(max-width: 760px) 78vw, 46vw")),
       ),
     ),
   );
@@ -285,7 +325,7 @@ export async function Meridian() {
           </div>
         </section>
 
-        <section id="index" data-mr="index" className="mr-index" aria-labelledby="index-title">
+        <section id="index" data-mr="index" data-fallback="#work" className="mr-index" aria-labelledby="index-title">
           <header className="mr-index__head">
             <h2 id="index-title">{index.title}</h2>
             {index.columns.map((col) => (
