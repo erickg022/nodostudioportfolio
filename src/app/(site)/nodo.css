@@ -1,0 +1,790 @@
+/*
+ * NODO additions on top of the verbatim Meridian styles (meridian.css):
+ * old-site preloader and footer, hero logo, body typeface, About logo assembly,
+ * and the vertical-screen layout. Loaded after meridian.css.
+ */
+
+/* Body text in Geist (previous site); display type stays Archivo.
+   `html:root` so it wins over meridian.css whatever the stylesheet order. */
+html:root {
+  --font-body: var(--font-geist), system-ui, sans-serif;
+}
+
+/* ---------- Preloader (previous site) ---------- */
+.site-preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #ffffff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 600ms ease;
+}
+.site-preloader[data-visible="true"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+.site-preloader__video {
+  display: block;
+  width: 100vw;
+  height: 100svh;
+  object-fit: contain;
+  object-position: center;
+  background: #ffffff;
+}
+
+/* ---------- Hero: the NODO logo alone, centred at the bottom ---------- */
+/* Centred, it would sit behind the sphere; bring it in front and invert against what is
+   underneath (Meridian's header trick), so it reads black on white and stays visible on photos. */
+.mr-hero__name--logo {
+  justify-content: center;
+  bottom: clamp(14px, 3svh, 32px);
+  line-height: 1;
+  z-index: 3;
+  mix-blend-mode: difference;
+}
+.mr-hero__name--logo .mr-hero__logo {
+  filter: invert(1);
+}
+/* The sticky wrapper is its own stacking context; give the blend the page colour to work on. */
+.mr-hero__sticky:has(.mr-hero__name--logo) {
+  background: var(--paper);
+}
+/* Full image is shown (nothing cropped); the span still masks the rise-in. */
+.mr-hero__name--logo .mr-hero__first {
+  padding-top: 0;
+}
+.mr-hero__logo {
+  display: block;
+  height: min(17svh, 18vw);
+  width: auto;
+  max-width: 100%;
+}
+@media (max-width: 760px) {
+  .mr-hero__name--logo {
+    align-items: center;
+  }
+  .mr-hero__logo {
+    height: auto;
+    width: min(72vw, 340px);
+  }
+}
+
+/* ---------- Navigation (previous site) ---------- */
+/* Desktop: white mono bar. Sits under the project overlay (z 60). */
+.nd-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 55;
+  background: rgb(255 255 255 / 0.9);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+}
+/* Location left, live clock a quarter in, links right (the previous site's hero bar). */
+.nd-header__bar {
+  display: grid;
+  grid-template-columns: 25.5% 1fr auto;
+  align-items: start;
+  height: 88px;
+  padding: 36px clamp(24px, 3.1vw, 56px) 0;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 1.35;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #0a0a0a;
+}
+.nd-header__loc,
+.nd-header__time {
+  margin: 0;
+  white-space: nowrap;
+}
+.nd-header__time span {
+  font-variant-numeric: tabular-nums;
+}
+.nd-header__links {
+  display: flex;
+  gap: 48px;
+}
+.nd-header a {
+  text-underline-offset: 4px;
+}
+.nd-header a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Hero: coordinates bottom-left, statement bottom-right ---------- */
+.nd-hero__coords,
+.nd-hero__intro {
+  position: absolute;
+  z-index: 3;
+  margin: 0;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.nd-hero__coords {
+  left: clamp(28px, 4.2vw, 76px);
+  bottom: 14svh;
+  display: flex;
+  gap: clamp(24px, 2.4vw, 48px);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+}
+.nd-hero__intro {
+  right: clamp(24px, 3.1vw, 56px);
+  bottom: 14svh;
+  max-width: min(24vw, 440px);
+  text-align: right;
+  font-size: 11px;
+  line-height: 1.6;
+  letter-spacing: 0.12em;
+}
+@media (max-width: 767px) {
+  .nd-hero__coords {
+    display: none;
+  }
+  .nd-hero__intro {
+    left: 18px;
+    right: 18px;
+    top: 96px;
+    bottom: auto;
+    max-width: none;
+    text-align: left;
+    font-size: 10px;
+  }
+}
+
+/* Mobile: 80px header with a two-line toggle and a full-screen menu. */
+.mobile-site-header,
+.mobile-menu-panel {
+  display: none;
+}
+@media (max-width: 767px) {
+  .nd-header {
+    display: none;
+  }
+  .mobile-site-header {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 55;
+    display: flex;
+    height: 80px;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(16, 16, 14, 0.14);
+    background: #ffffff;
+    padding: calc(env(safe-area-inset-top, 0px) + 14px) 18px 14px;
+  }
+  .mobile-site-header__brand-text {
+    font-family: var(--font-geist-mono), monospace;
+    font-size: clamp(13px, 3.8vw, 16px);
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #10100e;
+  }
+  .mobile-site-header__toggle {
+    position: relative;
+    display: grid;
+    height: 48px;
+    width: 48px;
+    place-items: center;
+    border: 0;
+    background: transparent;
+    color: #10100e;
+  }
+  .mobile-site-header__toggle span {
+    grid-area: 1 / 1;
+    display: block;
+    height: 1.5px;
+    width: 24px;
+    background: currentColor;
+    transition: transform 220ms ease, opacity 220ms ease;
+  }
+  .mobile-site-header__toggle span:first-child {
+    transform: translateY(-4px);
+  }
+  .mobile-site-header__toggle span:last-child {
+    transform: translateY(4px);
+  }
+  .mobile-site-header__toggle[aria-expanded="true"] span:first-child {
+    transform: rotate(45deg);
+  }
+  .mobile-site-header__toggle[aria-expanded="true"] span:last-child {
+    transform: rotate(-45deg);
+  }
+  .mobile-site-header__toggle:focus-visible,
+  .mobile-site-header__brand-text:focus-visible,
+  .mobile-menu-panel a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+  .mobile-menu-panel {
+    position: fixed;
+    inset: 0;
+    z-index: 1001;
+    display: flex;
+    min-height: 100svh;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #ffffff;
+    padding: calc(env(safe-area-inset-top, 0px) + 108px) 18px calc(env(safe-area-inset-bottom, 0px) + 22px);
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 360ms cubic-bezier(0.76, 0, 0.24, 1), opacity 180ms ease;
+  }
+  .mobile-menu-panel[data-open="true"] {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .mobile-menu-panel__nav {
+    display: grid;
+    gap: 0.18em;
+  }
+  .mobile-menu-panel__nav a {
+    display: block;
+    width: fit-content;
+    font-family: var(--font-geist), system-ui, sans-serif;
+    font-size: clamp(60.8px, 18vw, 115.2px);
+    font-weight: 800;
+    letter-spacing: -0.065em;
+    line-height: 0.86;
+    text-transform: uppercase;
+    color: #10100e;
+  }
+  .mobile-menu-panel__meta {
+    display: grid;
+    gap: 7.2px;
+    border-top: 1px solid rgba(16, 16, 14, 0.16);
+    padding-top: 17.6px;
+    font-family: var(--font-geist-mono), monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    line-height: 1.45;
+    text-transform: uppercase;
+    color: rgba(16, 16, 14, 0.72);
+  }
+}
+
+/* Keep the top-anchored Meridian copy clear of the opaque bars (56px desktop, 80px mobile). */
+@media (max-width: 767px) {
+  .mr-hero__notes {
+    top: 100px;
+  }
+}
+
+/* ---------- About: statement with the logo assembly beside it ---------- */
+.mr-about__lead {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  align-items: stretch;
+}
+.mr-about__lead .mr-about__statement {
+  grid-column: 1 / span 8;
+}
+.nd-assembly {
+  position: relative;
+  min-width: 0;
+}
+.nd-assembly canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: pan-y;
+}
+.nd-assembly--side {
+  grid-column: 9 / span 4;
+  min-height: 280px;
+}
+.nd-assembly--stacked {
+  display: none;
+  height: 62svh;
+  margin: 0 var(--gutter);
+}
+.nd-assembly__fallback {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 78%;
+  height: auto;
+  max-height: 60%;
+  object-fit: contain;
+}
+.nd-assembly[data-stage="ink"] {
+  background: #0b0b0a;
+}
+.nd-assembly[data-stage="ink"] .nd-assembly__fallback {
+  filter: invert(1);
+}
+
+/* ---------- Footer (previous site), also at the end of every project ---------- */
+.nd-footer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 56px;
+  padding: 48px 16px 32px;
+  background: #ffffff;
+  color: #0a0a0a;
+  font-family: var(--font-body);
+}
+.nd-footer__center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 0;
+}
+.nd-footer__frame {
+  position: relative;
+  padding: 28px 40px;
+  text-align: center;
+}
+.nd-footer__frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(#10100e, #10100e) left top / 12px 1.5px no-repeat,
+    linear-gradient(#10100e, #10100e) left top / 1.5px 12px no-repeat,
+    linear-gradient(#10100e, #10100e) right top / 12px 1.5px no-repeat,
+    linear-gradient(#10100e, #10100e) right top / 1.5px 12px no-repeat,
+    linear-gradient(#10100e, #10100e) left bottom / 12px 1.5px no-repeat,
+    linear-gradient(#10100e, #10100e) left bottom / 1.5px 12px no-repeat,
+    linear-gradient(#10100e, #10100e) right bottom / 12px 1.5px no-repeat,
+    linear-gradient(#10100e, #10100e) right bottom / 1.5px 12px no-repeat;
+}
+.nd-footer__statement {
+  font-size: clamp(24.8px, 2.05vw, 39.2px);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+}
+.nd-footer__cols {
+  display: grid;
+  gap: 40px;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 12px;
+  line-height: 1.25;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.nd-footer__label {
+  margin-bottom: 28px !important;
+  color: #a1a1a1;
+}
+.nd-footer__nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 32px;
+  row-gap: 4px;
+}
+.nd-footer__link {
+  display: block;
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.15s;
+}
+.nd-footer__link:hover {
+  text-decoration: underline;
+}
+.nd-footer p + .nd-footer__link {
+  margin-top: 8px;
+}
+@media (min-width: 640px) {
+  .nd-footer {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+@media (min-width: 768px) {
+  .nd-footer__cols {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    font-size: 14px;
+  }
+  .nd-footer__nav {
+    max-width: 176px;
+  }
+}
+
+/* ---------- Project media for one kind of screen (same query as VERTICAL_QUERY) ---------- */
+.mr-proj__fig--mobile {
+  display: none;
+}
+@media (max-width: 760px), (hover: none) and (orientation: portrait) {
+  .mr-proj__fig--mobile {
+    display: block;
+  }
+  .mr-proj__fig--desktop {
+    display: none;
+  }
+}
+
+/* ---------- Project impact: metrics from the previous site, under the media ---------- */
+.nd-impact {
+  margin: clamp(64px, 12vh, 140px) var(--gutter) 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink);
+}
+.nd-impact .nd-impact__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.nd-impact .nd-impact__intro,
+.nd-impact .nd-impact__cell {
+  min-width: 0;
+  min-height: clamp(280px, 34vh, 380px);
+  padding: 20px 24px 28px;
+  border-right: 1px solid var(--rule);
+}
+.nd-impact .nd-impact__cell:last-child {
+  border-right: 0;
+}
+.nd-impact .nd-impact__label {
+  margin: 0;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.nd-impact .nd-impact__lead {
+  max-width: 24ch;
+  margin-top: 40px;
+  font-size: clamp(20px, 1.75vw, 32px);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.nd-impact .nd-impact__value {
+  margin-top: 40px;
+  font-family: var(--font-geist), system-ui, sans-serif;
+  font-weight: 900;
+  font-size: clamp(44px, 4.8vw, 92px);
+  line-height: 0.86;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.nd-impact .nd-impact__name {
+  margin-top: 24px;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.nd-impact--system .nd-impact__name {
+  margin-top: 56px;
+  font-family: var(--font-geist), system-ui, sans-serif;
+  font-weight: 900;
+  font-size: clamp(22px, 2vw, 36px);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.nd-impact .nd-impact__desc {
+  max-width: 32ch;
+  margin-top: 16px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+.nd-impact .nd-impact__strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--rule);
+}
+.nd-impact .nd-impact__strip > * {
+  padding: 20px 24px;
+}
+.nd-impact .nd-impact__strip > :not(:last-child) {
+  border-right: 1px solid var(--rule);
+}
+.nd-impact .nd-impact__strip-text {
+  grid-column: span 2;
+  margin: 0;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+@media (max-width: 1100px) {
+  .nd-impact .nd-impact__grid,
+  .nd-impact .nd-impact__strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .nd-impact .nd-impact__intro {
+    grid-column: 1 / -1;
+    min-height: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .nd-impact .nd-impact__cell {
+    border-bottom: 1px solid var(--rule);
+  }
+  .nd-impact .nd-impact__cell:nth-child(odd) {
+    border-right: 0;
+  }
+  .nd-impact .nd-impact__strip-text {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--rule);
+  }
+  .nd-impact .nd-impact__strip > :nth-child(2) {
+    border-right: 0;
+  }
+}
+@media (max-width: 640px) {
+  .nd-impact .nd-impact__grid,
+  .nd-impact .nd-impact__strip {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .nd-impact .nd-impact__intro,
+  .nd-impact .nd-impact__cell {
+    min-height: 0;
+    padding: 18px 0 24px;
+    border-right: 0;
+  }
+  .nd-impact .nd-impact__strip > * {
+    padding: 14px 0;
+    border-right: 0 !important;
+  }
+  .nd-impact .nd-impact__strip > :empty {
+    display: none;
+  }
+  .nd-impact .nd-impact__value {
+    margin-top: 24px;
+    font-size: clamp(48px, 15vw, 72px);
+  }
+  .nd-impact .nd-impact__lead {
+    margin-top: 20px;
+  }
+}
+
+/* ---------- Work: adaptive portfolio carousel (ALL WORK / VISUAL / TECHNOLOGY) ---------- */
+/* White like the rest of the page; the project images carry the colour. */
+.mr-gallery {
+  background: var(--paper);
+  color: var(--ink);
+}
+.mr-gallery__canvas {
+  transition: opacity 0.28s ease;
+}
+.mr-gallery__canvas.is-switching {
+  opacity: 0;
+}
+.nd-work__head {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  top: 112px;
+  z-index: 2;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 1.35;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.nd-work__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+.nd-work__label {
+  margin: 0;
+  font: inherit;
+}
+.nd-work__count {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.nd-work__tabs {
+  display: flex;
+  gap: clamp(20px, 3vw, 48px);
+  margin-top: 10px;
+}
+/* Tabs are type, not buttons: dimmed when idle, full ink with a hairline underline when active. */
+.nd-work__tab {
+  position: relative;
+  display: inline-block;
+  padding: 12px 0;
+  color: var(--ink);
+  opacity: 0.36;
+  white-space: nowrap;
+  transition: opacity 0.25s ease;
+}
+.nd-work__tab::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0.22em;
+  bottom: 8px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s var(--ease-out);
+}
+.nd-work__tab:hover {
+  opacity: 0.7;
+}
+.nd-work__tab[aria-selected="true"] {
+  opacity: 1;
+}
+.nd-work__tab[aria-selected="true"]::after {
+  transform: scaleX(1);
+}
+.nd-work__tab:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* Swipe reel: shown instead of the WebGL gallery on vertical screens and without WebGL. */
+.nd-reel {
+  display: none;
+}
+.nd-reel__list {
+  display: flex;
+  gap: 12px;
+  margin: 0;
+  padding: 0 var(--gutter);
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 var(--gutter);
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.nd-reel__list[hidden] {
+  display: none;
+}
+.nd-reel__list::-webkit-scrollbar {
+  display: none;
+}
+.nd-reel__item {
+  flex: 0 0 78%;
+  scroll-snap-align: start;
+}
+.nd-reel__link {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 12px;
+  row-gap: 6px;
+  align-items: baseline;
+  color: var(--ink);
+}
+.nd-reel__img {
+  grid-column: 1 / -1;
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  margin-bottom: 8px;
+  background: var(--rule);
+}
+.nd-reel__no {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.nd-reel__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(22px, 6.2vw, 34px);
+  line-height: 1;
+  letter-spacing: var(--tight);
+}
+.nd-reel__meta {
+  grid-column: 2;
+  font-size: 12px;
+  color: var(--muted);
+}
+@media (min-width: 600px) {
+  .nd-reel__item {
+    flex-basis: 46%;
+  }
+}
+
+/* No WebGL on a landscape screen: same reel, in normal flow. */
+.mr--nogl .mr-gallery {
+  display: block;
+  height: auto !important;
+  padding: 112px 0 64px;
+}
+.mr--nogl .mr-gallery__sticky {
+  position: static;
+  height: auto;
+  overflow: visible;
+}
+.mr--nogl .mr-gallery__canvas,
+.mr--nogl .mr-gallery__info {
+  display: none;
+}
+.mr--nogl .nd-work__head {
+  position: static;
+  margin: 0 var(--gutter) 20px;
+}
+.mr--nogl .nd-reel {
+  display: block;
+}
+
+/* ---------- Vertical screens: same query as VERTICAL_QUERY in runtime/media.ts ---------- */
+@media (max-width: 760px), (hover: none) and (orientation: portrait) {
+  /* The scroll-turned gallery needs a wheel; here the same views become a native swipe reel. */
+  .mr-gallery {
+    height: auto !important;
+    padding: 104px 0 56px;
+  }
+  .mr-gallery__sticky {
+    position: static;
+    height: auto;
+    overflow: visible;
+  }
+  .mr-gallery__canvas,
+  .mr-gallery__info {
+    display: none;
+  }
+  .nd-work__head {
+    position: static;
+    margin: 0 var(--gutter) 16px;
+  }
+  .nd-work__tabs {
+    gap: 22px;
+    margin-top: 4px;
+  }
+  .nd-reel {
+    display: block;
+  }
+  .mr-index {
+    display: none;
+  }
+  .mr-about__lead {
+    display: block;
+  }
+  .nd-assembly--side {
+    display: none;
+  }
+  .nd-assembly--stacked {
+    display: block;
+  }
+}

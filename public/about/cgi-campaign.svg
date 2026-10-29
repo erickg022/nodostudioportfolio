@@ -1,0 +1,8 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="1000" fill="#d9d2c4"/>
+  <circle cx="810" cy="500" r="260" fill="#c7c2b8"/>
+  <circle cx="760" cy="440" r="170" fill="#f4f1e8"/>
+  <path d="M470 700C670 510 910 390 1180 300" stroke="#11110f" stroke-width="34" stroke-linecap="square"/>
+  <path d="M0 500H1600M800 0V1000" stroke="#11110f" stroke-opacity=".16" stroke-width="3"/>
+  <text x="55" y="75" fill="#11110f" font-family="monospace" font-size="30" letter-spacing="8">CGI CAMPAIGN STILL</text>
+</svg>
