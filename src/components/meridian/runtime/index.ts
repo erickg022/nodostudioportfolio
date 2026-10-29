@@ -268,6 +268,27 @@ function initOverlay(nextFor: NextFor) {
   let pushed = false;
   let returnFocus: Element | null = null;
 
+  // Films play only while on screen in the overlay and pause when scrolled away, so opening a
+  // project never downloads all of its films at once. Films meant for the other kind of screen
+  // (device "mobile"/"desktop" in site.json) are skipped and never download.
+  const filmObserver = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((e) => {
+        const v = e.target as HTMLVideoElement;
+        if (e.isIntersecting) v.play().catch(() => {});
+        else v.pause();
+      }),
+    { root: scroller, rootMargin: "25% 0px" },
+  );
+  const watchVideos = (article?: HTMLElement) => {
+    filmObserver.disconnect();
+    if (!article) return;
+    const skip = matchMedia(VERTICAL_QUERY).matches ? ".mr-proj__fig--desktop" : ".mr-proj__fig--mobile";
+    $$<HTMLVideoElement>("video", article).forEach((v) => {
+      if (!v.closest(skip)) filmObserver.observe(v);
+    });
+  };
+
   const reveal = (article: HTMLElement) => {
     gsap.fromTo(
       $$(".mr-proj__title", article),
@@ -293,10 +314,7 @@ function initOverlay(nextFor: NextFor) {
       const title = $(".mr-proj__next-title", link);
       if (title) title.textContent = next.title;
     }
-    // Only films shown on this screen play; device-specific ones hidden by CSS never download.
-    $$<HTMLVideoElement>("video", article).forEach((v) => {
-      if (v.getClientRects().length) v.play().catch(() => {});
-    });
+    watchVideos(article);
   };
 
   const open = (slug: string, origin?: OpenOrigin) => {
@@ -389,6 +407,7 @@ function initOverlay(nextFor: NextFor) {
       onComplete: () => {
         root.hidden = true;
         gsap.set(root, { clearProps: "clipPath,opacity,visibility" });
+        filmObserver.disconnect();
         $$<HTMLVideoElement>("video", root).forEach((v) => v.pause());
         document.documentElement.classList.remove("mr-locked");
         lenis?.start();
@@ -434,6 +453,7 @@ function initOverlay(nextFor: NextFor) {
   return {
     open,
     destroy() {
+      filmObserver.disconnect();
       close.removeEventListener("click", dismiss);
       window.removeEventListener("mr:close", onCloseRequest);
       window.removeEventListener("popstate", onPop);

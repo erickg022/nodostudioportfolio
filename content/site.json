@@ -293,19 +293,6 @@
         },
         {
           "type": "video",
-          "src": "/projects/mahou/pero-decirlo.mp4",
-          "poster": "/projects/mahou/pero-decirlo-poster.jpg",
-          "alt": "No todo el mundo sabe decirlo, social film",
-          "layout": "half"
-        },
-        {
-          "type": "image",
-          "src": "/projects/mahou/dilo-bottles.webp",
-          "alt": "Dilo como Madrid key visual with Mahou bottles",
-          "layout": "full"
-        },
-        {
-          "type": "video",
           "src": "/projects/mahou/stories.mp4",
           "poster": "/projects/mahou/stories-poster.jpg",
           "alt": "Dilo como Madrid stories",
@@ -324,12 +311,6 @@
           "type": "image",
           "src": "/projects/mahou/majou-poster.webp",
           "alt": "Majou? retro perforated stamp poster",
-          "layout": "half"
-        },
-        {
-          "type": "image",
-          "src": "/projects/mahou/caps.webp",
-          "alt": "Mahou caps with water drops",
           "layout": "right"
         }
       ],
@@ -644,14 +625,14 @@
           "src": "/projects/ceremonia/ar-walk.mp4",
           "poster": "/projects/ceremonia/ar-walk-poster.jpg",
           "alt": "Axe Ceremonia AR experience in the park",
-          "layout": "half"
+          "layout": "left"
         },
         {
-          "type": "video",
-          "src": "/projects/ceremonia/ar-portal.mp4",
-          "poster": "/projects/ceremonia/ar-portal-poster.jpg",
-          "alt": "Axe Ceremonia AR portal capture",
-          "layout": "half"
+          "type": "image",
+          "src": "/projects/axe-ceremonia-portal.png",
+          "alt": "Axe Ceremonia AR portal still",
+          "layout": "right",
+          "device": "desktop"
         },
         {
           "type": "image",
@@ -666,20 +647,6 @@
           "alt": "The Axe Ceremonia AR world",
           "layout": "full",
           "device": "mobile"
-        },
-        {
-          "type": "image",
-          "src": "/projects/axe-ceremonia-portal.png",
-          "alt": "Axe Ceremonia AR portal still",
-          "layout": "left",
-          "device": "desktop"
-        },
-        {
-          "type": "image",
-          "src": "/projects/axe-ceremonia-still-01.jpg",
-          "alt": "Axe Ceremonia AR portal still",
-          "layout": "right",
-          "device": "desktop"
         },
         {
           "type": "image",
@@ -724,10 +691,11 @@
           "value": "Independent speculative concept"
         }
       ],
-      "summary": "A speculative Stussy × Moncler campaign world built through AI image direction, CGI, motion, and 3D visual development.",
+      "summary": "A speculative Stüssy × Moncler universe spanning fashion, runway, and immersive retail, brought to life through AI, CGI, and creative direction.",
       "text": [
-        "A speculative campaign world for Stussy × Moncler, built around the collision of alpine performance, streetwear codes, and cinematic winter atmosphere.",
-        "The project explores how AI image direction, CGI, motion, and 3D visual development can extend a fashion collaboration into a complete visual system across stills, moving-image assets, and launch-world storytelling."
+        "A conceptual collaboration exploring the intersection of alpine performance, streetwear culture, and experimental fashion.",
+        "Beyond campaign visuals, the project imagines a complete brand experience, from cinematic fashion imagery and an experimental runway show to immersive retail spaces and pop-up installations.",
+        "Developed through AI image direction, CGI, motion, and 3D visual development, the project explores how a fashion collaboration can evolve beyond the product into an entire physical and digital world."
       ],
       "media": [
         {
@@ -788,22 +756,9 @@
         },
         {
           "type": "video",
-          "src": "/projects/stussy/puffer-film.mp4",
-          "poster": "/projects/stussy/puffer-film-poster.jpg",
-          "alt": "Down jacket detail film",
-          "layout": "left"
-        },
-        {
-          "type": "video",
           "src": "/projects/stussy/coast-film.mp4",
           "poster": "/projects/stussy/coast-film-poster.jpg",
           "alt": "Hooded figure on the coast film",
-          "layout": "right"
-        },
-        {
-          "type": "image",
-          "src": "/projects/stussy/pavilion.webp",
-          "alt": "The quilted pavilion in a Paris garden",
           "layout": "full"
         }
       ],
@@ -1005,6 +960,82 @@
           "text": "The project generated organic conversations with international architecture, creative, and experiential studios."
         }
       }
+    },
+    {
+      "slug": "pato-shoucair",
+      "title": "Pato Shoucair — Concert Visuals",
+      "year": "2026",
+      "client": "Pato Shoucair",
+      "disciplines": [
+        "Concert Visuals"
+      ],
+      "cover": "/projects/pato/cover.webp",
+      "images": [
+        "/projects/pato/cover.webp",
+        "/projects/pato/face.webp",
+        "/projects/pato/corridor.webp",
+        "/projects/pato/red-light.webp"
+      ],
+      "credits": [
+        {
+          "label": "Scope",
+          "value": "Creative Direction / Stage Visuals / Eye Tracking / Body Tracking"
+        },
+        {
+          "label": "Status",
+          "value": "In progress"
+        }
+      ],
+      "summary": "Concert visuals and full stage creative direction for Pato Shoucair, built around eye-tracking and body-tracking visuals.",
+      "text": [],
+      "media": [
+        {
+          "type": "video",
+          "src": "/projects/pato/red-flash.mp4",
+          "poster": "/projects/pato/red-flash-poster.jpg",
+          "alt": "Pato Shoucair red flash visual",
+          "layout": "full"
+        },
+        {
+          "type": "image",
+          "src": "/projects/pato/face.webp",
+          "alt": "Pato Shoucair face tattoo portrait",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/pato/corridor.webp",
+          "alt": "Pato Shoucair in a white corridor",
+          "layout": "half"
+        },
+        {
+          "type": "video",
+          "src": "/projects/pato/ghosts.mp4",
+          "poster": "/projects/pato/ghosts-poster.jpg",
+          "alt": "Pato Shoucair ghosts visual",
+          "layout": "full"
+        },
+        {
+          "type": "image",
+          "src": "/projects/pato/red-light.webp",
+          "alt": "Figure under a red light ring",
+          "layout": "half"
+        },
+        {
+          "type": "image",
+          "src": "/projects/pato/embryo.webp",
+          "alt": "Translucent duck embryo",
+          "layout": "half"
+        }
+      ],
+      "categories": [
+        "visual",
+        "tech"
+      ],
+      "technologies": [
+        "Eye tracking",
+        "Body tracking"
+      ]
     },
     {
       "slug": "eat-nudes",
@@ -1557,15 +1588,15 @@
     },
     {
       "src": "/sphere/00",
-      "project": "ginebra"
+      "project": "pato-shoucair"
     },
     {
       "src": "/sphere/30",
-      "project": "ginebra"
+      "project": "pato-shoucair"
     },
     {
       "src": "/sphere/31",
-      "project": "ginebra"
+      "project": "pato-shoucair"
     },
     {
       "src": "/sphere/22",
@@ -1732,7 +1763,9 @@
           "lacoste-roland-garros",
           "stussy-moncler",
           "nike-world-cup",
-          "twojeys"
+          "twojeys",
+          "eat-nudes",
+          "pato-shoucair"
         ]
       },
       {
@@ -1744,7 +1777,8 @@
           "avocados",
           "axe-ceremonia",
           "gdl-movilidad",
-          "eat-nudes"
+          "eat-nudes",
+          "pato-shoucair"
         ]
       }
     ],
