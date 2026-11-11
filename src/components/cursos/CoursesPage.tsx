@@ -49,7 +49,6 @@ function Media({ media, className, play = true }: { media: CourseMedia; classNam
 export function CoursesPage({ courses, settings, wheel }: { courses: Course[]; settings: Settings; wheel: CourseMedia[] }) {
   const [openSlug, setOpenSlug] = useState<string | null>(null);
   const [slide, setSlide] = useState(0);
-  const [hold, setHold] = useState(false);
   const [phase, setPhase] = useState<Phase>("info");
   const [learnAt, setLearnAt] = useState(0);
   const sheetRef = useRef<HTMLDivElement>(null);
@@ -60,7 +59,7 @@ export function CoursesPage({ courses, settings, wheel }: { courses: Course[]; s
   const n = course?.gallery.length ?? 1;
   const current = course?.gallery[slide % n];
   const slideMs = current?.type === "video" ? SLIDE_MS.video : SLIDE_MS.image;
-  const auto = !!course && !hold && !reduced;
+  const auto = !!course && !reduced;
 
   const open = useCallback((slug: string | null) => {
     setOpenSlug(slug);
@@ -125,6 +124,13 @@ export function CoursesPage({ courses, settings, wheel }: { courses: Course[]; s
   const prereg = () => {
     setPhase("form");
     requestAnimationFrame(() => document.getElementById("cx-prereg")?.scrollIntoView({ behavior: reduced ? "auto" : "smooth" }));
+  };
+
+  // "Conocer más": carry on down into the workshop.
+  const more = () => {
+    const sheet = sheetRef.current;
+    const target = sheet?.querySelector<HTMLElement>(".cx-reel");
+    if (sheet && target) sheet.scrollTo({ top: target.offsetTop - 56, behavior: reduced ? "auto" : "smooth" });
   };
 
   const tallySrc =
@@ -203,13 +209,11 @@ export function CoursesPage({ courses, settings, wheel }: { courses: Course[]; s
 
       {/* LOGO + TICKER */}
       <section className="cx-word" aria-label="NODO Workshops">
+        <p className="cx-word__text" aria-hidden="true">
+          Workshops—01
+        </p>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={LOGO} alt="NODO" className="cx-word__logo" width={900} height={440} />
-        <p className="cx-mono cx-small">
-          Workshops
-          <br />
-          <span className="cx-muted">{settings.season}</span>
-        </p>
       </section>
       <div className="cx-ticker cx-mono" aria-hidden="true">
         <div className="cx-ticker__track">
@@ -241,9 +245,6 @@ export function CoursesPage({ courses, settings, wheel }: { courses: Course[]; s
             <button key={c.slug} type="button" className="cx-card" onClick={() => open(c.slug)} aria-label={`Conocer más: ${c.title}`}>
               <span className="cx-card__img">
                 <Media media={c.cover} className="cx-cover cx-card__media" />
-                <span className="cx-badge cx-mono">
-                  {pad(c.gallery.length)} · {c.gallery.some((m) => m.type === "video") ? "IMG + VIDEO" : "IMÁGENES"}
-                </span>
                 <span className="cx-card__over">
                   <span className="cx-mono cx-small">Workshop {c.num}</span>
                   <span className="cx-card__title">{c.title}</span>
@@ -338,12 +339,17 @@ export function CoursesPage({ courses, settings, wheel }: { courses: Course[]; s
                   </span>
                 </div>
               </div>
-              <button type="button" className="cx-btn" onClick={prereg}>
-                Preregistrarme — sin pago <span aria-hidden="true">→</span>
-              </button>
+              <div className="cx-actions">
+                <button type="button" className="cx-btn" onClick={prereg}>
+                  Preregistrarme — sin pago <span aria-hidden="true">→</span>
+                </button>
+                <button type="button" className="cx-more cx-mono" onClick={more}>
+                  Conocer más <span className="cx-more__arrow" aria-hidden="true">↓</span>
+                </button>
+              </div>
             </div>
 
-            <div className="cx-detail__gallery" onMouseEnter={() => setHold(true)} onMouseLeave={() => setHold(false)}>
+            <div className="cx-detail__gallery">
               <div className="cx-stack">
                 <div className="cx-stack__card cx-stack__back2">
                   <Media media={at(slide + 2)} className="cx-cover" play={false} />
@@ -353,7 +359,6 @@ export function CoursesPage({ courses, settings, wheel }: { courses: Course[]; s
                 </div>
                 <div key={slide} className="cx-stack__card cx-stack__front">
                   <Media media={current} className="cx-cover cx-kenburns" />
-                  {current.type === "video" && <span className="cx-badge cx-badge--l cx-mono">● Video</span>}
                 </div>
               </div>
               <div className="cx-progress" aria-hidden="true">
@@ -400,10 +405,7 @@ export function CoursesPage({ courses, settings, wheel }: { courses: Course[]; s
                       <span className="cx-reel__img">
                         <Media media={m} className="cx-cover" play={false} />
                       </span>
-                      <span className="cx-reel__cap cx-mono">
-                        <span>{m.caption}</span>
-                        <span className="cx-soft">{m.type === "video" ? "Video" : "Img"}</span>
-                      </span>
+                      <span className="cx-reel__cap cx-mono">{m.caption}</span>
                     </button>
                   )),
                 )}
@@ -429,9 +431,7 @@ export function CoursesPage({ courses, settings, wheel }: { courses: Course[]; s
               <div className="cx-learn__frame">
                 <div key={learnAt} className="cx-learn__img">
                   <Media media={at(learnAt + 1)} className="cx-cover cx-kenburns" />
-                </div>
-                <span className="cx-badge cx-badge--l cx-mono">{at(learnAt + 1).caption}</span>
-              </div>
+                </div>              </div>
             </div>
             <div className="cx-learn__list">
               <p className="cx-label cx-mono">¿Qué aprenderás?</p>

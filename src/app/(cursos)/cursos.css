@@ -385,15 +385,19 @@ button {
   padding: 40px 24px 0;
   border-top: 1px solid var(--line);
 }
+.cx-word__text {
+  margin: 0;
+  font-size: min(10.5vw, 180px);
+  line-height: 0.86;
+  letter-spacing: -0.065em;
+  white-space: nowrap;
+}
 .cx-word__logo {
   display: block;
-  width: min(72vw, 1100px);
+  flex: none;
+  width: clamp(88px, 10vw, 170px);
   height: auto;
-}
-.cx-word p {
-  margin: 0;
-  text-align: right;
-  line-height: 1.5;
+  margin-bottom: 0.4vw;
 }
 .cx-ticker {
   overflow: hidden;
@@ -810,9 +814,6 @@ button {
   width: max-content;
   animation: cx-ticker linear infinite;
 }
-.cx-reel__viewport:hover .cx-reel__track {
-  animation-play-state: paused;
-}
 .cx-reel__item {
   all: unset;
   cursor: pointer;
@@ -837,10 +838,48 @@ button {
   transform: scale(1.06);
 }
 .cx-reel__cap {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
   font-size: 11px;
+}
+
+/* preregister + "Conocer más" */
+.cx-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.cx-more {
+  all: unset;
+  cursor: pointer;
+  box-sizing: border-box;
+  min-height: 52px;
+  padding: 0 24px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+.cx-more:hover {
+  background: var(--ink);
+  color: #fff;
+}
+@keyframes cx-nudge {
+  0%,
+  100% {
+    transform: none;
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}
+.cx-more__arrow {
+  display: inline-block;
+  animation: cx-nudge 1.6s ease-in-out infinite;
 }
 
 /* the workshop */
@@ -1140,15 +1179,17 @@ button {
     display: none;
   }
   .cx-word {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 32px 16px 0;
+    padding: 28px 16px 0;
+    gap: 12px;
+  }
+  .cx-word__text {
+    font-size: 11.5vw;
   }
   .cx-word__logo {
-    width: 100%;
+    width: 56px;
   }
-  .cx-word p {
-    text-align: left;
+  .cx-actions {
+    gap: 8px;
   }
   .cx-collection {
     padding: 32px 16px 56px;
