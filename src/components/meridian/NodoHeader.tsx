@@ -27,7 +27,8 @@ function useClock(timeZone: string) {
  * 80px header whose two-line toggle opens a full-screen menu. Links are page anchors;
  * the Meridian runtime turns them into smooth scrolls.
  */
-export function NodoHeader() {
+/** `base` prefixes the in-page anchors (e.g. "/" so links from another route go back to home). */
+export function NodoHeader({ base = "" }: { base?: string } = {}) {
   const { header, nav } = site;
   const [open, setOpen] = useState(false);
   const time = useClock(header.clock.timezone);
@@ -86,7 +87,7 @@ export function NodoHeader() {
           </p>
           <div className="nd-header__links">
             {nav.map((item) => (
-              <a key={item.href} href={item.href}>
+              <a key={item.href} href={base + item.href}>
                 {item.label}
               </a>
             ))}
@@ -95,7 +96,7 @@ export function NodoHeader() {
       </header>
 
       <header className="mobile-site-header">
-        <a href="#top" aria-label={`${header.brand} home`} className="mobile-site-header__brand-text" onClick={() => setOpen(false)}>
+        <a href={base + "#top"} aria-label={`${header.brand} home`} className="mobile-site-header__brand-text" onClick={() => setOpen(false)}>
           {header.brand}
         </a>
         <button
@@ -124,7 +125,7 @@ export function NodoHeader() {
       >
         <nav className="mobile-menu-panel__nav" aria-label="Mobile primary navigation">
           {header.mobileLinks.map((link) => (
-            <a key={link.href} href={link.href} onClick={() => setOpen(false)}>
+            <a key={link.href} href={base + link.href} onClick={() => setOpen(false)}>
               {link.label}
             </a>
           ))}
