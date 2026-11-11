@@ -1,9 +1,8 @@
 /**
  * Courses landing (/cursos) — every piece of copy and media lives here.
  *
- * MEDIA: the paths below point at existing portfolio files in /public/projects as
- * stand-ins. Drop the real course media into /public/cursos/<course-slug>/ and swap the paths.
- * Videos: silent H.264 .mp4, ideally < 5 MB, with a poster image.
+ * MEDIA: /public/cursos/<course-slug>/. Images: .webp, max 1600 px on the long side.
+ * Videos: silent H.264 .mp4, ideally < 5 MB, with a .jpg poster next to it.
  */
 
 export type CourseMedia = {
@@ -26,10 +25,12 @@ export type Course = {
   /** One line for the collection card. */
   short: string;
   description: string;
-  /** Presale price, e.g. "€149". */
+  /** Presale price, e.g. "$2,500 MXN". */
   price: string;
   /** Regular price shown struck through; leave "" to hide. */
   regularPrice: string;
+  /** Seat limit shown on the card and in the specs, e.g. "12 lugares"; leave "" to hide. */
+  seats: string;
   format: string;
   level: string;
   audience: string;
@@ -47,96 +48,102 @@ export const coursesSettings = {
   tallyFormId: "",
   season: "Temporada 01",
   intro:
-    "Tres cursos para crear renders hiperrealistas, tours cinematográficos y campañas con IA — con los procesos que usamos en proyectos para Nike, Lacoste, Airbnb y Stüssy × Moncler.",
+    "Tres cursos para diseñar experiencias de retail inmersivas, renders hiperrealistas con tour web y campañas audiovisuales con IA — con los procesos que usamos en proyectos para Lacoste, Airbnb y Stüssy × Moncler.",
 };
+
+const R = "/cursos/render";
+const F = "/cursos/film";
+const C = "/cursos/campanas";
 
 /** Cards on the rotating hero wheel (14 works best). */
 export const wheelMedia: CourseMedia[] = [
-  { type: "image", src: "/projects/lacoste-storefront-gallery.jpg", alt: "", caption: "Retail" },
-  { type: "image", src: "/projects/airbnb/still-02.webp", alt: "", caption: "Campaña" },
-  { type: "image", src: "/projects/stussy/tunnel.webp", alt: "", caption: "Espacio" },
-  { type: "image", src: "/projects/oura/still-ring.webp", alt: "", caption: "Producto" },
-  { type: "image", src: "/projects/nike-circular-lounge.jpg", alt: "", caption: "Interior" },
-  { type: "image", src: "/projects/beefeater-light/still-01.webp", alt: "", caption: "Key visual" },
-  { type: "video", src: "/projects/stussy/pavilion-film.mp4", poster: "/projects/stussy/pavilion-film-poster.jpg", alt: "", caption: "Film" },
-  { type: "image", src: "/projects/stussy/quilted-wall.webp", alt: "", caption: "Material" },
-  { type: "image", src: "/projects/ginebra-cover-hero.webp", alt: "", caption: "Joyería" },
-  { type: "image", src: "/projects/lacoste-conversation-pit.jpg", alt: "", caption: "Arquitectura" },
-  { type: "image", src: "/projects/mahou/still-03.webp", alt: "", caption: "Campaña" },
-  { type: "image", src: "/projects/nike-store-interior.jpg", alt: "", caption: "Retail" },
-  { type: "video", src: "/projects/stussy/magazine.mp4", poster: "/projects/stussy/magazine-poster.jpg", alt: "", caption: "Motion" },
-  { type: "image", src: "/projects/stussy/runway.webp", alt: "", caption: "Tour" },
+  { type: "image", src: `${R}/popup-paris.webp`, alt: "", caption: "Pop-up" },
+  { type: "image", src: `${F}/pabellon-lago.webp`, alt: "", caption: "Arquitectura" },
+  { type: "image", src: `${C}/running-key-visual.webp`, alt: "", caption: "Campaña" },
+  { type: "image", src: `${R}/tunel-inflable.webp`, alt: "", caption: "Inmersivo" },
+  { type: "image", src: `${F}/biblioteca.webp`, alt: "", caption: "Interior" },
+  { type: "image", src: `${R}/flagship-escalera.webp`, alt: "", caption: "Flagship" },
+  { type: "video", src: `${C}/airbnb-film.mp4`, poster: `${C}/airbnb-film-poster.jpg`, alt: "", caption: "Film" },
+  { type: "image", src: `${C}/anillo-cgi.webp`, alt: "", caption: "Producto" },
+  { type: "image", src: `${F}/sala-circular.webp`, alt: "", caption: "Espacio" },
+  { type: "image", src: `${R}/concept-store.webp`, alt: "", caption: "Retail" },
+  { type: "video", src: `${C}/joyeria-motion.mp4`, poster: `${C}/joyeria-motion-poster.jpg`, alt: "", caption: "Motion" },
+  { type: "image", src: `${F}/lounge-terciopelo.webp`, alt: "", caption: "Material" },
+  { type: "image", src: `${C}/film-still.webp`, alt: "", caption: "Still" },
+  { type: "image", src: `${R}/stand-mostrador.webp`, alt: "", caption: "Stand" },
 ];
 
 export const courses: Course[] = [
   {
     slug: "render",
     num: "01",
-    title: "Render Hiperrealista",
-    focus: "Arquitectura & Retail",
-    short: "Del sketch o modelo a imágenes que parecen fotografía.",
+    title: "Retail & Experiencias Inmersivas",
+    focus: "Arquitectura · Pop-ups",
+    short: "Conceptos de retail, pop-ups y espacios inmersivos con IA.",
     description:
-      "Renders de arquitectura y espacios comerciales con IA que se leen como fotografía: luz, materiales y cámara bajo control, del sketch a la imagen final.",
-    price: "[PRECIO]",
-    regularPrice: "[REGULAR]",
+      "Diseña conceptos de arquitectura comercial, pop-ups y experiencias inmersivas con IA: del brief de marca a imágenes que venden la idea al cliente.",
+    price: "$2,500 MXN",
+    regularPrice: "$3,000 MXN",
+    seats: "12 lugares",
     format: "Online",
     level: "Principiante – Intermedio",
-    audience: "Arquitectos, interioristas, retail",
-    cover: { type: "image", src: "/projects/lacoste-storefront-gallery.jpg", alt: "Render de un espacio de retail", caption: "Retail" },
+    audience: "Arquitectos, interioristas, retail, marcas",
+    cover: { type: "image", src: `${R}/popup-paris.webp`, alt: "Pop-up de marca en una calle de París", caption: "Pop-up" },
     gallery: [
-      { type: "image", src: "/projects/lacoste-storefront-gallery.jpg", alt: "Fachada de tienda", caption: "Retail — fachada" },
-      { type: "image", src: "/projects/nike-circular-lounge.jpg", alt: "Lounge circular", caption: "Interior — lounge" },
-      { type: "image", src: "/projects/lacoste-soundroom.jpg", alt: "Sala de sonido", caption: "Interior — luz" },
-      { type: "image", src: "/projects/stussy/quilted-wall.webp", alt: "Muro acolchado", caption: "Material — textil" },
-      { type: "image", src: "/projects/nike-store-interior.jpg", alt: "Interior de tienda", caption: "Retail — interior" },
-      { type: "image", src: "/projects/lacoste-merch-shop.jpg", alt: "Tienda de merch", caption: "Retail — pop-up" },
+      { type: "image", src: `${R}/popup-paris.webp`, alt: "Pop-up de marca en una calle de París", caption: "Pop-up — exterior" },
+      { type: "image", src: `${R}/flagship-escalera.webp`, alt: "Flagship con escalera y mesa de producto", caption: "Flagship — interior" },
+      { type: "video", src: `${R}/inflable-film.mp4`, poster: `${R}/inflable-film-poster.jpg`, alt: "Pabellón inflable animado", caption: "Concepto — en movimiento" },
+      { type: "image", src: `${R}/tunel-inflable.webp`, alt: "Túnel inflable iluminado", caption: "Inmersivo — túnel" },
+      { type: "image", src: `${R}/concept-store.webp`, alt: "Concept store en acero", caption: "Retail — concept store" },
+      { type: "image", src: `${R}/stand-mostrador.webp`, alt: "Stand de marca con mostrador circular", caption: "Stand — mostrador" },
     ],
     outcomes: [
-      "Renders fotorrealistas de interiores, fachadas y espacios comerciales.",
+      "Conceptos de retail, pop-ups y stands listos para presentar.",
+      "Experiencias inmersivas con identidad de marca clara.",
       "Luz, materiales y cámara para que no se vea “hecho con IA”.",
-      "Un concepto de retail del boceto a imagen de campaña.",
       "Entregar en alta resolución, lista para cliente.",
     ],
     modules: [
-      { title: "Fundamentos del fotorrealismo", detail: "Qué hace que una imagen se lea como foto." },
-      { title: "Sketch o modelo a render", detail: "Tu workflow base, paso a paso." },
-      { title: "Materiales, luz y atmósfera", detail: "Hora del día, texturas, profundidad." },
-      { title: "Experiencias de retail", detail: "Vitrinas, pop-ups, espacios de marca." },
-      { title: "Upscale y entrega", detail: "Resolución final y presentación." },
+      { title: "Del brief al concepto", detail: "Leer la marca y traducirla a espacio." },
+      { title: "Retail y flagships", detail: "Fachadas, interiores, mobiliario de producto." },
+      { title: "Pop-ups e inmersivos", detail: "Inflables, túneles, instalaciones." },
+      { title: "Materiales, luz y atmósfera", detail: "Que se lea como fotografía." },
+      { title: "Presentación y entrega", detail: "Upscale y deck para cliente." },
     ],
   },
   {
     slug: "film",
     num: "02",
-    title: "Arquitectura en Movimiento",
+    title: "Render Hiperrealista + Tour Web",
     focus: "Render + Film + Web",
-    short: "Renders a video cinematográfico y tours web con scroll animado.",
+    short: "Renders que parecen foto, convertidos en tour animado y web.",
     description:
-      "Del render al tour cinematográfico, y del tour a una web con scroll animation construida con Claude — sin ser programador.",
-    price: "[PRECIO]",
-    regularPrice: "[REGULAR]",
+      "Renders de arquitectura e interiores que se leen como fotografía, convertidos en un tour cinematográfico y en una web con scroll animation construida con Claude — sin ser programador.",
+    price: "$3,500 MXN",
+    regularPrice: "$4,000 MXN",
+    seats: "",
     format: "Online",
     level: "Intermedio",
     audience: "Arquitectos, desarrolladores, estudios",
-    cover: { type: "image", src: "/projects/stussy/tunnel.webp", alt: "Túnel arquitectónico", caption: "Tour" },
+    cover: { type: "image", src: `${F}/pabellon-lago.webp`, alt: "Pabellón frente a un lago", caption: "Arquitectura" },
     gallery: [
-      { type: "video", src: "/projects/stussy/pavilion-film.mp4", poster: "/projects/stussy/pavilion-film-poster.jpg", alt: "Recorrido por un pabellón", caption: "Tour — pabellón" },
-      { type: "image", src: "/projects/stussy/runway.webp", alt: "Pasarela", caption: "Frame — recorrido" },
-      { type: "video", src: "/projects/stussy/coast-film.mp4", poster: "/projects/stussy/coast-film-poster.jpg", alt: "Toma de exterior", caption: "Toma — exterior" },
-      { type: "image", src: "/projects/stussy/seats.webp", alt: "Gradas", caption: "Frame — espacio" },
-      { type: "video", src: "/projects/oura/oura-film.mp4", poster: "/projects/oura/oura-film-poster.jpg", alt: "Film de producto", caption: "Cámara — detalle" },
-      { type: "image", src: "/projects/pato/corridor.webp", alt: "Pasillo", caption: "Frame — pasillo" },
+      { type: "image", src: `${F}/pabellon-lago.webp`, alt: "Pabellón frente a un lago", caption: "Exterior — pabellón" },
+      { type: "image", src: `${F}/biblioteca.webp`, alt: "Biblioteca en madera", caption: "Interior — biblioteca" },
+      { type: "image", src: `${F}/sala-circular.webp`, alt: "Sala circular", caption: "Espacio — sala" },
+      { type: "image", src: `${F}/lounge-terciopelo.webp`, alt: "Lounge de terciopelo", caption: "Interior — lounge" },
+      { type: "image", src: `${F}/sala-cristal.webp`, alt: "Sala con muro de cristal", caption: "Interior — luz" },
+      { type: "image", src: `${F}/detalle-terciopelo.webp`, alt: "Detalle de terciopelo", caption: "Material — detalle" },
     ],
     outcomes: [
-      "Renders convertidos en tomas con movimiento de cámara.",
+      "Renders fotorrealistas de interiores y arquitectura.",
       "Un tour arquitectónico planeado como un film.",
       "Una web de recorrido con scroll animation, hecha con Claude.",
       "Publicar el tour para presentar o vender proyectos.",
     ],
     modules: [
+      { title: "Fundamentos del fotorrealismo", detail: "Qué hace que una imagen se lea como foto." },
       { title: "Del render a la toma", detail: "Animar imágenes fijas con IA de video." },
       { title: "Cámara para arquitectura", detail: "Dollys, reveals y ritmo." },
-      { title: "Edición, sonido y color", detail: "Que se sienta como película." },
       { title: "Scroll tours con Claude", detail: "Tu recorrido como web animada." },
       { title: "Publicar y presentar", detail: "Para clientes y compradores." },
     ],
@@ -144,24 +151,25 @@ export const courses: Course[] = [
   {
     slug: "campanas",
     num: "03",
-    title: "IA para Campañas Creativas",
+    title: "IA para Campañas Audiovisuales",
     focus: "Concepto → Producción",
     short: "El workflow de estudio para campañas visuales con IA.",
     description:
       "El proceso que usamos en campañas reales: concepto, dirección de arte con IA, consistencia de producto y estilo, y piezas fijas y video para marca.",
-    price: "[PRECIO]",
-    regularPrice: "[REGULAR]",
+    price: "$3,500 MXN",
+    regularPrice: "$4,000 MXN",
+    seats: "",
     format: "Online",
     level: "Todos los niveles",
     audience: "Creativos, agencias, marcas",
-    cover: { type: "image", src: "/projects/airbnb/still-02.webp", alt: "Still de campaña", caption: "Campaña" },
+    cover: { type: "image", src: `${C}/running-key-visual.webp`, alt: "Key visual de campaña de running", caption: "Campaña" },
     gallery: [
-      { type: "image", src: "/projects/beefeater-light/still-01.webp", alt: "Key visual", caption: "Key visual" },
-      { type: "video", src: "/projects/stussy/magazine.mp4", poster: "/projects/stussy/magazine-poster.jpg", alt: "Pieza de motion", caption: "Motion — editorial" },
-      { type: "image", src: "/projects/ginebra-cover-hero.webp", alt: "Joyería", caption: "Producto — joyería" },
-      { type: "image", src: "/projects/oura/still-ring.webp", alt: "Anillo", caption: "Producto — CGI" },
-      { type: "image", src: "/projects/airbnb/still-04.webp", alt: "Still de film", caption: "Film — still" },
-      { type: "image", src: "/projects/eat-nudes-hero.jpg", alt: "Campaña de comida", caption: "Campaña — food" },
+      { type: "image", src: `${C}/running-key-visual.webp`, alt: "Key visual de campaña de running", caption: "Key visual" },
+      { type: "video", src: `${C}/airbnb-film.mp4`, poster: `${C}/airbnb-film-poster.jpg`, alt: "Film de campaña", caption: "Film — campaña" },
+      { type: "image", src: `${C}/anillo-cgi.webp`, alt: "Anillo en CGI", caption: "Producto — CGI" },
+      { type: "video", src: `${C}/joyeria-motion.mp4`, poster: `${C}/joyeria-motion-poster.jpg`, alt: "Pieza de motion de joyería", caption: "Motion — joyería" },
+      { type: "image", src: `${C}/froyo-producto.webp`, alt: "Producto de comida", caption: "Producto — food" },
+      { type: "video", src: `${C}/tenis-film.mp4`, poster: `${C}/tenis-film-poster.jpg`, alt: "Film de tenis", caption: "Film — deporte" },
     ],
     outcomes: [
       "Un concepto con dirección de arte consistente.",

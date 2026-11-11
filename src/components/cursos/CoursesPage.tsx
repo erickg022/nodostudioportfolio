@@ -108,7 +108,7 @@ export function CoursesPage({ courses, settings, wheel }: { courses: Course[]; s
             <dl className="cx-meta cx-r4">
               <div>
                 <dt>Cursos</dt>
-                <dd>Render · Film · Campañas</dd>
+                <dd>Retail · Render · Campañas</dd>
               </div>
               <div>
                 <dt>Formato</dt>
@@ -195,6 +195,7 @@ export function CoursesPage({ courses, settings, wheel }: { courses: Course[]; s
                 </span>
                 <span className="cx-right">
                   <span>{c.focus}</span>
+                  {c.seats && <span>Solo {c.seats}</span>}
                   <span>
                     Preventa {c.price} <span className="cx-plus" aria-hidden="true">+</span>
                   </span>
@@ -274,6 +275,7 @@ export function CoursesPage({ courses, settings, wheel }: { courses: Course[]; s
                       ["Nivel", course.level],
                       ["Para", course.audience],
                       ["Temario", `${course.modules.length} módulos`],
+                      ...(course.seats ? [["Cupo", `Solo ${course.seats} en preventa`]] : []),
                     ].map(([k, v]) => (
                       <div key={k} className="cx-spec">
                         <span className="cx-soft">{k}</span>
