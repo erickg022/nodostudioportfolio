@@ -9,6 +9,11 @@ export type Resource = {
   /** Filename for a direct download of a file in /public. */
   download?: string;
   cta: string;
+  /**
+   * When true, the download asks for the visitor's details first and saves them to Google Sheets
+   * (see docs/leads-google-sheet.md). If LEADS_WEBHOOK_URL is not set it downloads directly instead.
+   */
+  gated?: boolean;
 };
 
 export const resources: Resource[] = [
@@ -61,6 +66,7 @@ export const resources: Resource[] = [
     href: "/recursos/recorrido-virtual-scroll.pdf",
     download: "recorrido-virtual-scroll.pdf",
     cta: "Descargar gratis",
+    gated: true,
   },
 ];
 
