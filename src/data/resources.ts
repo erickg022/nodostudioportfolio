@@ -45,6 +45,23 @@ export const resources: Resource[] = [
     download: "super-prompt-auto-edit-reels.md",
     cta: "Descargar gratis",
   },
+  {
+    slug: "scroll-virtual-walkthrough-guide",
+    title: "Scroll-Driven Virtual Walkthrough Guide",
+    titleEs: "Guía de recorrido virtual con scroll",
+    description:
+      "A step-by-step guide plus a ready-to-paste prompt that turns your finished walkthrough MP4 into a cinematic website where scrolling walks through the space. Works with Claude Code or Codex. You need your walkthrough video already made as an MP4. / Guía paso a paso con un prompt listo para pegar que convierte tu video de recorrido en MP4 en una web cinematográfica donde el scroll camina por el espacio. Funciona con Claude Code o Codex. Necesitas tener tu video de recorrido ya hecho en MP4.",
+    specs: ["PDF", "7 pages", "ES + EN prompt", "Free"],
+    image: {
+      src: "/recursos/recorrido-virtual-cover.jpg",
+      alt: "Warm walnut and travertine terrace lounge from the virtual walkthrough example",
+      width: 1600,
+      height: 1200,
+    },
+    href: "/recursos/recorrido-virtual-scroll.pdf",
+    download: "recorrido-virtual-scroll.pdf",
+    cta: "Descargar gratis",
+  },
 ];
 
 export const socials = [
