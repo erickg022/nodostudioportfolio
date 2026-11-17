@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { PageTransition } from "@/components/PageTransition";
+import { LeadDownload } from "@/components/recursos/LeadDownload";
 import { resources, socials } from "@/data/resources";
 
 export const metadata: Metadata = {
@@ -13,6 +14,9 @@ const linkFocus =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)]";
 
 export default function RecursosPage() {
+  // Lead capture is only shown when the Google Sheets webhook is configured; otherwise downloads stay direct.
+  const leadsEnabled = Boolean(process.env.LEADS_WEBHOOK_URL);
+
   return (
     <PageTransition>
       <section className="px-4 pb-8 pt-28 sm:px-6">
@@ -71,16 +75,15 @@ export default function RecursosPage() {
                       <li key={spec}>{spec}</li>
                     ))}
                   </ul>
-                  <a
+                  <LeadDownload
+                    slug={resource.slug}
+                    title={resource.title}
                     href={resource.href}
-                    {...(resource.download
-                      ? { download: resource.download }
-                      : { target: "_blank", rel: "noopener noreferrer" })}
+                    download={resource.download}
+                    cta={resource.cta}
+                    enabled={Boolean(resource.gated && leadsEnabled)}
                     className={`mt-6 inline-flex border border-black/20 px-5 py-4 font-mono text-[11px] uppercase tracking-[0.18em] text-neutral-950 transition hover:border-[var(--accent)] hover:text-[var(--accent)] ${linkFocus}`}
-                  >
-                    {resource.cta}
-                    <span aria-hidden="true" className="ml-3">-&gt;</span>
-                  </a>
+                  />
                 </div>
               </div>
             </article>
