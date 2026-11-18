@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const PRELOADER_VIDEO_SRC = "/video/nodo-preload-desktop.mp4?v=20260823-1";
 const MOBILE_FRAME_PATH = "/video/preload-jpg-v2";
@@ -9,7 +10,16 @@ const MOBILE_FRAME_FPS = 25;
 const MOBILE_FRAME_START_BUFFER = 18;
 const MOBILE_FRAME_LOOKAHEAD = 36;
 
+/** Pages that skip the intro video so their content shows immediately (e.g. the bio-link page). */
+const SKIP_PRELOADER = ["/links"];
+
 export function SitePreloader() {
+  const pathname = usePathname();
+  if (SKIP_PRELOADER.includes(pathname)) return null;
+  return <PreloaderPlayer />;
+}
+
+function PreloaderPlayer() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const finishedRef = useRef(false);

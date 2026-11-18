@@ -1,0 +1,194 @@
+.wrap {
+  display: flex;
+  min-height: calc(100svh - var(--mobile-header-height, 0px));
+  flex-direction: column;
+  background: #fff;
+  padding: 1.25rem 1rem 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .wrap {
+    min-height: calc(100svh - 3.5rem);
+    padding: 5rem 1.5rem 2.5rem;
+  }
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto 1rem;
+  width: 100%;
+  max-width: 560px;
+}
+
+.stack {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 560px;
+}
+
+.strip {
+  position: relative;
+  display: block;
+  height: clamp(132px, calc((100svh - var(--mobile-header-height, 56px) - 150px) / 3), 230px);
+  overflow: hidden;
+  background: #e9e7e3;
+  color: #fff;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: reveal 0.95s cubic-bezier(0.7, 0, 0.2, 1) both;
+}
+
+.img {
+  position: absolute;
+  inset: 0;
+  animation: drift 14s ease-in-out infinite alternate;
+}
+
+.img img {
+  object-fit: cover;
+  transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgb(0 0 0 / 0.28), rgb(0 0 0 / 0) 38%, rgb(0 0 0 / 0) 55%, rgb(0 0 0 / 0.45));
+}
+
+.label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.8rem 0.95rem;
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.rowEnd {
+  align-items: flex-end;
+}
+
+.mono {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.tag {
+  background: rgb(10 10 10 / 0.42);
+  padding: 3px 7px;
+}
+
+.pill {
+  background: #fff;
+  color: #0a0a0a;
+}
+
+.title {
+  font-size: clamp(30px, 9vw, 44px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.arrow {
+  font-size: 22px;
+  line-height: 1;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Hover / focus: lift the active strip, quiet the others (pointer devices only). */
+@media (hover: hover) {
+  .stack:has(.strip:hover) .strip:not(:hover) {
+    filter: grayscale(1) brightness(0.82);
+  }
+  .strip:hover {
+    transform: scale(1.025);
+  }
+  .strip:hover .img img {
+    transform: scale(1.07);
+  }
+  .strip:hover .arrow {
+    transform: translate(4px, -4px);
+  }
+}
+
+.strip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.strip:active {
+  transform: scale(0.985);
+}
+
+/* Tapped strip grows to fill the screen before navigating. */
+.ghost {
+  position: fixed;
+  z-index: 80;
+  overflow: hidden;
+  pointer-events: none;
+  transition: all 0.55s cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+.ghost img {
+  object-fit: cover;
+}
+
+.foot {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem auto 0;
+  width: 100%;
+  max-width: 560px;
+  color: #6b6b6b;
+}
+
+@keyframes reveal {
+  from {
+    clip-path: inset(100% 0 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes drift {
+  from {
+    transform: scale(1.02) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.09) translate3d(-1.5%, -1%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strip,
+  .img {
+    animation: none;
+  }
+  .strip,
+  .img img,
+  .arrow,
+  .ghost {
+    transition: none;
+  }
+}
