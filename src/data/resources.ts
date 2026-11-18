@@ -1,5 +1,7 @@
 export type Resource = {
   slug: string;
+  /** Publication date (YYYY-MM-DD). /recursos lists resources newest first. */
+  date: string;
   title: string;
   titleEs: string;
   description: string;
@@ -16,9 +18,14 @@ export type Resource = {
   gated?: boolean;
 };
 
-export const resources: Resource[] = [
+/**
+ * Add new resources anywhere in this list and give them a `date`. The page shows them newest first
+ * (resources with the same date keep the order they have here).
+ */
+const allResources: Resource[] = [
   {
     slug: "render-realism-kit",
+    date: "2026-10-27",
     title: "Render Realism Kit",
     titleEs: "Kit de realismo para renders",
     description:
@@ -35,6 +42,7 @@ export const resources: Resource[] = [
   },
   {
     slug: "reels-tiktoks-auto-edit-super-prompt",
+    date: "2026-10-27",
     title: "Reels & TikToks Auto-Edit Super Prompt",
     titleEs: "Super prompt para editar Reels y TikToks",
     description:
@@ -52,6 +60,7 @@ export const resources: Resource[] = [
   },
   {
     slug: "scroll-virtual-walkthrough-guide",
+    date: "2026-11-18",
     title: "Scroll-Driven Virtual Walkthrough Guide",
     titleEs: "Guía de recorrido virtual con scroll",
     description:
@@ -69,6 +78,8 @@ export const resources: Resource[] = [
     gated: true,
   },
 ];
+
+export const resources: Resource[] = [...allResources].sort((a, b) => b.date.localeCompare(a.date));
 
 export const socials = [
   { label: "TikTok", handle: "@ericktechcreates", href: "https://www.tiktok.com/@ericktechcreates" },
