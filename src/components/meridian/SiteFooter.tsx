@@ -1,11 +1,12 @@
 import { isTodo, site } from "@/content/site";
 
 /** Footer from the previous NODO site, shared by the page and every project overlay. */
-export function SiteFooter({ id }: { id?: string }) {
+/** `base` prefixes the in-page anchors (e.g. "/" when the footer is used on another route). */
+export function SiteFooter({ id, base = "" }: { id?: string; base?: string }) {
   const { footer, contact } = site;
   // "mailto" links go to the studio email once it is filled in; until then, to the footer.
   const href = (h: string) =>
-    h === "mailto" ? (isTodo(contact.email) ? "#contact" : `mailto:${contact.email}`) : h;
+    h === "mailto" ? (isTodo(contact.email) ? "#contact" : `mailto:${contact.email}`) : h.startsWith("#") ? base + h : h;
   return (
     <footer id={id} className="nd-footer">
       <div className="nd-footer__center">
