@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "
 import { NodoHeader } from "@/components/meridian/NodoHeader";
 import { SiteFooter } from "@/components/meridian/SiteFooter";
 import type { Course, CourseMedia } from "@/content/courses";
+import { DemoReel } from "./DemoReel";
 import { PreregForm } from "./PreregForm";
 import type { coursesSettings } from "@/content/courses";
 
@@ -131,7 +132,7 @@ export function CoursesPage({ courses, settings, wheel }: { courses: Course[]; s
   // "Conocer más": carry on down into the workshop.
   const more = () => {
     const sheet = sheetRef.current;
-    const target = sheet?.querySelector<HTMLElement>(".cx-reel");
+    const target = sheet?.querySelector<HTMLElement>(".cx-demo, .cx-reel");
     if (sheet && target) sheet.scrollTo({ top: target.offsetTop - 56, behavior: reduced ? "auto" : "smooth" });
   };
 
@@ -378,6 +379,9 @@ export function CoursesPage({ courses, settings, wheel }: { courses: Course[]; s
               </div>
             </div>
           </section>
+
+          {/* Real recording of the result (only workshops that define a demo) */}
+          {course.demo && <DemoReel demo={course.demo} />}
 
           {/* What you can make: endless strip */}
           <section className="cx-reel" aria-label="Lo que puedes crear">

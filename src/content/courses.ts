@@ -15,6 +15,17 @@ export type CourseMedia = {
   caption: string;
 };
 
+/** A short real recording of the result, shown in a display frame with chapter snaps. */
+export type CourseDemo = {
+  /** Mono label above the block. */
+  label: string;
+  title: string;
+  text: string;
+  video: { src: string; poster: string; alt: string; caption: string };
+  /** Snaps that jump to a moment (`at`, in seconds) of the video. */
+  chapters: { label: string; src: string; at: number }[];
+};
+
 export type Course = {
   slug: string;
   num: string;
@@ -46,6 +57,8 @@ export type Course = {
   cover: CourseMedia;
   /** Everything the student can make: drives the auto gallery, the strip and the section images. */
   gallery: CourseMedia[];
+  /** Optional: shows the real result as a video in a display frame. */
+  demo?: CourseDemo;
 };
 
 export const coursesSettings = {
@@ -63,6 +76,7 @@ export const coursesSettings = {
 const A = "/cursos/arquitectura";
 const C = "/cursos/campanas";
 const E = "/cursos/experiencias";
+const T = "/cursos/tour";
 
 const REQUIREMENTS_BASE = [
   "Laptop o computadora con conexión estable a internet.",
@@ -186,15 +200,30 @@ export const courses: Course[] = [
     price: "$2,000 MXN",
     regularPrice: "",
     seats: "",
-    cover: { type: "image", src: `${A}/sala-circular.webp`, alt: "Sala circular", caption: "Espacio" },
+    cover: { type: "image", src: `${T}/lounge.webp`, alt: "Terraza lounge al atardecer junto a un estanque", caption: "Terraza" },
     gallery: [
-      { type: "image", src: `${A}/sala-circular.webp`, alt: "Sala circular", caption: "Espacio — sala" },
-      { type: "image", src: `${A}/sala-cristal.webp`, alt: "Sala con muro de cristal", caption: "Interior — luz" },
-      { type: "image", src: `${A}/pabellon-lago.webp`, alt: "Pabellón frente a un lago", caption: "Exterior — pabellón" },
-      { type: "image", src: `${A}/lounge-terciopelo.webp`, alt: "Lounge de terciopelo", caption: "Interior — lounge" },
-      { type: "image", src: `${A}/biblioteca.webp`, alt: "Biblioteca en madera", caption: "Interior — biblioteca" },
-      { type: "image", src: `${A}/lounge-alfombra.webp`, alt: "Lounge con alfombra roja", caption: "Interior — escala" },
+      { type: "image", src: `${T}/bano.webp`, alt: "Baño con tina de piedra frente a un jardín", caption: "Baño — jardín" },
+      { type: "image", src: `${T}/lounge.webp`, alt: "Terraza lounge al atardecer junto a un estanque", caption: "Terraza — atardecer" },
+      { type: "image", src: `${T}/recamara.webp`, alt: "Recámara con ventanal hacia un jardín de arces", caption: "Recámara — luz" },
     ],
+    demo: {
+      label: "Así se ve",
+      title: "El recorrido que vas a crear",
+      text: "Esto es lo que construyes en el workshop: un video inmersivo de tu proyecto, con el movimiento de cámara adecuado, convertido en una web donde el scroll recorre el espacio. Pulsa un espacio para saltar a ese momento.",
+      video: {
+        src: `${T}/demo.mp4`,
+        poster: `${T}/demo-poster.jpg`,
+        alt: "Grabación de pantalla de un recorrido inmersivo: el scroll avanza por una casa, de la entrada a la recámara",
+        caption: "Grabación real · el scroll recorre la casa",
+      },
+      chapters: [
+        { label: "Entrada", src: `${T}/snap-entrada.webp`, at: 0 },
+        { label: "Sala", src: `${T}/snap-sala.webp`, at: 4.0 },
+        { label: "Comedor", src: `${T}/snap-comedor.webp`, at: 7.0 },
+        { label: "Lounge", src: `${T}/snap-lounge.webp`, at: 10.5 },
+        { label: "Recámara", src: `${T}/snap-recamara.webp`, at: 14.3 },
+      ],
+    },
   },
   {
     slug: "campanas",

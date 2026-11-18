@@ -1469,3 +1469,203 @@ button {
     transition: none !important;
   }
 }
+
+/* "Así se ve": real recording in a display frame + chapter snaps */
+.cx-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 96px 24px 88px;
+  background: #fff;
+}
+.cx-demo__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr);
+  gap: 32px;
+}
+.cx-demo__title {
+  margin: 0 0 16px;
+  font-size: clamp(30px, 3.4vw, 52px);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  font-weight: 400;
+}
+.cx-demo__text {
+  margin: 0;
+  max-width: 640px;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--soft);
+}
+.cx-demo__stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  width: min(100%, 980px);
+}
+.cx-demo__screen {
+  position: relative;
+  width: 100%;
+  padding: 10px;
+  border-radius: 18px;
+  background: #0b0b0b;
+  box-shadow: 0 0 0 1px #d4d4d4, 0 40px 70px -40px rgba(0, 0, 0, 0.45);
+}
+.cx-demo__video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1024 / 536;
+  border-radius: 8px;
+  background: #111;
+  object-fit: cover;
+}
+.cx-demo__toggle {
+  all: unset;
+  box-sizing: border-box;
+  position: absolute;
+  right: 22px;
+  bottom: 26px;
+  cursor: pointer;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(11, 11, 11, 0.55);
+  color: #fff;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  opacity: 0;
+  transition: opacity 0.3s;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.cx-demo__screen:hover .cx-demo__toggle,
+.cx-demo__toggle:focus-visible {
+  opacity: 1;
+}
+.cx-demo__bar {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 0 0 8px 8px;
+  background: rgba(255, 255, 255, 0.18);
+}
+.cx-demo__bar span {
+  display: block;
+  height: 100%;
+  background: #fff;
+  transform-origin: left;
+}
+.cx-demo__neck {
+  width: 132px;
+  height: 64px;
+  background: linear-gradient(90deg, #cfcfcf, #ececec 45%, #d9d9d9);
+  clip-path: polygon(14% 0, 86% 0, 100% 100%, 0 100%);
+}
+.cx-demo__foot {
+  width: 230px;
+  height: 7px;
+  border-radius: 0 0 8px 8px;
+  background: linear-gradient(#e2e2e2, #bdbdbd);
+}
+.cx-demo__cap {
+  margin-top: 18px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+.cx-demo__chapters {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  width: min(100%, 980px);
+}
+.cx-demo__chap {
+  all: unset;
+  box-sizing: border-box;
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  cursor: pointer;
+  font-size: 13px;
+}
+.cx-demo__chap img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1024 / 536;
+  object-fit: cover;
+  border-radius: 6px;
+  opacity: 0.55;
+  filter: grayscale(0.6);
+  transition: opacity 0.3s, filter 0.3s, transform 0.3s;
+}
+.cx-demo__chap:hover img,
+.cx-demo__chap.is-on img {
+  opacity: 1;
+  filter: none;
+}
+.cx-demo__chap.is-on img {
+  box-shadow: 0 0 0 2px var(--ink);
+}
+.cx-demo__chap:hover img {
+  transform: translateY(-2px);
+}
+.cx-demo__chapname {
+  font-size: 14px;
+  color: var(--ink);
+}
+.cx-demo__chap:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  .cx-demo {
+    gap: 28px;
+    padding: 64px 16px 56px;
+  }
+  .cx-demo__head {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+  .cx-demo__text {
+    font-size: 16px;
+  }
+  .cx-demo__screen {
+    padding: 6px;
+    border-radius: 12px;
+  }
+  .cx-demo__video {
+    border-radius: 6px;
+  }
+  .cx-demo__neck {
+    width: 84px;
+    height: 36px;
+  }
+  .cx-demo__foot {
+    width: 150px;
+  }
+  .cx-demo__toggle {
+    opacity: 1;
+    right: 14px;
+    bottom: 18px;
+  }
+  .cx-demo__chapters {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .cx-demo__chapters li {
+    flex: 0 0 38%;
+    scroll-snap-align: start;
+  }
+}
