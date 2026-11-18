@@ -1,8 +1,20 @@
-import { leadConsentText, leadInterests, leadRoles } from "@/data/lead-options";
+import { courses } from "@/content/courses";
+import {
+  leadConsentText,
+  leadInterests,
+  leadRoles,
+  preregConsentText,
+  preregExperience,
+  preregModality,
+  preregSource,
+  preregTools,
+} from "@/data/lead-options";
 
 /**
- * Receives lead-form submissions from /recursos and appends them to a Google Sheet
- * through an Apps Script web app (see docs/leads-google-sheet.md).
+ * Receives lead-form submissions and appends them to a Google Sheet through an Apps Script
+ * web app (see docs/leads-google-sheet.md):
+ *   - resource downloads from /recursos (default)
+ *   - workshop preregistrations from /cursos (kind: "prereg")
  *
  * Env vars (server only):
  *   LEADS_WEBHOOK_URL     Apps Script web app URL
@@ -24,6 +36,9 @@ function tooMany(ip: string): boolean {
 }
 
 const str = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
+const oneOf = <T extends string>(v: string, list: readonly T[]) => v === "" || (list as readonly string[]).includes(v);
+const manyOf = (v: unknown, list: readonly string[]) =>
+  Array.isArray(v) ? v.filter((i): i is string => typeof i === "string" && list.includes(i)) : [];
 
 export async function POST(request: Request) {
   const url = process.env.LEADS_WEBHOOK_URL;
@@ -44,23 +59,18 @@ export async function POST(request: Request) {
   // Humans need more than ~2s to fill two steps; scripts that post instantly are dropped quietly.
   if (typeof body.elapsed !== "number" || body.elapsed < 2000) return Response.json({ ok: true });
 
+  const prereg = body.kind === "prereg";
   const name = str(body.name, 100);
   const email = str(body.email, 200).toLowerCase();
   const country = str(body.country, 100);
   const role = str(body.role, 60);
-  const resource = str(body.resource, 80);
-  const interests = Array.isArray(body.interests)
-    ? body.interests.filter((i): i is string => typeof i === "string" && (leadInterests as readonly string[]).includes(i))
-    : [];
 
   if (name.length < 2) return Response.json({ ok: false, error: "name" }, { status: 400 });
   if (!EMAIL_RE.test(email)) return Response.json({ ok: false, error: "email" }, { status: 400 });
   if (body.consent !== true) return Response.json({ ok: false, error: "consent" }, { status: 400 });
-  if (role && !(leadRoles as readonly string[]).includes(role)) {
-    return Response.json({ ok: false, error: "role" }, { status: 400 });
-  }
+  if (!oneOf(role, leadRoles)) return Response.json({ ok: false, error: "role" }, { status: 400 });
 
-  const payload = {
+  const payload: Record<string, unknown> = {
     secret: process.env.LEADS_WEBHOOK_SECRET ?? "",
     timestamp: new Date().toISOString(),
     name,
@@ -69,11 +79,49 @@ export async function POST(request: Request) {
     // Coarse country from the hosting provider's edge (only set when deployed on Vercel).
     ipCountry: request.headers.get("x-vercel-ip-country") ?? "",
     role,
-    interests: interests.join(", "),
-    resource,
     consent: true,
-    consentText: leadConsentText,
   };
+
+  if (prereg) {
+    const course = courses.find((c) => c.slug === str(body.course, 60));
+    const experience = str(body.experience, 60);
+    const modality = str(body.modality, 60);
+    const source = str(body.source, 60);
+    const tools = manyOf(body.tools, preregTools);
+    if (!course) return Response.json({ ok: false, error: "course" }, { status: 400 });
+    if (!oneOf(experience, preregExperience) || !oneOf(modality, preregModality) || !oneOf(source, preregSource)) {
+      return Response.json({ ok: false, error: "option" }, { status: 400 });
+    }
+
+    Object.assign(payload, {
+      kind: "prereg",
+      course: course.slug,
+      courseTitle: course.title,
+      price: course.price,
+      experience,
+      modality,
+      tools: tools.join(", "),
+      source,
+      consentText: preregConsentText,
+      // Also fill the original download columns so a Sheet script that only knows
+      // /recursos still stores something sensible until it is updated.
+      resource: `curso:${course.slug}`,
+      interests: [
+        experience && `Experiencia: ${experience}`,
+        modality && `Modalidad: ${modality}`,
+        tools.length && `Herramientas: ${tools.join(", ")}`,
+        source && `Nos conoció por: ${source}`,
+      ]
+        .filter(Boolean)
+        .join(" | "),
+    });
+  } else {
+    Object.assign(payload, {
+      resource: str(body.resource, 80),
+      interests: manyOf(body.interests, leadInterests).join(", "),
+      consentText: leadConsentText,
+    });
+  }
 
   try {
     const res = await fetch(url, {

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "
 import { NodoHeader } from "@/components/meridian/NodoHeader";
 import { SiteFooter } from "@/components/meridian/SiteFooter";
 import type { Course, CourseMedia } from "@/content/courses";
+import { PreregForm } from "./PreregForm";
 import type { coursesSettings } from "@/content/courses";
 
 type Settings = typeof coursesSettings;
@@ -75,7 +76,8 @@ export function CoursesPage({ courses, settings, wheel }: { courses: Course[]; s
 
   // ?curso=<slug> opens a workshop directly (shareable links per workshop).
   useEffect(() => {
-    const slug = new URLSearchParams(window.location.search).get("curso");
+    const raw = new URLSearchParams(window.location.search).get("curso");
+    const slug = raw === "arquitectura" ? "renders" : raw; // the architecture workshop was split in two
     if (slug && courses.some((c) => c.slug === slug)) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setOpenSlug(slug);
@@ -133,10 +135,6 @@ export function CoursesPage({ courses, settings, wheel }: { courses: Course[]; s
     if (sheet && target) sheet.scrollTo({ top: target.offsetTop - 56, behavior: reduced ? "auto" : "smooth" });
   };
 
-  const tallySrc =
-    course && settings.tallyFormId
-      ? `https://tally.so/embed/${settings.tallyFormId}?curso=${course.slug}&hideTitle=1&transparentBackground=1&dynamicHeight=1`
-      : null;
 
   return (
     <div className="cx">
@@ -287,12 +285,12 @@ export function CoursesPage({ courses, settings, wheel }: { courses: Course[]; s
           <div className="cx-row3">
             <span className="cx-muted">02</span>
             <span>Preregístrate</span>
-            <span className="cx-soft">Nombre y correo. No se cobra nada hoy.</span>
+            <span className="cx-soft">Un formulario corto de 2 pasos. No se cobra nada hoy.</span>
           </div>
           <div className="cx-row3">
             <span className="cx-muted">03</span>
             <span>Prepárate</span>
-            <span className="cx-soft">Te escribimos con la fecha, el precio de preventa y cómo preparar tus herramientas.</span>
+            <span className="cx-soft">Cuando haya suficientes interesados definimos las fechas y te escribimos con el precio de preventa y cómo preparar tus herramientas.</span>
           </div>
         </div>
       </section>
@@ -501,13 +499,7 @@ export function CoursesPage({ courses, settings, wheel }: { courses: Course[]; s
                 </button>
               ) : (
                 <div className="cx-form">
-                  {tallySrc ? (
-                    <iframe src={tallySrc} title={`Preregistro ${course.title}`} className="cx-tally" loading="lazy" />
-                  ) : (
-                    <p className="cx-placeholder cx-mono">
-                      Falta el id del formulario de Tally: añádelo en <code>coursesSettings.tallyFormId</code> (src/content/courses.ts).
-                    </p>
-                  )}
+                  <PreregForm key={course.slug} courseSlug={course.slug} courseTitle={course.title} />
                 </div>
               )}
               <div className="cx-cta__nav">

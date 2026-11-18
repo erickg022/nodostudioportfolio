@@ -1103,6 +1103,170 @@ button {
   min-height: 420px;
   border: 0;
 }
+/* native preregistration form (inside .cx-form, white card) */
+.cx-pf {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.cx-pf form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.cx-pf__step {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+.cx-pf__h {
+  margin: 0;
+  font-size: clamp(26px, 3vw, 36px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-weight: 400;
+}
+.cx-pf__p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--soft);
+}
+.cx-pf__hint {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.cx-pf__field,
+.cx-pf__set {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.cx-pf__label {
+  padding: 0;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+.cx-pf input:not([type="checkbox"]) {
+  width: 100%;
+  padding: 12px 0;
+  border: 0;
+  border-bottom: 1px solid #c9c9c9;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 17px;
+  outline: none;
+  transition: border-color 0.25s;
+}
+.cx-pf input:not([type="checkbox"]):focus {
+  border-bottom-color: var(--ink);
+}
+.cx-pf__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.cx-pf__chip {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  padding: 9px 13px;
+  border: 1px solid #cfcfcf;
+  border-radius: 999px;
+  font-size: 14px;
+  line-height: 1.2;
+  color: var(--soft);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.cx-pf__chip:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.cx-pf__chip.is-on {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: #fff;
+}
+.cx-pf__chip:focus-visible,
+.cx-pf__btn:focus-visible,
+.cx-pf__back:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.cx-pf__consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--soft);
+}
+.cx-pf__consent input {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;
+  accent-color: var(--ink);
+}
+.cx-pf__err {
+  margin: 0;
+  font-size: 14px;
+  color: #c0341d;
+}
+.cx-pf__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+.cx-pf__btn {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  align-self: flex-start;
+  padding: 14px 22px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 15px;
+  transition: transform 0.25s, opacity 0.25s;
+}
+.cx-pf__btn:hover {
+  transform: translateY(-2px);
+}
+.cx-pf__btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+  transform: none;
+}
+.cx-pf__back {
+  all: unset;
+  cursor: pointer;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+.cx-pf__back:hover {
+  color: var(--ink);
+}
+.cx-pf__trap {
+  position: absolute;
+  left: -9999px;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
 .cx-placeholder {
   margin: 0;
   padding: 20px;

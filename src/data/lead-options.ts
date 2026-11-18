@@ -22,3 +22,25 @@ export const leadInterests = [
 
 export const leadConsentText =
   "Acepto recibir correos de Nodo Studio sobre recursos y workshops. Puedo darme de baja en cualquier momento.";
+
+/** Workshop preregistration (/cursos). */
+export const preregExperience = [
+  "Nunca la he usado",
+  "La uso de vez en cuando",
+  "La uso seguido en mi trabajo",
+  "Ya hago renders o video con IA",
+] as const;
+
+export const preregModality = [
+  "En vivo online",
+  "Grabado, a mi ritmo",
+  "Presencial",
+  "Me da igual",
+] as const;
+
+export const preregTools = ["ChatGPT", "Claude", "Magnific AI", "Midjourney", "Ninguna"] as const;
+
+export const preregSource = ["TikTok", "Instagram", "Recomendación", "Otro"] as const;
+
+export const preregConsentText =
+  "Acepto que Nodo Studio me escriba sobre este workshop, sus fechas y novedades. Puedo darme de baja en cualquier momento.";

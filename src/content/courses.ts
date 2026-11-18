@@ -49,11 +49,8 @@ export type Course = {
 };
 
 export const coursesSettings = {
-  /**
-   * Tally form id (the part after tally.so/r/). Add a hidden field named "curso" in Tally
-   * so every signup records which course it came from. Leave "" to show a placeholder.
-   */
-  tallyFormId: "",
+  /** Shown in every workshop until the real dates are set. */
+  datesNote: "Por definir según interesados",
   season: "Temporada 01",
   title: "Aprende a crear lo que antes parecía imposible.",
   intro: [
@@ -91,51 +88,49 @@ export const wheelMedia: CourseMedia[] = [
   { type: "image", src: `${E}/stand-mostrador.webp`, alt: "", caption: "Stand" },
 ];
 
+const DATES = coursesSettings.datesNote;
+
 export const courses: Course[] = [
   {
-    slug: "arquitectura",
+    slug: "renders",
     num: "01",
-    title: "Arquitectura con IA",
-    subtitle: "Renders Hiperrealistas + Tours Inmersivos",
-    focus: "Render + Tour web",
+    title: "Renders Realistas con IA",
+    subtitle: "Arquitectura e interiores",
+    focus: "Render hiperrealista",
     tagline:
-      "Transforma tus proyectos arquitectónicos en visualizaciones hiperrealistas y experiencias digitales interactivas utilizando inteligencia artificial.",
+      "Transforma tus proyectos arquitectónicos en renders hiperrealistas utilizando inteligencia artificial, sin depender de procesos complejos de renderizado.",
     intro: [
       "En este workshop aprenderás a crear renders arquitectónicos de calidad profesional utilizando IA, sin depender de procesos complejos de renderizado.",
-      "Descubrirás cómo generar interiores y exteriores hiperrealistas, controlar iluminación, materiales, composición y perspectivas, y transformar tus imágenes en recorridos inmersivos que tus clientes puedan explorar directamente desde una página web.",
-      "Aprenderás un workflow práctico que combina generación visual, dirección creativa y desarrollo web asistido por IA, para llevar tus proyectos arquitectónicos a otro nivel.",
+      "Descubrirás cómo generar interiores y exteriores hiperrealistas, y cómo controlar iluminación, materiales, composición y perspectivas.",
     ],
     learn: [
       "Cómo generar renders arquitectónicos hiperrealistas con IA.",
       "Cómo utilizar referencias, imágenes y proyectos existentes para generar nuevas visualizaciones.",
       "Técnicas de iluminación, composición, materiales y dirección visual.",
       "Cómo mantener consistencia arquitectónica entre diferentes perspectivas de un mismo espacio.",
-      "Creación de imágenes y recorridos cinematográficos.",
-      "Cómo transformar tus renders en un tour inmersivo e interactivo en web.",
-      "Cómo utilizar ChatGPT o Claude para construir experiencias digitales sin conocimientos avanzados de programación.",
     ],
     requirements: [
       ...REQUIREMENTS_BASE,
       "Renders base, fotografías, planos o referencias de algún proyecto arquitectónico propio (opcional).",
-      "No necesitas experiencia previa en programación.",
     ],
     note: "Después de completar tu inscripción, recibirás un correo electrónico con todas las instrucciones para configurar tus cuentas, preparar las herramientas y organizar los materiales antes del workshop. Las suscripciones a herramientas externas no están incluidas en el precio del curso.",
     takeaways: [
       "Tus propios renders arquitectónicos hiperrealistas.",
-      "Un prototipo funcional de tour inmersivo en web.",
+      "Varias perspectivas consistentes de un mismo espacio.",
     ],
     closing:
-      "Un proyecto desarrollado por ti que podrás compartir, presentar a clientes, integrar a tu portafolio o aplicar directamente en tus proyectos profesionales.",
+      "Imágenes creadas por ti que podrás compartir, presentar a clientes, integrar a tu portafolio o aplicar directamente en tus proyectos profesionales.",
     specs: [
       ["Formato", "Workshop práctico"],
-      ["Duración", "3 horas"],
+      ["Sesiones", "1 de 2.5 horas"],
       ["Herramientas", "ChatGPT o Claude · Magnific AI Pro"],
       ["Programación", "No necesaria"],
+      ["Fechas", DATES],
     ],
-    price: "$3,500 MXN",
-    regularPrice: "$4,000 MXN",
+    price: "$1,500 MXN",
+    regularPrice: "",
     seats: "",
-    cover: { type: "image", src: `${A}/pabellon-lago.webp`, alt: "Pabellón frente a un lago", caption: "Arquitectura" },
+    cover: { type: "image", src: `${A}/biblioteca.webp`, alt: "Biblioteca en madera", caption: "Interior" },
     gallery: [
       { type: "image", src: `${A}/pabellon-lago.webp`, alt: "Pabellón frente a un lago", caption: "Exterior — pabellón" },
       { type: "image", src: `${A}/biblioteca.webp`, alt: "Biblioteca en madera", caption: "Interior — biblioteca" },
@@ -147,8 +142,57 @@ export const courses: Course[] = [
     ],
   },
   {
-    slug: "campanas",
+    slug: "tour",
     num: "02",
+    title: "Tour Inmersivo con IA",
+    subtitle: "Arquitectura en web",
+    focus: "Tour web",
+    tagline:
+      "Convierte tus renders en un recorrido inmersivo que tus clientes puedan explorar directamente desde una página web.",
+    intro: [
+      "En este workshop aprenderás a transformar tus imágenes arquitectónicas en recorridos inmersivos que tus clientes puedan explorar directamente desde una página web.",
+      "Aprenderás un workflow práctico que combina generación visual, dirección creativa y desarrollo web asistido por IA, para llevar tus proyectos arquitectónicos a otro nivel.",
+    ],
+    learn: [
+      "Creación de imágenes y recorridos cinematográficos.",
+      "Cómo transformar tus renders en un tour inmersivo e interactivo en web.",
+      "Cómo utilizar ChatGPT o Claude para construir experiencias digitales sin conocimientos avanzados de programación.",
+    ],
+    requirements: [
+      ...REQUIREMENTS_BASE,
+      "Renders base, fotografías, planos o referencias de algún proyecto arquitectónico propio (opcional).",
+      "No necesitas experiencia previa en programación.",
+    ],
+    note: "Después de completar tu inscripción, recibirás un correo electrónico con todas las instrucciones para configurar tus cuentas, preparar las herramientas y organizar los materiales antes del workshop. Las suscripciones a herramientas externas no están incluidas en el precio del curso.",
+    takeaways: [
+      "Un recorrido cinematográfico de tu proyecto.",
+      "Un prototipo funcional de tour inmersivo en web.",
+    ],
+    closing:
+      "Un proyecto desarrollado por ti que podrás compartir, presentar a clientes, integrar a tu portafolio o aplicar directamente en tus proyectos profesionales.",
+    specs: [
+      ["Formato", "Workshop práctico"],
+      ["Sesiones", "2 de 2.5 horas"],
+      ["Herramientas", "ChatGPT o Claude · Magnific AI Pro"],
+      ["Programación", "No necesaria"],
+      ["Fechas", DATES],
+    ],
+    price: "$2,000 MXN",
+    regularPrice: "",
+    seats: "",
+    cover: { type: "image", src: `${A}/sala-circular.webp`, alt: "Sala circular", caption: "Espacio" },
+    gallery: [
+      { type: "image", src: `${A}/sala-circular.webp`, alt: "Sala circular", caption: "Espacio — sala" },
+      { type: "image", src: `${A}/sala-cristal.webp`, alt: "Sala con muro de cristal", caption: "Interior — luz" },
+      { type: "image", src: `${A}/pabellon-lago.webp`, alt: "Pabellón frente a un lago", caption: "Exterior — pabellón" },
+      { type: "image", src: `${A}/lounge-terciopelo.webp`, alt: "Lounge de terciopelo", caption: "Interior — lounge" },
+      { type: "image", src: `${A}/biblioteca.webp`, alt: "Biblioteca en madera", caption: "Interior — biblioteca" },
+      { type: "image", src: `${A}/lounge-alfombra.webp`, alt: "Lounge con alfombra roja", caption: "Interior — escala" },
+    ],
+  },
+  {
+    slug: "campanas",
+    num: "03",
     title: "Campañas de Alto Impacto Visual con IA",
     subtitle: "",
     focus: "Concepto → Imagen → Video",
@@ -186,12 +230,14 @@ export const courses: Course[] = [
       "Todo creado por ti, listo para utilizarse en redes sociales, presentaciones comerciales, proyectos de marca o como parte de tu portafolio profesional.",
     specs: [
       ["Formato", "Workshop práctico"],
+      ["Sesiones", "2 de 2.5 horas"],
       ["Herramientas", "Magnific · ChatGPT · Seedream · Video IA"],
       ["Resultado", "Mini campaña: imágenes + video"],
       ["Experiencia", "No necesaria"],
+      ["Fechas", DATES],
     ],
-    price: "$3,500 MXN",
-    regularPrice: "$4,000 MXN",
+    price: "$2,000 MXN",
+    regularPrice: "",
     seats: "",
     cover: {
       type: "video",
@@ -216,7 +262,7 @@ export const courses: Course[] = [
   },
   {
     slug: "experiencias",
-    num: "03",
+    num: "04",
     title: "De la Idea a la Experiencia",
     subtitle: "Creative Technology + IA",
     focus: "Marcas · Eventos · Retail",
@@ -256,12 +302,14 @@ export const courses: Course[] = [
       "Un proyecto creado por ti, de la idea al prototipo, listo para incorporarlo a tu portafolio, presentarlo a potenciales clientes o continuar desarrollándolo como una experiencia real.",
     specs: [
       ["Formato", "Workshop práctico"],
+      ["Sesiones", "2 de 2.5 horas"],
       ["Tecnologías", "IA · Computer vision · Hand tracking · Web"],
       ["Necesitas", "Cámara web"],
       ["Programación", "No necesaria"],
+      ["Fechas", DATES],
     ],
-    price: "$2,500 MXN",
-    regularPrice: "$3,000 MXN",
+    price: "$1,990 MXN",
+    regularPrice: "",
     seats: "12 lugares",
     cover: { type: "image", src: `${E}/popup-paris.webp`, alt: "Pop-up de marca en una calle de París", caption: "Pop-up" },
     gallery: [
