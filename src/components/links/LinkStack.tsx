@@ -75,7 +75,6 @@ export function LinkStack({ links }: { links: BioLink[] }) {
             </span>
             <span className={`${styles.row} ${styles.rowEnd}`}>
               <span className={styles.title}>{link.label}</span>
-              <span className={styles.arrow}>&#8599;</span>
             </span>
           </span>
         </a>

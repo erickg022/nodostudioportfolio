@@ -109,12 +109,6 @@
   text-transform: uppercase;
 }
 
-.arrow {
-  font-size: 22px;
-  line-height: 1;
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
 /* Hover / focus: lift the active strip, quiet the others (pointer devices only). */
 @media (hover: hover) {
   .stack:has(.strip:hover) .strip:not(:hover) {
@@ -125,9 +119,6 @@
   }
   .strip:hover .img img {
     transform: scale(1.07);
-  }
-  .strip:hover .arrow {
-    transform: translate(4px, -4px);
   }
 }
 
@@ -187,7 +178,6 @@
   }
   .strip,
   .img img,
-  .arrow,
   .ghost {
     transition: none;
   }
